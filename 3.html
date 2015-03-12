@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+    <!-- Import custom.css -->
+    <link type="text/css" rel="stylesheet" href="css/custom.css"  media="screen,projection"/>
+	
+	 <!-- Import prism.css - for code -->
+    <link type="text/css" rel="stylesheet" href="css/prism.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  </head>
+
+  <body>
+    <header>
+      <nav class="cyan accent-4 z-depth-2">
+				<div class="nav-wrapper container">
+            <a href="index.html" class="brand-logo light"><img src="img/fhirbase_white.png" width="20px" /> FHIRbase</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a href="1.html">Обзор</a></li>
+              <li><a href="2.html">Быстрый старт</a></li>
+              <li class="active"><a href="3.html">Документация</a></li>
+              <li><a href="4.html">Демонстрация</a></li>
+            </ul>
+          </div>
+        </nav>
+    </header>
+
+    <main>
+    	  <div class="container">
+  <div class="row">
+    <div class="section col s12 m9 l10">
+			<div id="fhirbase" class="section scrollspy">
+			<h5>fhirbase: FHIR persistence in PostgreSQL</h5>
+				<p>
+FHIR is specification of semantic resources and API for working with healthcare data.
+Please address the [official specification](http://hl7-fhir.github.io/) for more details.
+
+To implement FHIR server we have to persist & query data in application internal
+format or in FHIR format. This article describes how to store FHIR resources
+in relational database (PostgreSQL) and about open source FHIR
+storage implementation - [fhirbase](https://github.com/fhirbase/fhirbase).
+</p>
+</div>
+<div id="overview" class="section scrollspy">
+<h5>Overview</h5>
+<p>
+*fhirbase* is built on top of PostgreSQL and require version higher then 9.4
+(i.e. [jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html) support).
+</p>
+FHIR describes ~ 100 [resources](http://hl7-fhir.github.io/resourcelist.html)
+as base StructureDefinitions, which by themselves are resources in FHIR terms.
+
+To setup fhirbase read [installation guide](installation.md).
+
+Fhirbase stores each resource in two tables - one for current version
+and second for previous versions of resources. By convention tables are named
+in downcase after resource types: Patient => patient, StructureDefinition => structuredefinition.
+
+For example *Patient* resources are stored
+in *patient* and *patient_history* tables:
+
+			<pre class=" language-psql"><code class=" language-psql">
+fhirbase=# \d patient
+                       Table "public.patient"
+    Column     |           Type           |        Modifiers
+---------------+--------------------------+-------------------------
+ version_id    | text                     |
+ logical_id    | text                     | not null
+ resource_type | text                     | default 'Patient'::text
+ updated       | timestamp with time zone | not null default now()
+ published     | timestamp with time zone | not null default now()
+ category      | jsonb                    |
+ content       | jsonb                    | not null
+Inherits: resource
+
+fhirbase=# \d patient_history
+
+                   Table "public.patient_history"
+    Column     |           Type           |        Modifiers
+---------------+--------------------------+-------------------------
+ version_id    | text                     | not null
+ logical_id    | text                     |
+ resource_type | text                     | default 'Patient'::text
+ updated       | timestamp with time zone | not null default now()
+ published     | timestamp with time zone | not null default now()
+ category      | jsonb                    |
+ content       | jsonb                    | not null
+Inherits: resource_history
+          </code></pre>
+		  
+<p>
+All resource tables have similar structure and are inherited from *resource* table,
+to allow cross-table queries (for more information see [PostgreSQL inheritance](http://www.postgresql.org/docs/9.4/static/tutorial-inheritance.html)).
+
+Minimal installation of fhirbase consists of only
+few tables for "meta" resources:
+
+* StructureDefinition
+* OperationDefinition
+* SearchParameter
+* ValueSet
+* ConceptMap
+
+This tables are filled with resources provided by FHIR distribution.
+
+Most of API for fhirbase are represented as functions in *fhir* schema,
+other schemas are used as code library modules.
+
+First helpful function is `fhir.generate_tables(resources text[])`, which generates tables
+for specific resources passed as array.
+For example to generate tables for patient, organization and encounter:
+</p>
+			<pre class=" language-sql"><code class=" language-sql">
+psql fhirbase
+
+fhirbase=# select fhir.generate_tables('{Patient, Organization, Encounter}');
+
+--  generate_tables
+-----------------
+--  3
+-- (1 row)
+          </code></pre>
+
+
+If you call generate_tables() without any parameters,
+then tables for all resources described in StructureDefinition
+will be generated:
+			<pre class=" language-sql"><code class=" language-sql">
+fhirbase=# select fhir.generate_tables();
+-- generate_tables
+-----------------
+-- 93
+--(1 row)
+          </code></pre>
+
+When concrete resource type tables are generated,
+column *installed* in profile table for this resource is set to true.
+
+			<pre class=" language-sql"><code class=" language-sql">
+SELECT logical_id, installed from structuredefinition
+WHERE logical_id = 'Patient'
+
+--  logical_id | installed
+----------------------------
+--  Patient    | true
+          </code></pre>
+
+Functions representing public API of fhirbase are all located in fhir schema.
+The first group of functions implements CRUD operations on resources:
+
+* create(resource json)
+* read(resource_type, logical_id)
+* update(resource json)
+* vread(resource_type, version_id)
+* delete(resource_type, logical_id)
+* history(resource_type, logical_id)
+* is_exists(resource_type, logical_id)
+* is_deleted(resource_type, logical_id)
+
+			<pre class=" language-sql"><code class=" language-sql">
+SELECT fhir.create('{"resourceType":"Patient", "name": [{"given": ["John"]}]}')
+-- {
+--  "id": "c6f20b3a...",
+--  "meta": {
+--    "versionId": "c6f20b3a...",
+--    "lastUpdated": "2015-03-05T15:53:47.213016+00:00"
+--  },
+--  "name": [{"given": ["John"]}],
+--  "resourceType": "Patient"
+-- }
+--(1 row)
+
+-- create - insert new row into patient table
+SELECT resource_type, logical_id, version_id,* from patient;
+
+-- resource_type |  logical_id  |  version_id | content
+---------------+---------------------------------------------------
+-- Patient       | c6f20b3ab... | c6f20b....  | {"resourceType".....}
+--(1 row)
+
+
+
+SELECT fhir.read('Patient', 'c6f20b3a...');
+-- {
+--  "id": "c6f20b3a...",
+--  "meta": {
+--    "versionId": "c6f20b3a...",
+--    "lastUpdated": "2015-03-05T15:53:47.213016+00:00"
+--  },
+--  "name": [{"given": ["John"]}],
+--  "resourceType": "Patient"
+-- }
+--(1 row)
+
+SELECT fhir.update(
+   jsonbext.merge(
+     fhir.read('Patient', 'c6f20b3a...'),
+     '{"name":[{"given":"Bruno"}]}'
+   )
+);
+-- returns update version
+
+SELECT count() FROM patient; => 1
+SELECT count() FROM patient_history; => 1
+
+-- read previous version of resource
+SELECT fhir.vread('Patient', /*old_version_id*/ 'c6f20b3a...');
+
+
+SELECT fhir.history('Patient', 'c6f20b3a...');
+
+-- {
+--     "type": "history",
+--     "entry": [{
+--         "resource": {
+--             "id": "c6f20b3a...",
+--             "meta": {
+--                 "versionId": "a11dba...",
+--                 "lastUpdated": "2015-03-05T16:00:12.484542+00:00"
+--             },
+--             "name": [{
+--                 "given": "Bruno"
+--             }],
+--             "resourceType": "Patient"
+--         }
+--     }, {
+--         "resource": {
+--             "id": "c6f20b3a...",
+--             "meta": {
+--                 "versionId": "c6f20b3a...",
+--                 "lastUpdated": "2015-03-05T15:53:47.213016+00:00"
+--             },
+--             "name": [{
+--                 "given": ["John"]
+--             }],
+--             "resourceType": "Patient"
+--         }
+--     }],
+--     "resourceType": "Bundle"
+-- }
+
+SELECT fhir.is_exists('Patient', 'c6f20b3a...'); => true
+SELECT fhir.is_deleted('Patient', 'c6f20b3a...'); => false
+
+SELECT fhir.delete('Patient', 'c6f20b3a...');
+-- return last version
+
+SELECT fhir.is_exists('Patient', 'c6f20b3a...'); => false
+SELECT fhir.is_deleted('Patient', 'c6f20b3a...'); => true
+          </code></pre>
+When resource is created *logical_id* and *version_id* is generated as uuid.
+On every update resource content updated in *patient* table and old version of resource is copied
+into *patient_history* table.
+
+</div>
+<div id="transaction" class="section scrollspy">
+<h4>Transaction</h4>
+<h5>Search & Indexing</h5>
+
+
+Next part of API is a search API.
+Folowing functions will help you search resources in fhirbase:
+
+* fhir.search(resourceType, searchString) returns bundle
+* fhir._search(resourceType, searchString) returns relation
+* fhir.explain_search(resourceType, searchString) show execution plan for search
+* fhir.search_sql(resourceType, searchString) show original sql query behind the search
+
+			<pre class=" language-sql"><code class=" language-sql">
+select fhir.search('Patient', 'given=john'S)
+-- returns bundle
+-- {"type": "search", "entry": [...]}
+
+-- return search as relatio
+select * from fhir._search('Patient', 'name=david&count=10');
+
+-- version_id | logical_id     | resource_type
+------------+----------------------------------
+--            | "a8bec52c-..." | Patient
+--            | "fad90884-..." | Patient
+--            | "895fdb15-..." | Patient
+
+
+-- expect generated by search sql
+select fhir.search_sql('Patient', 'given=david&count=10');
+
+-- SELECT * FROM patient
+-- WHERE (index_fns.index_as_string(patient.content, '{given}') ilike '%david%')
+-- LIMIT 100
+-- OFFSET 0
+
+-- explain query execution plan
+select fhir.explain_search('Patient', 'given=david&count=10');
+
+-- Limit  (cost=0.00..19719.37 rows=100 width=461) (actual time=6.012..7198.325 rows=100 loops=1)
+--   ->  Seq Scan on patient  (cost=0.00..81441.00 rows=413 width=461) (actual time=6.010..7198.290 rows=100 loops=1)
+--         Filter: (index_fns.index_as_string(content, '{name,given}'::text[]) ~~* '%david%'::text)
+--         Rows Removed by Filter: 139409
+-- Planning time: 0.311 ms
+-- Execution time: 7198.355 ms
+          </code></pre>
+
+Search works without indexing, but search query would be slow
+on any reasonable amount of data.
+So fhirbase has group of indexing functions:
+
+* index_search_param(resourceType, searchParam)
+* drop_index_search_param(resourceType, searchParam)
+* index_resource(resourceType)
+* drop_resource_indexes(resourceType)
+* index_all_resources()
+* drop_all_resource_indexes()
+
+Indexes are not for free - they eat space and slow inserts and updates.
+That is why in fhirbase, indexes are optional and completely under you control.
+
+Most important function is `fhir.index_search_param`, which
+accept resourceType as first parameter and name of search parameter to index.
+			<pre class=" language-sql"><code class=" language-sql">
+select count(*) from patient; --=> 258000
+
+-- search without index
+select fhir.search('Patient', 'given=david&count=10');
+-- Time: 7332.451 ms
+
+-- index search param
+SELECT fhir.index_search_param('Patient','name');
+--- Time: 15669.056 ms
+
+-- index cost
+select fhir.admin_disk_usage_top(10);
+-- [
+--  {"size": "107 MB", "relname": "public.patient"},
+--  {"size": "19 MB", "relname": "public.patient_name_name_string_idx"},
+--  ...
+-- ]
+
+-- search with index
+select fhir.search('Patient', 'name=david&count=10');
+-- Time: 26.910 ms
+
+-- explain search
+
+select fhir.explain_search('Patient', 'name=david&count=10');
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+-- Limit  (cost=43.45..412.96 rows=100 width=461) (actual time=0.906..6.871 rows=100 loops=1)
+--   ->  Bitmap Heap Scan on patient  (cost=43.45..1569.53 rows=413 width=461) (actual time=0.905..6.859 rows=100 loops=1)
+--         Recheck Cond: (index_fns.index_as_string(content, '{name}'::text[]) ~~* '%david%'::text)
+--         Heap Blocks: exact=100
+--         ->  Bitmap Index Scan on patient_name_name_string_idx  (cost=0.00..43.35 rows=413 width=0) (actual time=0.205..0.205 rows=390 loops=1)
+--               Index Cond: (index_fns.index_as_string(content, '{name}'::text[]) ~~* '%david%'::text)
+-- Planning time: 0.449 ms
+-- Execution time: 6.946 ms
+          </code></pre>
+				</p>
+				</div>
+          </div>
+		  <!-- Table of Contents -->
+	<div class="col hide-on-small-only m3 l2">
+	<div class="toc-wrapper">
+		  <ul class="section table-of-contents">
+			<li><a href="#fhirbase">fhirbase</a></li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#transaction">Transaction</a></li>
+		  </ul>
+		</div>
+	</div>
+	<!-- End of Table of Contents -->	
+        </div>
+
+      </div>
+	
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer cyan darken-3 z-depth-2">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+		  <h5 class="white-text">Ссылки</h5>
+            <ul>
+			  <li><a class="grey-text text-lighten-3" href="http://fhir-ru.github.io/index.html" target="_blank">Стандарт FHIR</a></li>
+              <li><a class="grey-text text-lighten-3" href="https://github.com/fhirbase/fhirbase" target="_blank">Проект на GitHub</a></li>
+			  <li><a class="grey-text text-lighten-3" href="http://try-fhirplace.hospital-systems.com/fhirbase-presentation/index.html#/" target="_blank">Презентация FHIRbase</a></li>
+              <li><a class="grey-text text-lighten-3" href="http://health-samurai.io" target="_blank">Сайт команды Health Samurai</a></li>
+              <li><a class="grey-text text-lighten-3" href="https://medium.com/@health_samurai" target="_blank">Наш блог</a></li>
+            </ul>
+          </div>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="white-text">Связь</h5>            
+            <a href="https://twitter.com/health_samurai" class="twitter-follow-button" data-show-count="false" data-lang="ru" data-size="large">Читать @health_samurai</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+			<br>
+			<a href="https://twitter.com/share" class="twitter-share-button" data-via="health_samurai" data-lang="ru" data-size="large">Твитнуть</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="g-plusone" data-size="tall" data-annotation="none" data-href="https://plus.google.com/u/0/106276017181324261891/posts"></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        © 2014 Health Samurai, All Rights Reserved
+        <a class="grey-text text-lighten-4 right" href="#!"><!-- More Links --></a>
+        </div>
+      </div>
+    </footer>
+                
+
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script src="js/init.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('.parallax').parallax();
+      });
+    </script>
+	
+	<!-- Кнопка гугл+ -->
+	<script src="https://apis.google.com/js/platform.js" async defer>
+	  {lang: 'ru'}
+	</script>
+	
+	<!-- For Table of Contents -->
+	<script type="text/javascript" src="js/materialize.min.js">
+		$(document).ready(function(){
+			$('.scrollspy').scrollSpy();
+		});
+	 </script>
+  </body>
+</html>
