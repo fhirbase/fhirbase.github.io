@@ -6,6 +6,8 @@
 
     <!--Custom.css-->
     <link type="text/css" rel="stylesheet" href="css/custom.css"  media="screen,projection"/>
+    <!-- Open Sans Font  -->    
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel='stylesheet' type='text/css'>
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -16,17 +18,19 @@
       <div class="navbar-fixed">
         <nav>
           <div class="nav-wrapper container">
-            <a href="#" class="brand-logo"><img src="fhirbase.png" width="15px"> FHIRbase</a>
+            <a href="#" class="brand-logo"><img src="img/fhirbase.png" width="15px"> FHIRbase</a>
             <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
             <ul class="right hide-on-med-and-down">
               <li><a href="">Overview</a></li>
               <li><a href="">Demo</a></li>
-              <li><a href="">Source & Docs</a></li>
+              <li><a href="">Install</a></li>
+              <li><a href="">Docs</a></li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
               <li><a href="">Overview</a></li>
               <li><a href="">Demo</a></li>
-              <li><a href="">Source & Docs</a></li>
+              <li><a href="">Install</a></li>
+              <li><a href="">Docs</a></li>
             </ul>
           </div>
         </nav>
@@ -36,66 +40,73 @@
     <main>
       <div class="row moto center" id="moto">
         <h4>Relational Storage for Health IT Solutions</h4>
-        <p>Based on <a href="http://hl7.org/implement/standards/fhir/">FHIR Standard</a> and ready to Production Usage</p>
+        <p>Open Source, based on <a href="http://hl7.org/implement/standards/fhir/">FHIR Standard</a> and ready to Production Usage</p>
         <br>
-        <a class="waves-effect waves-light btn red lighten-2">Call to Action</a>
+        <a class="waves-effect waves-light btn teal accent-4">Try Now</a>
+        <a class="waves-effect waves-light btn teal accent-4">Install</a>
+      </div>
+      <!-- Positioning -->
+      <div class="row row-content positioning" id="positioning">
+        <div class="container">
+          <div>
+            <h5>Vision of FHIRbase</h5>
+            <p>FHIRbase is good start and basis to create standardized next generation Health IT solutions like EHRs, Patient Portals etc.</p>
+          </div>
+        </div>
       </div>
       <!-- Features -->
-      <div class="row feature" id="features">
-        <div class="container center-align">
+      <div class="row row-content" id="heart">
+        <div class="container">
+          <div class="col s6">.
+          </div>
           <div class="col s6">
             <h5>Heart of FHIRbase is PostgreSQL</h5>
             <p>PostgreSQL is a battle proved open source database which supports structured documents (jsonb) while preserving ACID guaranties and richness of SQL query language.</p>
           </div>
-          <div class="col s6"></div>
         </div>
       </div>
-      <div class="row feature" id="features">
-        <div class="container center-align">
-          <div class="col s6">.</div>
+      <div class="row row-content" id="soul">
+        <div class="container">
           <div class="col s6">
             <h5>Soul of FHIRbase is FHIR standard</h5>
             <p>We decided to implement most of FHIR specification inside a database for scalability reason. This approach also gives you a possibility to use FHIRbase from your preferred lang/platform (.NET, java, ruby, nodejs etc).</p>
           </div>
-        </div>
-      </div>
-      <div class="row feature" id="features">
-        <div class="container center-align">
           <div class="col s6">
-            <h5>FHIRbase with Simple API</h5>
-            <p>Most of API for FHIRbase is represented as functions in fhir schema, other schemas are used as code library modules.</p>
           </div>
-          <div class="col s6"></div>
         </div>
       </div>
-      <div class="row feature" id="features">
-        <div class="container center-align">
-          <div class="col s6">.</div>
+      <div class="row row-content" id="face">
+        <div class="container">
+          <div class="col s6">.
+          </div>
           <div class="col s6">
-            <h5>FHIRbase is Open Source Project</h5>
-            <p>FHIRbase is released under the terms of the MIT License.</p>
+            <h5>Face of FHIRbase is Simple API</h5>
+            <p>Most of API for FHIRbase is represented as functions in fhir schema, other schemas are used as code library modules.</p>
           </div>
         </div>
       </div>
       <!-- Features END -->
-      <div class="row usage center">
-        <h4>FHIRbase as part of ...</h4>
+      <div class="row row-content calltoaction center">
+        <h4>Try FHIRbase now</h4>
+        <br>
+        <a class="waves-effect waves-light btn teal accent-4">Try Now</a>
+        <a class="waves-effect waves-light btn teal accent-4">Install</a>
+        <p></p>
+      </div>
+
+      <!-- Community & Offer -->
+      <div class="row row-content offer center">
         <div class="container">
+          <h4>FHIRbase Community</h4>
+          <p>We are actively developing the FHIRbase and are interested in its real use.<br>Join the our community.</p>
+          <a class="waves-effect waves-light btn teal accent-4">JOIN</a>
         </div>
       </div>
-      <div class="row benchmarks center">
-        <h4>Metrics</h4>
-        <p></p>
-      </div>
-      <div class="row qstart center">
-        <h4>Quick Start</h4>
-        <p></p>
-      </div>
-      <div class="row calltoaction center">
-        <h4>Try it now</h4>
-        <br>
-        <a class="waves-effect waves-light btn red lighten-2">Call to Action</a>
-        <p></p>
+
+      <div class="row row-content offer center">
+        <div class="container">
+          <h4>Consulting from Health Samurai</h4>
+        </div>
       </div>
     </main>
 

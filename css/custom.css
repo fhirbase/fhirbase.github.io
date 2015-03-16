@@ -2,11 +2,14 @@ body{
 	height: 100%;
 	background-color: #fafafa;
 	color: #444;
+	font-family: 'Open Sans', sans-serif;
 }
 
 nav{
-	background-color: transparent;
+	background-color: #bbb;
+	opacity: 0.5;
 	box-shadow: none;
+	color: white;
 }
 
 nav a{
@@ -27,7 +30,7 @@ h4{
 .moto{
 	height: 80vh;
 	background-color: transparent;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #eee;
 }
 
 .moto h4{
@@ -39,17 +42,36 @@ h4{
 .features{
 	height: 80vh;
 	background-color: white;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #eee;
 }
 */
 
-.feature{
-	background-color: white;
-	border-bottom: 1px solid #ddd;
-	font-size: 18px;
-	height: 300px;
+.positioning p{
+	width: 50%;
+
 }
 
+.offer p{
+	width: 40%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.row-content{
+	background-color: white;
+	border-bottom: 1px solid #eee;
+	font-size: 18px;
+	padding-top: 80px;
+	padding-bottom: 80px;
+}
+
+main .row-content:nth-child(odd){
+	background-color: #fafafa;
+}
+
+main .row-content:nth-child(odd){
+	background-color: #fafafa;
+}
 
 .features-nav{
 	margin-bottom: 20px;
@@ -64,31 +86,7 @@ ul.tabs li.tab{
 }
 
 ul.tabs a{
-	border-bottom: 1px solid #ddd;
-}
-
-.usage{
-	height: 80vh;
-	background-color: transparent;
-	border-bottom: 1px solid #ddd;
-}
-
-.benchmarks{
-	height: 80vh;
-	background-color: white;
-	border-bottom: 1px solid #ddd;
-}
-
-.qstart{
-	height: 80vh;
-	background-color: transparent;
-	border-bottom: 1px solid #ddd;
-}
-
-.calltoaction{
-	height: 40vh;
-	background-color: white;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #eee;
 }
 
 footer.page-footer{
