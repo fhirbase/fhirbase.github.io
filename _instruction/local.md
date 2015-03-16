@@ -1,8 +1,37 @@
 ---
 layout: default
-title:  "local"
+title:  "Local Installation"
 ---
 
-#Test
+## Local Installation
 
-Jekyll is a great solution for building small, static sites. It is worth mentioning that it will struggle to compete with sites that need a robust backend – including data manipulation and search. This is something to keep in mind when debating on choosing Jekyll for your next project. That being said, Jekyll’s setup is quick and it has some configurable options that allow you to specify how you’d like the site to work. The requirements are minimal and the quick setup functionality gives you a fully functioning site.
+<br>
+
+Requirements:
+
+* PostgreSQL 9.4
+* pgcrypto
+* pg_trgm
+* btree_gin
+* btree_gist
+
+<br>
+
+Installation steps:
+
+```bash
+sudo apt-get install postgresql-9.4 postgresql-contrib-9.4 curl
+# create local user for ident auth
+sudo su postgres -c 'createuser -s <you-local-user>'
+# create empty database
+psql -d postgres -c 'create database test'
+# install last version of fhirbase
+curl https://raw.githubusercontent.com/fhirbase/fhirbase-build/master/fhirbase.sql | psql -d test
+# generate tables
+psql -d test -c 'SELECT fhir.generate_tables()'
+
+psql test
+#> \dt
+```
+
+Here is asci cast for the simplest installation - [https://asciinema.org/a/17236].

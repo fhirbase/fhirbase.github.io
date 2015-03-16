@@ -12,14 +12,8 @@ title: FHIRbase
 	</ul>
 </div>
 
-<div class="container">
-	<h3>Getting Started</h3>
+<div class="container gstarted">
 	{% for instruction in site.instruction %}
-		<li>
-			<a href="{{ instruction.url }}">
-				{{ instruction.title }}
-				{{ instruction.content }}
-			</a>
-		</li>
+		{{ instruction.content }}
 	{% endfor %}
 </div>
