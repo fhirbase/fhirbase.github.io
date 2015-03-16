@@ -1,0 +1,24 @@
+---
+layout: default
+title: FHIRbase
+---
+
+<div class="sub-nav text-center">
+	<ul class="subnav-list list-inline">
+		<li><a href="">Local</a></li>
+		<li><a href="">Vagrant</a></li>
+		<li><a href="">Docker</a></li>
+		<li><a href="">Heroku</a></li>
+	</ul>
+</div>
+
+<div class="container">
+	<h3>Getting Started</h3>
+	{% for instruction in site.instruction %}
+		<li>
+			<a href="{{ instruction.url }}">
+				{{ instruction.title }}
+			</a>
+		</li>
+	{% endfor %}
+</div>
