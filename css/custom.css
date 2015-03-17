@@ -74,8 +74,8 @@ nav a{
 }
 
 .btn-community{
-	background-color: transparent;
-	border: 1px solid #26a69a;
+	background-color: white;
+	border: 2px solid #26a69a;
 	border-radius: 2px;
 	min-width: 150px;
 	color: #26a69a;
@@ -84,8 +84,8 @@ nav a{
 }
 
 .btn-community:hover{
-	background-color: transparent;
-	border: 1px solid #2bbbad;
+	background-color: white;
+	border: 2px solid #2bbbad;
 	border-radius: 2px;
 	min-width: 150px;
 	color: #2bbbad;
@@ -141,8 +141,14 @@ footer a:hover{
 	background-color: #fafafa;
 }
 
-.positioning p{
-	width: 50%;
+.image{
+	display: flex;
+	justify-content: center;
+}
+
+.image img{
+	width: 200px;
+	height: 200px;
 }
 
 .calltoaction{
