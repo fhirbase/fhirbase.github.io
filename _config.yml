@@ -3,5 +3,7 @@ markdown: redcarpet
 highlighter: pygments
 
 collections:
-  instruction:
+  instructions:
+    output: true
+  docs:
     output: true

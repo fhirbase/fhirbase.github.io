@@ -3,10 +3,10 @@ layout: default
 title: FHIRbase
 ---
 
-{% assign instructions = site.instructions | sort: 'order' %}
+{% assign docs = site.docs | sort: 'order' %}
 <div class="container gstarted">
 	<div class="col-md-9">
-		{% for instruction in instructions %}
+		{% for instruction in docs %}
 			<h3 id="{{ instruction.id }}">
 				{{instruction.title}}
 			</h3>
@@ -17,7 +17,7 @@ title: FHIRbase
 	</div>
 	<div class="col-md-3 sub-nav">
 		<ul class="subnav-list list-unstyled">
-                  {% for instruction in instructions %}
+                  {% for instruction in docs %}
 		     <li><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
 		  {% endfor %}
 
