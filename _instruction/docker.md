@@ -2,6 +2,7 @@
 layout: default
 title:  "Docker Installation"
 id: docker
+order: 3
 ---
 
 1.  You can install FHIRbase using docker. First you have to install [docker](https://www.docker.com/) itself according to provided documentation (see the [installation section] (https://docs.docker.com/installation/#installation)).

@@ -5,8 +5,9 @@ title: FHIRbase
 
 <div class="container gstarted">
 	<div class="col-md-9">
-		{% for instruction in site.instruction %}
-			<h3 id="{{ instruction.id }}"> 
+                {% assign instructions = site.instruction | sort: 'order' %}
+		{% for instruction in instructions %}
+			<h3 id="{{ instruction.id }}">
 				{{instruction.title}}
 			</h3>
 			{{ instruction.content }}

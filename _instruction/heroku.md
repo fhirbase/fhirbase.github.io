@@ -2,6 +2,7 @@
 layout: default
 title:  "Heroku Installation"
 id: heroku
+order: 4
 ---
 
 1. Register on [Heroku](https://heroku.com).

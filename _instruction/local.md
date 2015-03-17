@@ -2,6 +2,7 @@
 layout: default
 title:  "Local Installation"
 id: local
+order: 1
 ---
 
 Requirements:

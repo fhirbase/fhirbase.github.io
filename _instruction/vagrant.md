@@ -2,6 +2,7 @@
 layout: default
 title:  "Vagrant Installation"
 id: vagrant
+order: 2
 ---
 
 The simplest and cross-platform installation can be done using vagrant.
