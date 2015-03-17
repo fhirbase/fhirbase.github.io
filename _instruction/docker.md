@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Docker Installation"
+title:  "Docker"
 id: docker
 order: 3
 ---

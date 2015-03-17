@@ -3,9 +3,9 @@ layout: default
 title: FHIRbase
 ---
 
+{% assign instructions = site.instruction | sort: 'order' %}
 <div class="container gstarted">
 	<div class="col-md-9">
-                {% assign instructions = site.instruction | sort: 'order' %}
 		{% for instruction in instructions %}
 			<h3 id="{{ instruction.id }}">
 				{{instruction.title}}
@@ -17,10 +17,10 @@ title: FHIRbase
 	</div>
 	<div class="col-md-3 sub-nav">
 		<ul class="subnav-list list-unstyled">
-			<li><a href="#local" >Local</a></li>
-			<li><a href="#vagrant">Vagrant</a></li>
-			<li><a href="#docker">Docker</a></li>
-			<li><a href="#heroku">Heroku</a></li>
+                  {% for instruction in instructions %}
+		     <li><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
+		  {% endfor %}
+
 		</ul>
 	</div>
 </div>

@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Local Installation"
+title:  "Local"
 id: local
 order: 1
 ---

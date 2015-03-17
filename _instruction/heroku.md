@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Heroku Installation"
+title:  "Heroku"
 id: heroku
 order: 4
 ---

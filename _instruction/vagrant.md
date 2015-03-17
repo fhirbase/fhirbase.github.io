@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Vagrant Installation"
+title:  "Vagrant"
 id: vagrant
 order: 2
 ---
