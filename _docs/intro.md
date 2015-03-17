@@ -5,9 +5,7 @@ id: intro
 order: 1
 ---
 
-# TODO: outdated
-
-# FHIRBase Introduction
+### FHIRBase Introduction
 
 FHIRBase is a PostgreSQL extension for storing and retrieving
 [FHIR resources](http://www.hl7.org/implement/standards/fhir/resources.html). You
@@ -27,7 +25,7 @@ We assume that you have successfully
 using Vagrant and already configured connection parameters in your
 PostgreSQL client.
 
-## Stored Procedures as primary API
+### Stored Procedures as primary API
 
 In SQL world it's conventional to insert data with `INSERT` statement,
 delete it with `DELETE`, update with `UPDATE` and so on. FHIRBase uses
@@ -46,7 +44,7 @@ resource or set of resources. But when you create, delete or modify
 something, you have to use corresponding stored procedures
 (hereinafter, we'll refer them as SP).
 
-## Types
+### Types
 
 SQL has strict type checking, so SP's arguments and return values are
 typed. When describing SP, we will put type of every argument in
@@ -60,7 +58,7 @@ parens. For example, if argument `cfg` has `jsonb` type, we'll write:
 You can take a look at
 [overview of standard PostgreSQL types](http://www.postgresql.org/docs/9.4/static/datatype.html#DATATYPE-TABLE).
 
-## JSON and XML
+### JSON and XML
 
 FHIR standard
 [allows](http://www.hl7.org/implement/standards/fhir/formats.html) to
@@ -81,7 +79,7 @@ several advantages of such decision:
 * If you need an XML representation of a resource, you can always get
   it from JSON in your application's code.
 
-## Passing JSON to a SP
+### Passing JSON to a SP
 
 When SP's argument has type `jsonb`, that means you have to pass some
 JSON as a value. To do this, you need to represent JSON as
@@ -166,7 +164,7 @@ need to "remember" (copy-paste) this identifier for later use.
 Copy-paste this ID somewhere, because we'll need it in the
 next step.
 
-## Reading resources
+### Reading resources
 
 To read latest version of Resource use **fhir.read** SP:
 
@@ -241,7 +239,7 @@ Generally, `SELECT`ing data from `resource` table by logical ID and
 resource type is as fast as `SELECT`ing from inherited table by
 logical ID only.
 
-## Updating resource
+### Updating resource
 
 To update resource data use **fhir_update** SP:
 
@@ -342,7 +340,7 @@ SELECT fhir_vread(
 [... skipped ...]
 ```
 
-## Searching Resources
+### Searching Resources
 
 [Search](http://www.hl7.org/implement/standards/fhir/search.html) is
 the most tricky part of FHIR Standard. FHIRBase implements most of

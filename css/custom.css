@@ -12,6 +12,22 @@ body{
 	font-weight: 300;
 }
 
+@font-face {
+  font-family: 'LogosFont';
+  src: url('../fonts/LogosFont.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon {
+  display: inline-block;
+  font-family: LogosFont ;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 .navbar{
 	background-color: #fafafa !important;
@@ -23,6 +39,11 @@ body{
 
 a.navbar-brand{
 	font-size: 24px;
+	padding: 0px 15px;
+}
+
+.navbar span{
+	font-size: 40px;
 }
 
 nav a{
@@ -50,6 +71,24 @@ nav a{
 	border-radius: 2px;
 	min-width: 150px;
 	color: white;
+}
+
+.btn-community{
+	background-color: transparent;
+	border: 1px solid #26a69a;
+	border-radius: 2px;
+	min-width: 150px;
+	color: #26a69a;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+	margin: 0px 5px;
+}
+
+.btn-community:hover{
+	background-color: transparent;
+	border: 1px solid #2bbbad;
+	border-radius: 2px;
+	min-width: 150px;
+	color: #2bbbad;
 }
 
 footer{
@@ -115,7 +154,6 @@ footer a:hover{
 }
 
 .offer p{
-	width: 40%;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -145,6 +183,21 @@ ul.subnav-list li{
 
 .gstarted{
 	padding: 40px 0px;
+}
+
+.docs-content{
+	border-right: 1px solid #eee;
+	padding-right: 40px;
+}
+
+.docs-content h3{
+	padding-top: 20px;
+	padding-bottom: 10px;
+	margin-top: 0px;
+}
+
+.docs-content p{
+	font-size: 16px;
 }
 
 

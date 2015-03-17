@@ -5,11 +5,8 @@ title: FHIRbase
 
 {% assign docs = site.docs | sort: 'order' %}
 <div class="container gstarted">
-	<div class="col-md-9">
+	<div class="col-md-9 docs-content">
 		{% for instruction in docs %}
-			<h3 id="{{ instruction.id }}">
-				{{instruction.title}}
-			</h3>
 			{{ instruction.content }}
 			<hr>
 			<br>
@@ -20,7 +17,6 @@ title: FHIRbase
                   {% for instruction in docs %}
 		     <li><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
 		  {% endfor %}
-
 		</ul>
 	</div>
 </div>
