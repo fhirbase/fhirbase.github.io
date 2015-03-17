@@ -16,9 +16,9 @@ title: FHIRbase
 		{% endfor %}
 	</div>
 	<div class="col-md-3 sub-nav">
-		<ul class="subnav-list list-unstyled">
+		<ul class="subnav-list list-unstyled" id="nav">
                   {% for instruction in instructions %}
-		     <li><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
+		     <li {% if instruction.order == 1 %}class="current"{% endif %}><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
 		  {% endfor %}
 
 		</ul>

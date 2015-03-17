@@ -178,7 +178,11 @@ ul.subnav-list{
 }
 
 ul.subnav-list li{
-	padding: 0px 20px;
+       padding: 0px 20px;
+}
+
+#nav li.current a{
+        font-weight: bold;
 }
 
 .gstarted{
