@@ -5,15 +5,13 @@ id: local
 order: 1
 ---
 
-Requirements:
+Requirements
 
 * PostgreSQL 9.4
 * pgcrypto
 * pg_trgm
 * btree_gin
 * btree_gist
-
-<br>
 
 Installation steps:
 

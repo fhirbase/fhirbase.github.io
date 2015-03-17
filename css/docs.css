@@ -1,0 +1,20 @@
+.gstarted .docs-content{
+	border-right: 1px solid #eee;
+	padding-right: 40px;
+}
+
+.gstarted .docs-content h3{
+	padding-top: 20px;
+	padding-bottom: 10px;
+	margin-top: 0px;
+}
+
+.gstarted  .docs-content p, ul, li{
+	font-size: 16px;
+}
+
+.gstarted pre{
+	background-color: #455a64;
+	color: white;
+	border: 1px solid #455a64; 
+}

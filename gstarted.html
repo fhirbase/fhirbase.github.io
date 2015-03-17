@@ -7,11 +7,11 @@ title: FHIRbase
 <div class="container gstarted">
 	<div class="col-md-9 docs-content">
 		{% for instruction in instructions %}
-			<h3 id="{{ instruction.id }}">
+			<h1 id="{{ instruction.id }}">
 				{{instruction.title}}
-			</h3>
-			{{ instruction.content }}
+			</h1>
 			<hr>
+			{{ instruction.content }}
 			<br>
 		{% endfor %}
 	</div>
