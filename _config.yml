@@ -1,6 +1,6 @@
 name: FHIRbase
 markdown: redcarpet
-pygments: true
+highlighter: pygments
 
 collections:
   instruction:
