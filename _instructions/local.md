@@ -21,15 +21,22 @@ sudo apt-get install postgresql-9.4 postgresql-contrib-9.4 curl
 sudo su postgres -c 'createuser -s <you-local-user>'
 # create empty database
 psql -d postgres -c 'create database test'
+```
+
+Download latest version of fhirbase.sql
+
+<a href="#" class="btn btn-default btn-lg" id="download">Download</a>
+
+```bash
 # install last version of fhirbase
-curl https://raw.githubusercontent.com/fhirbase/fhirbase-build/master/fhirbase.sql | psql -d test
+psql -d test < fhirbase.sql
 # generate tables
 psql -d test -c 'SELECT fhir.generate_tables()'
 
 psql test
 #> \dt
 ```
-<a href="#" class="btn btn-default btn-lg" id="download">Download</a>
+
 
 
 Here is asci cast for the simplest installation - [https://asciinema.org/a/17236].
