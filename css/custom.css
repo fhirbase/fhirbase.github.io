@@ -18,6 +18,7 @@ body{
 	border: none !important;
 	box-shadow: none;
 	padding: 15px 0px;
+	margin-bottom: 0px;
 }
 
 a.navbar-brand{
@@ -130,9 +131,12 @@ main .row-content:nth-child(odd){
 /* Getting Started Page */
 
 .sub-nav{
-	margin-top: 85px;
-	padding: 15px 0px;
-	border-bottom: 1px solid #eee;
+	position: relative;
+}
+
+ul.subnav-list{
+	position: fixed;
+	padding-top: 20px;
 }
 
 ul.subnav-list li{

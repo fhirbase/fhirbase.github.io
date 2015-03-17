@@ -1,11 +1,8 @@
 ---
 layout: default
 title:  "Local Installation"
+id: local
 ---
-
-## Local Installation
-
-<br>
 
 Requirements:
 

@@ -3,17 +3,23 @@ layout: default
 title: FHIRbase
 ---
 
-<div class="sub-nav text-center">
-	<ul class="subnav-list list-inline">
-		<li><a href="">Local</a></li>
-		<li><a href="">Vagrant</a></li>
-		<li><a href="">Docker</a></li>
-		<li><a href="">Heroku</a></li>
-	</ul>
-</div>
-
 <div class="container gstarted">
-	{% for instruction in site.instruction %}
-		{{ instruction.content }}
-	{% endfor %}
+	<div class="col-md-9">
+		{% for instruction in site.instruction %}
+			<h3 id="{{ instruction.id }}"> 
+				{{instruction.title}}
+			</h3>
+			{{ instruction.content }}
+			<hr>
+			<br>
+		{% endfor %}
+	</div>
+	<div class="col-md-3 sub-nav">
+		<ul class="subnav-list list-unstyled">
+			<li><a href="#local" >Local</a></li>
+			<li><a href="#vagrant">Vagrant</a></li>
+			<li><a href="#docker">Docker</a></li>
+			<li><a href="#heroku">Heroku</a></li>
+		</ul>
+	</div>
 </div>
