@@ -91,8 +91,15 @@
   </script>
 
   <script type="text/javascript">
-  $('.collapse').collapse({
-    toggle: false
+    $('.collapse').collapse({
+      toggle: false
+    });
+  </script>
+
+  <script type="text/javascript">
+    $('#download').on('click', function() {
+      console.log('download');
+      ga('send', 'event', 'button', 'click', 'nav-buttons');
     });
   </script>
   </body>

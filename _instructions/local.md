@@ -29,5 +29,7 @@ psql -d test -c 'SELECT fhir.generate_tables()'
 psql test
 #> \dt
 ```
+<a href="#" class="btn btn-default btn-lg" id="download">Download</a>
+
 
 Here is asci cast for the simplest installation - [https://asciinema.org/a/17236].
