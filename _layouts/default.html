@@ -108,6 +108,7 @@
     $('#download').on('click', function() {
       console.log('download');
       ga('send', 'event', 'download', 'click', 'download-sql');
+      window.open('https://raw.githubusercontent.com/fhirbase/fhirbase-build/master/fhirbase.sql');
     });
   </script>
 
