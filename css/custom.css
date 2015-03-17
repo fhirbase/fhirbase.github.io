@@ -137,8 +137,19 @@ footer a:hover{
 .moto{
 	border-bottom: 1px solid #eee;
 	text-align: center;
-	padding: 250px 0px;
+	padding: 200px 0px;
 	background-color: #fafafa;
+}
+
+.next{
+	margin-top: -70px;
+
+}
+
+.next a{
+	font-size: 36px;
+	opacity: 0.5;
+	color: grey;
 }
 
 .image{
@@ -165,10 +176,10 @@ footer a:hover{
 }
 
 main .row-content:nth-child(odd){
-	background-color: #fafafa;
+	background-color: transparent;
 }
 
-main .row-content:nth-child(odd){
+main .row-content:nth-child(even){
 	background-color: #fafafa;
 }
 
