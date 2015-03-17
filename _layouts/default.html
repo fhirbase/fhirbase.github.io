@@ -38,10 +38,10 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="index.html">Overview</a></li>
-          <li><a href="">Demo</a></li>
-          <li><a href="gstarted.html">Getting Started</a></li>
-          <li><a href="docs.html">Docs</a></li>
+          <li {% if page.url == '/index.html' %}class="active"{% endif %}><a href="index.html">Overview</a></li>
+          <li {% if page.url == '/demo.html' %}class="active"{% endif %}><a href="">Demo</a></li>
+          <li {% if page.url == '/gstarted.html' %}class="active"{% endif %}><a href="gstarted.html">Getting Started</a></li>
+          <li {% if page.url == '/docs.html' %}class="active"{% endif %}><a href="docs.html">Docs</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
