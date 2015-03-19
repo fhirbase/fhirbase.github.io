@@ -1,0 +1,7 @@
+{
+  "name": "fhirbase-demo",
+  "title": "fhirbase Demo",
+  "version": "0.0.0",
+  "description": "fhirbase Demo",
+  "server": "http://hostel.coreos.health-samurai.io:10001/app"
+}
