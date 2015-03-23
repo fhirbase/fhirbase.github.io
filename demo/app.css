@@ -7012,6 +7012,13 @@ ul.subnav-list {
 ul.subnav-list li {
   padding: 0px 20px;
 }
+ul.subnav-list li a:focus {
+  color: #337ab7;
+  text-decoration: none;
+}
+ul.subnav-list li.active a {
+  font-weight: bold;
+}
 .header {
   padding: 0 45px;
   margin: 0 auto;
