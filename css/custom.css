@@ -162,6 +162,11 @@ footer a:hover{
 	height: 200px;
 }
 
+#community .image img {
+	width: auto;
+	height: 150px;
+}
+
 .calltoaction{
 	text-align: center;
 }
