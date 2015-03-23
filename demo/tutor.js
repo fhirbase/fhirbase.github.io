@@ -50,9 +50,9 @@
 
 	__webpack_require__(10);
 
-	__webpack_require__(12);
-
 	__webpack_require__(11);
+
+	__webpack_require__(12);
 
 	__webpack_require__(13);
 
@@ -66,9 +66,9 @@
 
 	__webpack_require__(18);
 
-	__webpack_require__(22);
-
 	__webpack_require__(20);
+
+	__webpack_require__(22);
 
 	__webpack_require__(24);
 
@@ -126,7 +126,7 @@
 	    template: function() {
 	      var tutor;
 	      tutor = __webpack_require__(28);
-	      return "<div class=\"row\">\n  <div class=\"col-md-9\">" + tutor + "</div>\n  <div class=\"col-md-3 tutorial-nav sub-nav\">\n    <ul class=\"subnav-list list-unstyled\" id=\"nav\">\n      <li ng-repeat=\"item in items\" du-scrollspy=\"{{item.link.split('#')[1]}}\">\n        <a href=\"{{item.link}}\" \n           ng-click=\"goTo(item.link)\" \n           du-smooth-scroll\">{{item.title}}</a>\n      </li>\n    </ul>\n  </div>\n</div>";
+	      return "<div class=\"row\">\n  <div class=\"col-md-9 tutorial-content\">" + tutor + "</div>\n  <div class=\"col-md-3 tutorial-nav sub-nav\">\n    <ul class=\"subnav-list list-unstyled\" id=\"nav\">\n      <li ng-repeat=\"item in items\" du-scrollspy=\"{{item.link.split('#')[1]}}\">\n        <a href=\"{{item.link}}\" \n           ng-click=\"goTo(item.link)\" \n           du-smooth-scroll\">{{item.title}}</a>\n      </li>\n    </ul>\n  </div>\n</div>";
 	    }
 	  };
 	});
@@ -36095,680 +36095,6 @@
 	 */
 	(function(window, angular, undefined) {'use strict';
 
-	var $sanitizeMinErr = angular.$$minErr('$sanitize');
-
-	/**
-	 * @ngdoc module
-	 * @name ngSanitize
-	 * @description
-	 *
-	 * # ngSanitize
-	 *
-	 * The `ngSanitize` module provides functionality to sanitize HTML.
-	 *
-	 *
-	 * <div doc-module-components="ngSanitize"></div>
-	 *
-	 * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
-	 */
-
-	/*
-	 * HTML Parser By Misko Hevery (misko@hevery.com)
-	 * based on:  HTML Parser By John Resig (ejohn.org)
-	 * Original code by Erik Arvidsson, Mozilla Public License
-	 * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
-	 *
-	 * // Use like so:
-	 * htmlParser(htmlString, {
-	 *     start: function(tag, attrs, unary) {},
-	 *     end: function(tag) {},
-	 *     chars: function(text) {},
-	 *     comment: function(text) {}
-	 * });
-	 *
-	 */
-
-
-	/**
-	 * @ngdoc service
-	 * @name $sanitize
-	 * @kind function
-	 *
-	 * @description
-	 *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
-	 *   then serialized back to properly escaped html string. This means that no unsafe input can make
-	 *   it into the returned string, however, since our parser is more strict than a typical browser
-	 *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
-	 *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
-	 *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
-	 *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
-	 *
-	 * @param {string} html HTML input.
-	 * @returns {string} Sanitized HTML.
-	 *
-	 * @example
-	   <example module="sanitizeExample" deps="angular-sanitize.js">
-	   <file name="index.html">
-	     <script>
-	         angular.module('sanitizeExample', ['ngSanitize'])
-	           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
-	             $scope.snippet =
-	               '<p style="color:blue">an html\n' +
-	               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
-	               'snippet</p>';
-	             $scope.deliberatelyTrustDangerousSnippet = function() {
-	               return $sce.trustAsHtml($scope.snippet);
-	             };
-	           }]);
-	     </script>
-	     <div ng-controller="ExampleController">
-	        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-	       <table>
-	         <tr>
-	           <td>Directive</td>
-	           <td>How</td>
-	           <td>Source</td>
-	           <td>Rendered</td>
-	         </tr>
-	         <tr id="bind-html-with-sanitize">
-	           <td>ng-bind-html</td>
-	           <td>Automatically uses $sanitize</td>
-	           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-	           <td><div ng-bind-html="snippet"></div></td>
-	         </tr>
-	         <tr id="bind-html-with-trust">
-	           <td>ng-bind-html</td>
-	           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
-	           <td>
-	           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
-	&lt;/div&gt;</pre>
-	           </td>
-	           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
-	         </tr>
-	         <tr id="bind-default">
-	           <td>ng-bind</td>
-	           <td>Automatically escapes</td>
-	           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-	           <td><div ng-bind="snippet"></div></td>
-	         </tr>
-	       </table>
-	       </div>
-	   </file>
-	   <file name="protractor.js" type="protractor">
-	     it('should sanitize the html snippet by default', function() {
-	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
-	         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
-	     });
-
-	     it('should inline raw snippet if bound to a trusted value', function() {
-	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
-	         toBe("<p style=\"color:blue\">an html\n" +
-	              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
-	              "snippet</p>");
-	     });
-
-	     it('should escape snippet without any filter', function() {
-	       expect(element(by.css('#bind-default div')).getInnerHtml()).
-	         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
-	              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
-	              "snippet&lt;/p&gt;");
-	     });
-
-	     it('should update', function() {
-	       element(by.model('snippet')).clear();
-	       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
-	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
-	         toBe('new <b>text</b>');
-	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
-	         'new <b onclick="alert(1)">text</b>');
-	       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
-	         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
-	     });
-	   </file>
-	   </example>
-	 */
-	function $SanitizeProvider() {
-	  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
-	    return function(html) {
-	      var buf = [];
-	      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
-	        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
-	      }));
-	      return buf.join('');
-	    };
-	  }];
-	}
-
-	function sanitizeText(chars) {
-	  var buf = [];
-	  var writer = htmlSanitizeWriter(buf, angular.noop);
-	  writer.chars(chars);
-	  return buf.join('');
-	}
-
-
-	// Regular Expressions for parsing tags and attributes
-	var START_TAG_REGEXP =
-	       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
-	  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
-	  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
-	  BEGIN_TAG_REGEXP = /^</,
-	  BEGING_END_TAGE_REGEXP = /^<\//,
-	  COMMENT_REGEXP = /<!--(.*?)-->/g,
-	  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
-	  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
-	  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-	  // Match everything outside of normal chars and " (quote character)
-	  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
-
-
-	// Good source of info about elements and attributes
-	// http://dev.w3.org/html5/spec/Overview.html#semantics
-	// http://simon.html5.org/html-elements
-
-	// Safe Void Elements - HTML5
-	// http://dev.w3.org/html5/spec/Overview.html#void-elements
-	var voidElements = makeMap("area,br,col,hr,img,wbr");
-
-	// Elements that you can, intentionally, leave open (and which close themselves)
-	// http://dev.w3.org/html5/spec/Overview.html#optional-tags
-	var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
-	    optionalEndTagInlineElements = makeMap("rp,rt"),
-	    optionalEndTagElements = angular.extend({},
-	                                            optionalEndTagInlineElements,
-	                                            optionalEndTagBlockElements);
-
-	// Safe Block Elements - HTML5
-	var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
-	        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
-	        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
-
-	// Inline Elements - HTML5
-	var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
-	        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
-	        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
-
-	// SVG Elements
-	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
-	var svgElements = makeMap("animate,animateColor,animateMotion,animateTransform,circle,defs," +
-	        "desc,ellipse,font-face,font-face-name,font-face-src,g,glyph,hkern,image,linearGradient," +
-	        "line,marker,metadata,missing-glyph,mpath,path,polygon,polyline,radialGradient,rect,set," +
-	        "stop,svg,switch,text,title,tspan,use");
-
-	// Special Elements (can contain anything)
-	var specialElements = makeMap("script,style");
-
-	var validElements = angular.extend({},
-	                                   voidElements,
-	                                   blockElements,
-	                                   inlineElements,
-	                                   optionalEndTagElements,
-	                                   svgElements);
-
-	//Attributes that have href and hence need to be sanitized
-	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
-
-	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
-	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
-	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
-	    'scope,scrolling,shape,size,span,start,summary,target,title,type,' +
-	    'valign,value,vspace,width');
-
-	// SVG attributes (without "id" and "name" attributes)
-	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
-	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
-	    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,' +
-	    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,' +
-	    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,' +
-	    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,' +
-	    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,' +
-	    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,' +
-	    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,' +
-	    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,' +
-	    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,' +
-	    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,' +
-	    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,' +
-	    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,' +
-	    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,' +
-	    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,' +
-	    'zoomAndPan');
-
-	var validAttrs = angular.extend({},
-	                                uriAttrs,
-	                                svgAttrs,
-	                                htmlAttrs);
-
-	function makeMap(str) {
-	  var obj = {}, items = str.split(','), i;
-	  for (i = 0; i < items.length; i++) obj[items[i]] = true;
-	  return obj;
-	}
-
-
-	/**
-	 * @example
-	 * htmlParser(htmlString, {
-	 *     start: function(tag, attrs, unary) {},
-	 *     end: function(tag) {},
-	 *     chars: function(text) {},
-	 *     comment: function(text) {}
-	 * });
-	 *
-	 * @param {string} html string
-	 * @param {object} handler
-	 */
-	function htmlParser(html, handler) {
-	  if (typeof html !== 'string') {
-	    if (html === null || typeof html === 'undefined') {
-	      html = '';
-	    } else {
-	      html = '' + html;
-	    }
-	  }
-	  var index, chars, match, stack = [], last = html, text;
-	  stack.last = function() { return stack[stack.length - 1]; };
-
-	  while (html) {
-	    text = '';
-	    chars = true;
-
-	    // Make sure we're not in a script or style element
-	    if (!stack.last() || !specialElements[stack.last()]) {
-
-	      // Comment
-	      if (html.indexOf("<!--") === 0) {
-	        // comments containing -- are not allowed unless they terminate the comment
-	        index = html.indexOf("--", 4);
-
-	        if (index >= 0 && html.lastIndexOf("-->", index) === index) {
-	          if (handler.comment) handler.comment(html.substring(4, index));
-	          html = html.substring(index + 3);
-	          chars = false;
-	        }
-	      // DOCTYPE
-	      } else if (DOCTYPE_REGEXP.test(html)) {
-	        match = html.match(DOCTYPE_REGEXP);
-
-	        if (match) {
-	          html = html.replace(match[0], '');
-	          chars = false;
-	        }
-	      // end tag
-	      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
-	        match = html.match(END_TAG_REGEXP);
-
-	        if (match) {
-	          html = html.substring(match[0].length);
-	          match[0].replace(END_TAG_REGEXP, parseEndTag);
-	          chars = false;
-	        }
-
-	      // start tag
-	      } else if (BEGIN_TAG_REGEXP.test(html)) {
-	        match = html.match(START_TAG_REGEXP);
-
-	        if (match) {
-	          // We only have a valid start-tag if there is a '>'.
-	          if (match[4]) {
-	            html = html.substring(match[0].length);
-	            match[0].replace(START_TAG_REGEXP, parseStartTag);
-	          }
-	          chars = false;
-	        } else {
-	          // no ending tag found --- this piece should be encoded as an entity.
-	          text += '<';
-	          html = html.substring(1);
-	        }
-	      }
-
-	      if (chars) {
-	        index = html.indexOf("<");
-
-	        text += index < 0 ? html : html.substring(0, index);
-	        html = index < 0 ? "" : html.substring(index);
-
-	        if (handler.chars) handler.chars(decodeEntities(text));
-	      }
-
-	    } else {
-	      // IE versions 9 and 10 do not understand the regex '[^]', so using a workaround with [\W\w].
-	      html = html.replace(new RegExp("([\\W\\w]*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
-	        function(all, text) {
-	          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
-
-	          if (handler.chars) handler.chars(decodeEntities(text));
-
-	          return "";
-	      });
-
-	      parseEndTag("", stack.last());
-	    }
-
-	    if (html == last) {
-	      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
-	                                        "of html: {0}", html);
-	    }
-	    last = html;
-	  }
-
-	  // Clean up any remaining tags
-	  parseEndTag();
-
-	  function parseStartTag(tag, tagName, rest, unary) {
-	    tagName = angular.lowercase(tagName);
-	    if (blockElements[tagName]) {
-	      while (stack.last() && inlineElements[stack.last()]) {
-	        parseEndTag("", stack.last());
-	      }
-	    }
-
-	    if (optionalEndTagElements[tagName] && stack.last() == tagName) {
-	      parseEndTag("", tagName);
-	    }
-
-	    unary = voidElements[tagName] || !!unary;
-
-	    if (!unary)
-	      stack.push(tagName);
-
-	    var attrs = {};
-
-	    rest.replace(ATTR_REGEXP,
-	      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
-	        var value = doubleQuotedValue
-	          || singleQuotedValue
-	          || unquotedValue
-	          || '';
-
-	        attrs[name] = decodeEntities(value);
-	    });
-	    if (handler.start) handler.start(tagName, attrs, unary);
-	  }
-
-	  function parseEndTag(tag, tagName) {
-	    var pos = 0, i;
-	    tagName = angular.lowercase(tagName);
-	    if (tagName)
-	      // Find the closest opened tag of the same type
-	      for (pos = stack.length - 1; pos >= 0; pos--)
-	        if (stack[pos] == tagName)
-	          break;
-
-	    if (pos >= 0) {
-	      // Close all the open elements, up the stack
-	      for (i = stack.length - 1; i >= pos; i--)
-	        if (handler.end) handler.end(stack[i]);
-
-	      // Remove the open elements from the stack
-	      stack.length = pos;
-	    }
-	  }
-	}
-
-	var hiddenPre=document.createElement("pre");
-	/**
-	 * decodes all entities into regular string
-	 * @param value
-	 * @returns {string} A string with decoded entities.
-	 */
-	function decodeEntities(value) {
-	  if (!value) { return ''; }
-
-	  hiddenPre.innerHTML = value.replace(/</g,"&lt;");
-	  // innerText depends on styling as it doesn't display hidden elements.
-	  // Therefore, it's better to use textContent not to cause unnecessary reflows.
-	  return hiddenPre.textContent;
-	}
-
-	/**
-	 * Escapes all potentially dangerous characters, so that the
-	 * resulting string can be safely inserted into attribute or
-	 * element text.
-	 * @param value
-	 * @returns {string} escaped text
-	 */
-	function encodeEntities(value) {
-	  return value.
-	    replace(/&/g, '&amp;').
-	    replace(SURROGATE_PAIR_REGEXP, function(value) {
-	      var hi = value.charCodeAt(0);
-	      var low = value.charCodeAt(1);
-	      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
-	    }).
-	    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
-	      return '&#' + value.charCodeAt(0) + ';';
-	    }).
-	    replace(/</g, '&lt;').
-	    replace(/>/g, '&gt;');
-	}
-
-	/**
-	 * create an HTML/XML writer which writes to buffer
-	 * @param {Array} buf use buf.jain('') to get out sanitized html string
-	 * @returns {object} in the form of {
-	 *     start: function(tag, attrs, unary) {},
-	 *     end: function(tag) {},
-	 *     chars: function(text) {},
-	 *     comment: function(text) {}
-	 * }
-	 */
-	function htmlSanitizeWriter(buf, uriValidator) {
-	  var ignore = false;
-	  var out = angular.bind(buf, buf.push);
-	  return {
-	    start: function(tag, attrs, unary) {
-	      tag = angular.lowercase(tag);
-	      if (!ignore && specialElements[tag]) {
-	        ignore = tag;
-	      }
-	      if (!ignore && validElements[tag] === true) {
-	        out('<');
-	        out(tag);
-	        angular.forEach(attrs, function(value, key) {
-	          var lkey=angular.lowercase(key);
-	          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
-	          if (validAttrs[lkey] === true &&
-	            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
-	            out(' ');
-	            out(key);
-	            out('="');
-	            out(encodeEntities(value));
-	            out('"');
-	          }
-	        });
-	        out(unary ? '/>' : '>');
-	      }
-	    },
-	    end: function(tag) {
-	        tag = angular.lowercase(tag);
-	        if (!ignore && validElements[tag] === true) {
-	          out('</');
-	          out(tag);
-	          out('>');
-	        }
-	        if (tag == ignore) {
-	          ignore = false;
-	        }
-	      },
-	    chars: function(chars) {
-	        if (!ignore) {
-	          out(encodeEntities(chars));
-	        }
-	      }
-	  };
-	}
-
-
-	// define ngSanitize module and register $sanitize service
-	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
-
-	/* global sanitizeText: false */
-
-	/**
-	 * @ngdoc filter
-	 * @name linky
-	 * @kind function
-	 *
-	 * @description
-	 * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
-	 * plain email address links.
-	 *
-	 * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
-	 *
-	 * @param {string} text Input text.
-	 * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
-	 * @returns {string} Html-linkified text.
-	 *
-	 * @usage
-	   <span ng-bind-html="linky_expression | linky"></span>
-	 *
-	 * @example
-	   <example module="linkyExample" deps="angular-sanitize.js">
-	     <file name="index.html">
-	       <script>
-	         angular.module('linkyExample', ['ngSanitize'])
-	           .controller('ExampleController', ['$scope', function($scope) {
-	             $scope.snippet =
-	               'Pretty text with some links:\n'+
-	               'http://angularjs.org/,\n'+
-	               'mailto:us@somewhere.org,\n'+
-	               'another@somewhere.org,\n'+
-	               'and one more: ftp://127.0.0.1/.';
-	             $scope.snippetWithTarget = 'http://angularjs.org/';
-	           }]);
-	       </script>
-	       <div ng-controller="ExampleController">
-	       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-	       <table>
-	         <tr>
-	           <td>Filter</td>
-	           <td>Source</td>
-	           <td>Rendered</td>
-	         </tr>
-	         <tr id="linky-filter">
-	           <td>linky filter</td>
-	           <td>
-	             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
-	           </td>
-	           <td>
-	             <div ng-bind-html="snippet | linky"></div>
-	           </td>
-	         </tr>
-	         <tr id="linky-target">
-	          <td>linky target</td>
-	          <td>
-	            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
-	          </td>
-	          <td>
-	            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
-	          </td>
-	         </tr>
-	         <tr id="escaped-html">
-	           <td>no filter</td>
-	           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
-	           <td><div ng-bind="snippet"></div></td>
-	         </tr>
-	       </table>
-	     </file>
-	     <file name="protractor.js" type="protractor">
-	       it('should linkify the snippet with urls', function() {
-	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
-	             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
-	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
-	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
-	       });
-
-	       it('should not linkify snippet without the linky filter', function() {
-	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
-	             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
-	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
-	         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
-	       });
-
-	       it('should update', function() {
-	         element(by.model('snippet')).clear();
-	         element(by.model('snippet')).sendKeys('new http://link.');
-	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
-	             toBe('new http://link.');
-	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
-	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
-	             .toBe('new http://link.');
-	       });
-
-	       it('should work with the target property', function() {
-	        expect(element(by.id('linky-target')).
-	            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
-	            toBe('http://angularjs.org/');
-	        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
-	       });
-	     </file>
-	   </example>
-	 */
-	angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
-	  var LINKY_URL_REGEXP =
-	        /((ftp|https?):\/\/|(www\.)|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"”’]/,
-	      MAILTO_REGEXP = /^mailto:/;
-
-	  return function(text, target) {
-	    if (!text) return text;
-	    var match;
-	    var raw = text;
-	    var html = [];
-	    var url;
-	    var i;
-	    while ((match = raw.match(LINKY_URL_REGEXP))) {
-	      // We can not end in these as they are sometimes found at the end of the sentence
-	      url = match[0];
-	      // if we did not match ftp/http/www/mailto then assume mailto
-	      if (!match[2] && !match[4]) {
-	        url = (match[3] ? 'http://' : 'mailto:') + url;
-	      }
-	      i = match.index;
-	      addText(raw.substr(0, i));
-	      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
-	      raw = raw.substring(i + match[0].length);
-	    }
-	    addText(raw);
-	    return $sanitize(html.join(''));
-
-	    function addText(text) {
-	      if (!text) {
-	        return;
-	      }
-	      html.push(sanitizeText(text));
-	    }
-
-	    function addLink(url, text) {
-	      html.push('<a ');
-	      if (angular.isDefined(target)) {
-	        html.push('target="',
-	                  target,
-	                  '" ');
-	      }
-	      html.push('href="',
-	                url.replace(/"/g, '&quot;'),
-	                '">');
-	      addText(text);
-	      html.push('</a>');
-	    }
-	  };
-	}]);
-
-
-	})(window, window.angular);
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @license AngularJS v1.3.14
-	 * (c) 2010-2014 Google, Inc. http://angularjs.org
-	 * License: MIT
-	 */
-	(function(window, angular, undefined) {'use strict';
-
 	/**
 	 * @ngdoc module
 	 * @name ngRoute
@@ -37748,6 +37074,680 @@
 	    }
 	  };
 	}
+
+
+	})(window, window.angular);
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @license AngularJS v1.3.14
+	 * (c) 2010-2014 Google, Inc. http://angularjs.org
+	 * License: MIT
+	 */
+	(function(window, angular, undefined) {'use strict';
+
+	var $sanitizeMinErr = angular.$$minErr('$sanitize');
+
+	/**
+	 * @ngdoc module
+	 * @name ngSanitize
+	 * @description
+	 *
+	 * # ngSanitize
+	 *
+	 * The `ngSanitize` module provides functionality to sanitize HTML.
+	 *
+	 *
+	 * <div doc-module-components="ngSanitize"></div>
+	 *
+	 * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
+	 */
+
+	/*
+	 * HTML Parser By Misko Hevery (misko@hevery.com)
+	 * based on:  HTML Parser By John Resig (ejohn.org)
+	 * Original code by Erik Arvidsson, Mozilla Public License
+	 * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+	 *
+	 * // Use like so:
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 */
+
+
+	/**
+	 * @ngdoc service
+	 * @name $sanitize
+	 * @kind function
+	 *
+	 * @description
+	 *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
+	 *   then serialized back to properly escaped html string. This means that no unsafe input can make
+	 *   it into the returned string, however, since our parser is more strict than a typical browser
+	 *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
+	 *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
+	 *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
+	 *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
+	 *
+	 * @param {string} html HTML input.
+	 * @returns {string} Sanitized HTML.
+	 *
+	 * @example
+	   <example module="sanitizeExample" deps="angular-sanitize.js">
+	   <file name="index.html">
+	     <script>
+	         angular.module('sanitizeExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
+	             $scope.snippet =
+	               '<p style="color:blue">an html\n' +
+	               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+	               'snippet</p>';
+	             $scope.deliberatelyTrustDangerousSnippet = function() {
+	               return $sce.trustAsHtml($scope.snippet);
+	             };
+	           }]);
+	     </script>
+	     <div ng-controller="ExampleController">
+	        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Directive</td>
+	           <td>How</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="bind-html-with-sanitize">
+	           <td>ng-bind-html</td>
+	           <td>Automatically uses $sanitize</td>
+	           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind-html="snippet"></div></td>
+	         </tr>
+	         <tr id="bind-html-with-trust">
+	           <td>ng-bind-html</td>
+	           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
+	           <td>
+	           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
+	&lt;/div&gt;</pre>
+	           </td>
+	           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
+	         </tr>
+	         <tr id="bind-default">
+	           <td>ng-bind</td>
+	           <td>Automatically escapes</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	       </div>
+	   </file>
+	   <file name="protractor.js" type="protractor">
+	     it('should sanitize the html snippet by default', function() {
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+	     });
+
+	     it('should inline raw snippet if bound to a trusted value', function() {
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
+	         toBe("<p style=\"color:blue\">an html\n" +
+	              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+	              "snippet</p>");
+	     });
+
+	     it('should escape snippet without any filter', function() {
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).
+	         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+	              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+	              "snippet&lt;/p&gt;");
+	     });
+
+	     it('should update', function() {
+	       element(by.model('snippet')).clear();
+	       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('new <b>text</b>');
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
+	         'new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
+	         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
+	     });
+	   </file>
+	   </example>
+	 */
+	function $SanitizeProvider() {
+	  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
+	    return function(html) {
+	      var buf = [];
+	      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
+	        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
+	      }));
+	      return buf.join('');
+	    };
+	  }];
+	}
+
+	function sanitizeText(chars) {
+	  var buf = [];
+	  var writer = htmlSanitizeWriter(buf, angular.noop);
+	  writer.chars(chars);
+	  return buf.join('');
+	}
+
+
+	// Regular Expressions for parsing tags and attributes
+	var START_TAG_REGEXP =
+	       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
+	  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
+	  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
+	  BEGIN_TAG_REGEXP = /^</,
+	  BEGING_END_TAGE_REGEXP = /^<\//,
+	  COMMENT_REGEXP = /<!--(.*?)-->/g,
+	  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
+	  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
+	  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+	  // Match everything outside of normal chars and " (quote character)
+	  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g;
+
+
+	// Good source of info about elements and attributes
+	// http://dev.w3.org/html5/spec/Overview.html#semantics
+	// http://simon.html5.org/html-elements
+
+	// Safe Void Elements - HTML5
+	// http://dev.w3.org/html5/spec/Overview.html#void-elements
+	var voidElements = makeMap("area,br,col,hr,img,wbr");
+
+	// Elements that you can, intentionally, leave open (and which close themselves)
+	// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+	var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+	    optionalEndTagInlineElements = makeMap("rp,rt"),
+	    optionalEndTagElements = angular.extend({},
+	                                            optionalEndTagInlineElements,
+	                                            optionalEndTagBlockElements);
+
+	// Safe Block Elements - HTML5
+	var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
+	        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+	        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
+
+	// Inline Elements - HTML5
+	var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
+	        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+	        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+	// SVG Elements
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
+	var svgElements = makeMap("animate,animateColor,animateMotion,animateTransform,circle,defs," +
+	        "desc,ellipse,font-face,font-face-name,font-face-src,g,glyph,hkern,image,linearGradient," +
+	        "line,marker,metadata,missing-glyph,mpath,path,polygon,polyline,radialGradient,rect,set," +
+	        "stop,svg,switch,text,title,tspan,use");
+
+	// Special Elements (can contain anything)
+	var specialElements = makeMap("script,style");
+
+	var validElements = angular.extend({},
+	                                   voidElements,
+	                                   blockElements,
+	                                   inlineElements,
+	                                   optionalEndTagElements,
+	                                   svgElements);
+
+	//Attributes that have href and hence need to be sanitized
+	var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
+
+	var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
+	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
+	    'scope,scrolling,shape,size,span,start,summary,target,title,type,' +
+	    'valign,value,vspace,width');
+
+	// SVG attributes (without "id" and "name" attributes)
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
+	var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
+	    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,' +
+	    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,' +
+	    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,' +
+	    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,' +
+	    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,' +
+	    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,' +
+	    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,' +
+	    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,' +
+	    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,' +
+	    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,' +
+	    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,' +
+	    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,' +
+	    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,' +
+	    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,' +
+	    'zoomAndPan');
+
+	var validAttrs = angular.extend({},
+	                                uriAttrs,
+	                                svgAttrs,
+	                                htmlAttrs);
+
+	function makeMap(str) {
+	  var obj = {}, items = str.split(','), i;
+	  for (i = 0; i < items.length; i++) obj[items[i]] = true;
+	  return obj;
+	}
+
+
+	/**
+	 * @example
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 * @param {string} html string
+	 * @param {object} handler
+	 */
+	function htmlParser(html, handler) {
+	  if (typeof html !== 'string') {
+	    if (html === null || typeof html === 'undefined') {
+	      html = '';
+	    } else {
+	      html = '' + html;
+	    }
+	  }
+	  var index, chars, match, stack = [], last = html, text;
+	  stack.last = function() { return stack[stack.length - 1]; };
+
+	  while (html) {
+	    text = '';
+	    chars = true;
+
+	    // Make sure we're not in a script or style element
+	    if (!stack.last() || !specialElements[stack.last()]) {
+
+	      // Comment
+	      if (html.indexOf("<!--") === 0) {
+	        // comments containing -- are not allowed unless they terminate the comment
+	        index = html.indexOf("--", 4);
+
+	        if (index >= 0 && html.lastIndexOf("-->", index) === index) {
+	          if (handler.comment) handler.comment(html.substring(4, index));
+	          html = html.substring(index + 3);
+	          chars = false;
+	        }
+	      // DOCTYPE
+	      } else if (DOCTYPE_REGEXP.test(html)) {
+	        match = html.match(DOCTYPE_REGEXP);
+
+	        if (match) {
+	          html = html.replace(match[0], '');
+	          chars = false;
+	        }
+	      // end tag
+	      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
+	        match = html.match(END_TAG_REGEXP);
+
+	        if (match) {
+	          html = html.substring(match[0].length);
+	          match[0].replace(END_TAG_REGEXP, parseEndTag);
+	          chars = false;
+	        }
+
+	      // start tag
+	      } else if (BEGIN_TAG_REGEXP.test(html)) {
+	        match = html.match(START_TAG_REGEXP);
+
+	        if (match) {
+	          // We only have a valid start-tag if there is a '>'.
+	          if (match[4]) {
+	            html = html.substring(match[0].length);
+	            match[0].replace(START_TAG_REGEXP, parseStartTag);
+	          }
+	          chars = false;
+	        } else {
+	          // no ending tag found --- this piece should be encoded as an entity.
+	          text += '<';
+	          html = html.substring(1);
+	        }
+	      }
+
+	      if (chars) {
+	        index = html.indexOf("<");
+
+	        text += index < 0 ? html : html.substring(0, index);
+	        html = index < 0 ? "" : html.substring(index);
+
+	        if (handler.chars) handler.chars(decodeEntities(text));
+	      }
+
+	    } else {
+	      // IE versions 9 and 10 do not understand the regex '[^]', so using a workaround with [\W\w].
+	      html = html.replace(new RegExp("([\\W\\w]*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
+	        function(all, text) {
+	          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
+
+	          if (handler.chars) handler.chars(decodeEntities(text));
+
+	          return "";
+	      });
+
+	      parseEndTag("", stack.last());
+	    }
+
+	    if (html == last) {
+	      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
+	                                        "of html: {0}", html);
+	    }
+	    last = html;
+	  }
+
+	  // Clean up any remaining tags
+	  parseEndTag();
+
+	  function parseStartTag(tag, tagName, rest, unary) {
+	    tagName = angular.lowercase(tagName);
+	    if (blockElements[tagName]) {
+	      while (stack.last() && inlineElements[stack.last()]) {
+	        parseEndTag("", stack.last());
+	      }
+	    }
+
+	    if (optionalEndTagElements[tagName] && stack.last() == tagName) {
+	      parseEndTag("", tagName);
+	    }
+
+	    unary = voidElements[tagName] || !!unary;
+
+	    if (!unary)
+	      stack.push(tagName);
+
+	    var attrs = {};
+
+	    rest.replace(ATTR_REGEXP,
+	      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
+	        var value = doubleQuotedValue
+	          || singleQuotedValue
+	          || unquotedValue
+	          || '';
+
+	        attrs[name] = decodeEntities(value);
+	    });
+	    if (handler.start) handler.start(tagName, attrs, unary);
+	  }
+
+	  function parseEndTag(tag, tagName) {
+	    var pos = 0, i;
+	    tagName = angular.lowercase(tagName);
+	    if (tagName)
+	      // Find the closest opened tag of the same type
+	      for (pos = stack.length - 1; pos >= 0; pos--)
+	        if (stack[pos] == tagName)
+	          break;
+
+	    if (pos >= 0) {
+	      // Close all the open elements, up the stack
+	      for (i = stack.length - 1; i >= pos; i--)
+	        if (handler.end) handler.end(stack[i]);
+
+	      // Remove the open elements from the stack
+	      stack.length = pos;
+	    }
+	  }
+	}
+
+	var hiddenPre=document.createElement("pre");
+	/**
+	 * decodes all entities into regular string
+	 * @param value
+	 * @returns {string} A string with decoded entities.
+	 */
+	function decodeEntities(value) {
+	  if (!value) { return ''; }
+
+	  hiddenPre.innerHTML = value.replace(/</g,"&lt;");
+	  // innerText depends on styling as it doesn't display hidden elements.
+	  // Therefore, it's better to use textContent not to cause unnecessary reflows.
+	  return hiddenPre.textContent;
+	}
+
+	/**
+	 * Escapes all potentially dangerous characters, so that the
+	 * resulting string can be safely inserted into attribute or
+	 * element text.
+	 * @param value
+	 * @returns {string} escaped text
+	 */
+	function encodeEntities(value) {
+	  return value.
+	    replace(/&/g, '&amp;').
+	    replace(SURROGATE_PAIR_REGEXP, function(value) {
+	      var hi = value.charCodeAt(0);
+	      var low = value.charCodeAt(1);
+	      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+	    }).
+	    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
+	      return '&#' + value.charCodeAt(0) + ';';
+	    }).
+	    replace(/</g, '&lt;').
+	    replace(/>/g, '&gt;');
+	}
+
+	/**
+	 * create an HTML/XML writer which writes to buffer
+	 * @param {Array} buf use buf.jain('') to get out sanitized html string
+	 * @returns {object} in the form of {
+	 *     start: function(tag, attrs, unary) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * }
+	 */
+	function htmlSanitizeWriter(buf, uriValidator) {
+	  var ignore = false;
+	  var out = angular.bind(buf, buf.push);
+	  return {
+	    start: function(tag, attrs, unary) {
+	      tag = angular.lowercase(tag);
+	      if (!ignore && specialElements[tag]) {
+	        ignore = tag;
+	      }
+	      if (!ignore && validElements[tag] === true) {
+	        out('<');
+	        out(tag);
+	        angular.forEach(attrs, function(value, key) {
+	          var lkey=angular.lowercase(key);
+	          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
+	          if (validAttrs[lkey] === true &&
+	            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+	            out(' ');
+	            out(key);
+	            out('="');
+	            out(encodeEntities(value));
+	            out('"');
+	          }
+	        });
+	        out(unary ? '/>' : '>');
+	      }
+	    },
+	    end: function(tag) {
+	        tag = angular.lowercase(tag);
+	        if (!ignore && validElements[tag] === true) {
+	          out('</');
+	          out(tag);
+	          out('>');
+	        }
+	        if (tag == ignore) {
+	          ignore = false;
+	        }
+	      },
+	    chars: function(chars) {
+	        if (!ignore) {
+	          out(encodeEntities(chars));
+	        }
+	      }
+	  };
+	}
+
+
+	// define ngSanitize module and register $sanitize service
+	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+
+	/* global sanitizeText: false */
+
+	/**
+	 * @ngdoc filter
+	 * @name linky
+	 * @kind function
+	 *
+	 * @description
+	 * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
+	 * plain email address links.
+	 *
+	 * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
+	 *
+	 * @param {string} text Input text.
+	 * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
+	 * @returns {string} Html-linkified text.
+	 *
+	 * @usage
+	   <span ng-bind-html="linky_expression | linky"></span>
+	 *
+	 * @example
+	   <example module="linkyExample" deps="angular-sanitize.js">
+	     <file name="index.html">
+	       <script>
+	         angular.module('linkyExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', function($scope) {
+	             $scope.snippet =
+	               'Pretty text with some links:\n'+
+	               'http://angularjs.org/,\n'+
+	               'mailto:us@somewhere.org,\n'+
+	               'another@somewhere.org,\n'+
+	               'and one more: ftp://127.0.0.1/.';
+	             $scope.snippetWithTarget = 'http://angularjs.org/';
+	           }]);
+	       </script>
+	       <div ng-controller="ExampleController">
+	       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Filter</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="linky-filter">
+	           <td>linky filter</td>
+	           <td>
+	             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+	           </td>
+	           <td>
+	             <div ng-bind-html="snippet | linky"></div>
+	           </td>
+	         </tr>
+	         <tr id="linky-target">
+	          <td>linky target</td>
+	          <td>
+	            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+	          </td>
+	          <td>
+	            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
+	          </td>
+	         </tr>
+	         <tr id="escaped-html">
+	           <td>no filter</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	     </file>
+	     <file name="protractor.js" type="protractor">
+	       it('should linkify the snippet with urls', function() {
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
+	       });
+
+	       it('should not linkify snippet without the linky filter', function() {
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
+	       });
+
+	       it('should update', function() {
+	         element(by.model('snippet')).clear();
+	         element(by.model('snippet')).sendKeys('new http://link.');
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('new http://link.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+	             .toBe('new http://link.');
+	       });
+
+	       it('should work with the target property', function() {
+	        expect(element(by.id('linky-target')).
+	            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
+	            toBe('http://angularjs.org/');
+	        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
+	       });
+	     </file>
+	   </example>
+	 */
+	angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
+	  var LINKY_URL_REGEXP =
+	        /((ftp|https?):\/\/|(www\.)|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"”’]/,
+	      MAILTO_REGEXP = /^mailto:/;
+
+	  return function(text, target) {
+	    if (!text) return text;
+	    var match;
+	    var raw = text;
+	    var html = [];
+	    var url;
+	    var i;
+	    while ((match = raw.match(LINKY_URL_REGEXP))) {
+	      // We can not end in these as they are sometimes found at the end of the sentence
+	      url = match[0];
+	      // if we did not match ftp/http/www/mailto then assume mailto
+	      if (!match[2] && !match[4]) {
+	        url = (match[3] ? 'http://' : 'mailto:') + url;
+	      }
+	      i = match.index;
+	      addText(raw.substr(0, i));
+	      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+	      raw = raw.substring(i + match[0].length);
+	    }
+	    addText(raw);
+	    return $sanitize(html.join(''));
+
+	    function addText(text) {
+	      if (!text) {
+	        return;
+	      }
+	      html.push(sanitizeText(text));
+	    }
+
+	    function addLink(url, text) {
+	      html.push('<a ');
+	      if (angular.isDefined(target)) {
+	        html.push('target="',
+	                  target,
+	                  '" ');
+	      }
+	      html.push('href="',
+	                url.replace(/"/g, '&quot;'),
+	                '">');
+	      addText(text);
+	      html.push('</a>');
+	    }
+	  };
+	}]);
 
 
 	})(window, window.angular);
@@ -40160,7 +40160,7 @@
 /* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<h2 id=\"interactive-tutorial\">Interactive Tutorial</h2>\n<p>We&#39;ll cover most important parts of FHIRbase in this tutorial.</p>\n<p>First important point: this tutorial is interactive. That means \nyou can run any code right on this page and get feedback immediately.\nEvery time you see <code>Run</code> button, you can press it and the results of real\nPostgreSQL query will be shown in the bottom part of a page, inside of &quot;result&quot;\npopup block.</p>\n<p>Let&#39;s try it now:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;Run me, please&#39;;\n</code></pre>\n<p>But you can always <a href=\"http://fhirbase.github.io/installation.html\">install FHIRbase</a> \nlocally and repeat same steps on your own machine. Just follow \n<a href=\"http://fhirbase.github.io/installation.html\">installation guide</a>.</p>\n<p>Great, keep going further.</p>\n<h1 id=\"fhirbase-introduction\">FHIRBase Introduction</h1>\n<p>FHIRBase is a PostgreSQL extension for storing and retrieving\n<a href=\"http://www.hl7.org/implement/standards/fhir/resources.html\">FHIR resources</a>. You\ncan interact with FHIRBase using any PostgreSQL client. We advise you\nto start with <a href=\"http://www.pgadmin.org/\">pgAdmin</a>, because it has\neasy-to-use graphical interface.  However, \n<a href=\"https://wiki.postgresql.org/wiki/Community_Guide_to_PostgreSQL_GUI_Tools\">other options</a>\nare available.</p>\n<p><a href=\"https://en.wikipedia.org/wiki/SQL\">SQL</a> is the language in which you\n&quot;talk&quot; to FHIRBase. If you don&#39;t have at least basic knowledge of SQL,\nwe strongly advise to read some books or tutorials on the Web in the\nfirst place.</p>\n<h2 id=\"stored-procedures-as-primary-api\">Stored Procedures as primary API</h2>\n<p>In SQL world it&#39;s conventional to insert data with <code>INSERT</code> statement,\ndelete it with <code>DELETE</code>, update with <code>UPDATE</code> and so on. FHIRBase uses\nless common approach - it forces you to use\n<a href=\"http://en.wikipedia.org/wiki/Stored_procedure\">stored procedures</a> for\ndata manipulation. Reason for this is that FHIRBase needs to perform\nadditional actions on data changes in order to keep FHIR-specific\nfunctionality (such as\n<a href=\"http://www.hl7.org/implement/standards/fhir/search.html\">search</a> and\n<a href=\"http://www.hl7.org/implement/standards/fhir/http.html#vread\">versioning</a>)\nworking.</p>\n<p>There are some exceptions from this rule in data retrieval cases. For\nexample you can <code>SELECT ... FROM resource</code> to search for specific\nresource or set of resources. But when you create, delete or modify\nsomething, you have to use corresponding stored procedures\n(hereinafter, we&#39;ll refer them as SP).</p>\n<h2 id=\"types\">Types</h2>\n<p>SQL has strict type checking, so SP&#39;s arguments and return values are\ntyped. When describing SP, we will put type of every argument after two\ncolon(<code>::</code>) characters. For example, if argument <code>cfg</code> has <code>jsonb</code> type, \nwe&#39;ll write:</p>\n<ul>\n<li>cfg::jsonb - Confguration data</li>\n</ul>\n<p>You can take a look at\n<a href=\"http://www.postgresql.org/docs/9.4/static/datatype.html#DATATYPE-TABLE\">overview of standard PostgreSQL types</a>.</p>\n<h2 id=\"json-and-xml\">JSON and XML</h2>\n<p>FHIR standard\n<a href=\"http://www.hl7.org/implement/standards/fhir/formats.html\">allows</a> to\nuse two formats for data exchange: XML and JSON. They are\ninterchangeable, what means any XML representation of FHIR resource\ncan be unambiguously transformed into equivalent JSON\nrepresentation.</p>\n<p>Considering interchangeability of XML and JSON FHIRBase team decided\nto discard XML format support and use JSON as only format. There are\nseveral advantages of such decision:</p>\n<ul>\n<li>PostgreSQL has native support for JSON data type which means fast\nqueries and efficient storage;</li>\n<li>JSON is native and preferred format for Web Services/APIs nowadays;</li>\n<li>If you need an XML representation of a resource, you can always get\nit from JSON in your application&#39;s code.</li>\n</ul>\n<h2 id=\"passing-json-to-a-stored-procedure\">Passing JSON to a Stored Procedure</h2>\n<p>When SP&#39;s argument has type <code>jsonb</code>, that means you have to pass some\nJSON as a value. To do this, you need to represent JSON as\nsingle-line PostgreSQL string. You can do this in many ways, for\nexample, using a\n<a href=\"http://jsonviewer.stack.hu/\">online JSON formatter</a>. Copy-paste your\nJSON into this tool, click &quot;Remove white space&quot; button and copy-paste\nresult back to editor.</p>\n<p>Another thing we need to do before using JSON in SQL query is quote\nescaping. Strings in PostgreSQL are enclosed in single quotes. Example:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;this is a string&#39;;\n</code></pre>\n<p>If you have single quote in your string, you have to <strong>double</strong> it:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;I&#39;&#39;m a string with single quote!&#39;;\n</code></pre>\n<p>So if your JSON contains single quotes, Find and Replace them with two\nsingle quotes in any text editor.</p>\n<p>Finally, get your JSON, surround it with single quotes, and append\n<code>::jsonb</code> after closing quote. That&#39;s how you pass JSON to PostgreSQL.</p>\n<pre><code class=\"lang-sql\">SELECT &#39;{&quot;foo&quot;: &quot;i&#39;&#39;m a string from JSON&quot;}&#39;::jsonb;\n</code></pre>\n<p>Sometimes you can omit <code>::jsonb</code> suffix and PostreSQL will parse it\nautomaticly, if your JSON representation is valid:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;{&quot;foo&quot;: &quot;i&#39;&#39;m a string from JSON&quot;}&#39;;\n</code></pre>\n<pre><code class=\"lang-sql\">-- compare two JSONs, one of which built with ::jsonb\n-- should return true\nSELECT &#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;::jsonb @&gt; &#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;;\n</code></pre>\n<h2 id=\"overview\">Overview</h2>\n<p><strong>FHIRbase</strong> is built on top of PostgreSQL and requires its version higher than 9.4\n(i.e. <a href=\"http://www.postgresql.org/docs/9.4/static/datatype-json.html\">jsonb</a> support).</p>\n<p>FHIR describes ~100 <a href=\"http://hl7-fhir.github.io/resourcelist.html\">resources</a>\nas base StructureDefinitions which by themselves are resources in FHIR terms.</p>\n<p>FHIRbase stores each resource in two tables - one for current version\nand second for previous versions of the resource. Following a convention, tables are named\nin a lower case after resource types: <code>Patient</code> =&gt; <code>patient</code>,\n<code>StructureDefinition</code> =&gt; <code>structuredefinition</code>.</p>\n<p>For example <strong>Patient</strong> resources are stored\nin <code>patient</code> and <code>patient_history</code> tables:</p>\n<pre><code class=\"lang-sql\">-- show Patient table schema\nselect column_name, data_type\nfrom information_schema.columns where\ntable_name=&#39;patient&#39;;\n</code></pre>\n<pre><code class=\"lang-sql\">-- show Patient history table schema\nselect column_name, data_type\nfrom information_schema.columns where\ntable_name=&#39;patient_history&#39;;\n</code></pre>\n<p>All resource tables have similar structure and are inherited from <code>resource</code> table,\nto allow cross-table queries (for more information see <a href=\"http://www.postgresql.org/docs/9.4/static/tutorial-inheritance.html\">PostgreSQL inheritance</a>).</p>\n<p>Minimal installation of FHIRbase consists of only a\nfew tables for &quot;meta&quot; resources:</p>\n<ul>\n<li>StructureDefinition</li>\n<li>OperationDefinition</li>\n<li>SearchParameter</li>\n<li>ValueSet</li>\n<li>ConceptMap</li>\n</ul>\n<p>These tables are populated with resources provided by FHIR distribution.</p>\n<p>Most of API for FHIRbase is represented as functions in <code>fhir</code> schema,\nother schemas are used as code library modules.</p>\n<p>First helpful function is <code>fhir.generate_tables(resources::text[])</code> which generates tables\nfor specific resources passed as array.\nFor example to generate tables for patient, organization and encounter:</p>\n<pre><code class=\"lang-sql\">select fhir.generate_tables(&#39;{Patient, Organization, Encounter}&#39;);\n</code></pre>\n<p>If you call <code>generate_tables()</code> without any parameters,\nthen tables for all resources described in <code>StructureDefinition</code>\nwill be generated:</p>\n<pre><code class=\"lang-sql\">select fhir.generate_tables();\n</code></pre>\n<p>When concrete resource type tables are generated,\ncolumn <code>installed</code> for this resource is set to true in the profile table.</p>\n<pre><code class=\"lang-sql\">-- show column &#39;installed&#39; for Patient table\nSELECT logical_id, installed from structuredefinition\nWHERE logical_id = &#39;Patient&#39;\n</code></pre>\n<h2 id=\"public-api-functions\">Public API functions</h2>\n<p>Functions representing public API of FHIRbase are all located in the <code>fhir</code> schema.\nThe first group of functions implements CRUD operations on resources:</p>\n<ul>\n<li><code>fhir.create(resource::jsonb)</code></li>\n<li><code>fhir.read(resource_type, logical_id)</code></li>\n<li><code>fhir.update(resource::jsonb)</code></li>\n<li><code>fhir.vread(resource_type, version_id)</code></li>\n<li><code>fhir.delete(resource_type, logical_id)</code></li>\n<li><code>fhir.history(resource_type, logical_id)</code></li>\n<li><code>fhir.is_exists(resource_type, logical_id)</code></li>\n<li><code>fhir.is_deleted(resource_type, logical_id)</code></li>\n</ul>\n<p>Let&#39;s create first Patient with <code>fhir.create</code>;</p>\n<pre><code class=\"lang-sql\">SELECT fhir.create(&#39;{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;: [{&quot;given&quot;: [&quot;John&quot;]}]}&#39;)\n</code></pre>\n<p>When resource is created, <code>logical_id</code> and <code>version_id</code> are generated as uuids.</p>\n<p>Let&#39;s check, if Patient was created:</p>\n<pre><code class=\"lang-sql\">SELECT resource_type, logical_id, version_id, content\n FROM patient\nORDER BY updated DESC\nLIMIT 2\n</code></pre>\n<p>Now you can select last created patient&#39;s <code>logical_id</code> and copy it for\nall forthcoming requests:</p>\n<pre><code class=\"lang-sql\">(SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1)\n</code></pre>\n<p>Or you can use it in request directly. Let&#39;s select last patient with <code>fhir.read</code>:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.read(&#39;Patient&#39;,\n  (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1)\n);\n</code></pre>\n<p>And rename it with <code>fhir.update</code>:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.update(\n   jsonbext.merge(\n     fhir.read(&#39;Patient&#39;,\n       (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1)\n     ),\n     &#39;{&quot;name&quot;:[{&quot;given&quot;:&quot;Bruno&quot;}]}&#39;\n   )\n);\n-- returns updated version\n--\n-- Did you noticed that patient named Bruno now?\n-- Forget to mention, that you can edit any text inside of this code block.\n-- Try to rename {&quot;given&quot;:&quot;Bruno&quot;} to any name you want and run code multiple times\n</code></pre>\n<p>Repeat last update several times, but change given name every time. \nCheck how <code>patient_history</code> table grows.\nExecute next query after every update and pay attention to <code>versions_count</code> \nnumber:</p>\n<pre><code class=\"lang-sql\">SELECT\n (SELECT count(*) FROM patient LIMIT 1) as patients_count,\n (SELECT count(*) FROM patient_history LIMIT 1) as versions_count\n</code></pre>\n<p>On each update resource content is updated in the <code>patient</code> table, \nand old version of the resource is copied into the <code>patient_history</code> table.</p>\n<p><code>fhir.history</code> will show all previous versions for any resource:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.history(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n</code></pre>\n<p>But returned <code>Bundle</code> resource may be too excess. So you can select any version\nof <code>Patient</code> resource with <code>fhir.vread</code>. Let&#39;s select one step before current\nversion:</p>\n<pre><code class=\"lang-sql\">-- read previous version of resource\nSELECT fhir.vread(&#39;Patient&#39;, \n  (SELECT version_id FROM patient_history ORDER BY updated DESC LIMIT 1)\n);\n</code></pre>\n<p>Now let&#39;s delete Patient. That deletion will take place in patient&#39;s history.\nBut let&#39;s use <code>is_exists</code> and <code>is_deleted</code> before any delete action.</p>\n<pre><code class=\"lang-sql\">SELECT fhir.is_exists(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n-- should return true\n</code></pre>\n<pre><code class=\"lang-sql\">SELECT fhir.is_deleted(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n-- should return false\n</code></pre>\n<p>Time to delete the Patient, but pay attention to the fact, that we&#39;ll\nneed last patient&#39;s <code>logical_id</code> for the final <strong>is_exists</strong> and <strong>is_deleted</strong>\nchecks. <code>fhir.delete</code> will return that <code>logical_id</code> and you need to copy and paste it\nfurther.</p>\n<p>Now go to the deletion:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.delete(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n-- should return last version\n-- don&#39;t forget to copy &quot;versionId&quot; value.\n</code></pre>\n<pre><code class=\"lang-sql\">SELECT fhir.is_exists(&#39;Patient&#39;, &#39;replace-this-to-copied-logical-id&#39;);\n-- should return false\n</code></pre>\n<pre><code class=\"lang-sql\">SELECT fhir.is_deleted(&#39;Patient&#39;, &#39;replace-this-to-copied-logical-id&#39;);\n-- should return true\n</code></pre>\n<h2 id=\"transaction\">Transaction</h2>\n<p>For sure you&#39;ve already thought about creating multiple patients with one\nquery. Or even about multiple different CRUD operations at the same time, like\n<code>fhir.create</code>, <code>fhir.update</code>, <code>fhir.delete</code> and so on. Good news - FHIRbase has\nsolution for this, and it&#39;s called <code>fhir.transaction</code>.</p>\n<p>Let&#39;s try it and create 10 patients with one transaction. But transaction JSON\nwould become very long and hard to read without indent formatting. PostgreSQL\nwill not let to pass multiline string easy way.  So we&#39;ll use PostgreSQL \n<a href=\"http://www.postgresql.org/docs/8.2/static/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING\">Dollar-Quoted String Constants</a> \nand wrap long multiline JSON inside of paired <code>$$</code> tags. Short representation\nof this idea: <code>fhir.transaction($$ HUGE_JSON $$)</code>.</p>\n<p>Ok, run transaction now:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.transaction($$ \n{\n&quot;resourceType&quot;:&quot;Bundle&quot;,\n&quot;type&quot;:&quot;transaction&quot;,\n&quot;entry&quot;: [\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Mark&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Boris&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Ted&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Mike&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Nick&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Chance&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Mary&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Cobe&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Paul&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Daniel&quot;]}]}\n  }]\n} \n$$)\n</code></pre>\n<p>Let&#39;s check, if patients was created:</p>\n<pre><code class=\"lang-sql\">SELECT resource_type, logical_id, version_id, content\nFROM patient\nORDER BY updated DESC\nLIMIT 10\n</code></pre>\n<h2 id=\"search\">Search</h2>\n<p>Next part of API is a search API.\nFolowing functions will help you to search resources in FHIRbase:</p>\n<ul>\n<li><code>fhir.search(resourceType, searchString)</code> - returns a bundle</li>\n<li><code>fhir._search(resourceType, searchString)</code> - returns a relation</li>\n<li><code>fhir.explain_search(resourceType, searchString)</code> - shows an execution plan for search</li>\n<li><code>fhir.search_sql(resourceType, searchString)</code> - shows the original sql query underlying the search</li>\n</ul>\n<p>You can repeat patient creation with <code>fhir.transaction</code> multiple times, to\npopulate FHIRbase data a little.</p>\n<p>Now let&#39;s make a search:</p>\n<pre><code class=\"lang-sql\">select fhir.search(&#39;Patient&#39;, &#39;given=mark&#39;)\n-- returns bundle\n</code></pre>\n<p><code>Bundle</code> JSON can be not very convinient form for result and you may want to see\nevery patient in a single row, that&#39;s why <code>fhir._search</code> is needed.</p>\n<p>Let&#39;s search and get one patient per row:</p>\n<pre><code class=\"lang-sql\">select * from fhir._search(&#39;Patient&#39;, &#39;name=mark&amp;count=10&#39;);\n-- returns search as relation\n-- pay attention to logical_id fields, they must be different\n</code></pre>\n<p>Behind the scenes FHIRbase builds very smart and complex search SQL query. In \nsome point you may need to debug it, or understand what indexes to set and\nwhere. <code>fhir.search_sql</code> will decode query for you. Let&#39;s try:</p>\n<pre><code class=\"lang-sql\">select fhir.search_sql(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n\n-- SELECT * FROM patient\n-- WHERE (index_fns.index_as_string(patient.content, &#39;{given}&#39;) ilike &#39;%david%&#39;)\n-- LIMIT 10\n-- OFFSET 0\n</code></pre>\n<p>Now copy <code>search_sql</code> from result, run it separately and compare to previous\n<code>fhir._search</code> results:</p>\n<pre><code class=\"lang-sql\">SELECT patient.version_id, patient.logical_id, patient.resource_type,\npatient.updated, patient.published, patient.category, patient.content FROM\npatient WHERE (index_fns.index_as_string(patient.content, &#39;{name,given}&#39;) ilike\n&#39;%mark%&#39;) LIMIT 100 OFFSET 0\n-- Look, it completely identical to \n-- select * from fhir._search(&#39;Patient&#39;, &#39;name=mark&amp;count=10&#39;);\n</code></pre>\n<p>And execution plan can be seen with <code>fhir.explain_search</code>. Try it:</p>\n<pre><code class=\"lang-sql\">-- explain query execution plan\nselect fhir.explain_search(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n</code></pre>\n<h2 id=\"indexing\">Indexing</h2>\n<p>Search works without indexing but search query would be slow\non any reasonable amount of data.\nSo FHIRbase has a group of indexing functions:</p>\n<ul>\n<li><code>index_search_param(resourceType, searchParam)</code></li>\n<li><code>drop_index_search_param(resourceType, searchParam)</code></li>\n<li><code>index_resource(resourceType)</code></li>\n<li><code>drop_resource_indexes(resourceType)</code></li>\n<li><code>index_all_resources()</code></li>\n<li><code>drop_all_resource_indexes()</code></li>\n</ul>\n<p>Indexes are not for free - they eat space and slow inserts and updates.\nThat is why indexes are optional and completely under you control in FHIRbase.</p>\n<p>Before indexing experiments, please keep in mind, that searching time boost can be\nobservable only on thousands of entries. If you have enough patience, you can\ngo back to <strong>Transaction</strong> block and try to generate those thousands of\npatients. After that you&#39;ll see the difference sharp and clear.  </p>\n<p>If you don&#39;t have that much patience - you&#39;ll get indexing functions\nunderstanding and practice anyway. </p>\n<p>So, let&#39;s go. First, drop all existing indexes \nfor <code>Patient</code> resource with <code>drop_resource_indexes</code>:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.drop_resource_indexes(&#39;Patient&#39;);\n</code></pre>\n<p>Check, if <code>Patient</code> names index exists. Next request should return empty\nresult:</p>\n<pre><code class=\"lang-sql\">-- Patient names index size\nselect * from (select obj-&gt;&gt;&#39;relname&#39; as relname, obj-&gt;&gt;&#39;size&#39; as size\nfrom jsonb_array_elements(fhir.admin_disk_usage_top(100)) as obj) x\nwhere relname = &#39;public.patient_name_name_string_idx&#39;\n</code></pre>\n<p>Check, how many patients you have at the moment:</p>\n<pre><code>SELECT COUNT(*) from patient;\n</code></pre><p>Now, follow up to indexing. Most important function for that is \n<code>fhir.index_search_param</code> which accepts resourceType as a first parameter, and \nname of search parameter to index.</p>\n<p>Let&#39;s check request timing for search without index you have already ran before. \nYou can see execution time in the header of result popup, near <strong>result</strong> word. \nMake search request multiple times and remember average execution time value:</p>\n<pre><code class=\"lang-sql\">-- search without index\nSELECT fhir.search(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n</code></pre>\n<p>Next step - add index for <code>Patient</code> names with <code>fhir.index_search_param</code>:</p>\n<pre><code class=\"lang-sql\">-- index search param\nSELECT fhir.index_search_param(&#39;Patient&#39;,&#39;name&#39;);\n</code></pre>\n<p>Check, if index was created. Request should return the size of just created\n<code>Patient</code> names index:</p>\n<pre><code class=\"lang-sql\">-- Patient names index size\nselect * from (select obj-&gt;&gt;&#39;relname&#39; as relname, obj-&gt;&gt;&#39;size&#39; as size\nfrom jsonb_array_elements(fhir.admin_disk_usage_top(100)) as obj) x\nwhere relname = &#39;public.patient_name_name_string_idx&#39;\n</code></pre>\n<p>Repeat patient search multiple times again and compare average execution timing \nvalue now. You&#39;ll see huge performance impact on large number of patients:</p>\n<pre><code class=\"lang-sql\">-- search with index\nSELECT fhir.search(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n</code></pre>\n<p>For more understanding you can research request execution plan. This time you\ncan see <strong>Bitmap Index Scan</strong> string in results.</p>\n<pre><code class=\"lang-sql\">-- explain search\nselect fhir.explain_search(&#39;Patient&#39;, &#39;name=mark&amp;count=10&#39;);\n</code></pre>\n<p>Try to run <code>fhir.drop_resource_indexes</code> and \n<code>fhir.index_search_param(&#39;Patient&#39;,&#39;name&#39;)</code> multiple times and check the result\nof <code>fhir.explain_search</code> every time.</p>\n";
+	module.exports = "<h2 id=\"interactive-tutorial\">Interactive Tutorial</h2>\n<p>We&#39;ll cover most important parts of FHIRbase in this tutorial.</p>\n<p>First important point: this tutorial is interactive. That means \nyou can run any code right on this page and get feedback immediately.\nEvery time you see <code>Run</code> button, you can press it and the results of real\nPostgreSQL query will be shown in the bottom part of a page, inside of &quot;result&quot;\npopup block.</p>\n<p>Let&#39;s try it now:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;Run me, please&#39;;\n</code></pre>\n<p>But you can always <a href=\"http://fhirbase.github.io/installation.html\">install FHIRbase</a> \nlocally and repeat same steps on your own machine. Just follow \n<a href=\"http://fhirbase.github.io/installation.html\">installation guide</a>.</p>\n<p>Great, keep going further.</p>\n<h2 id=\"fhirbase-introduction\">FHIRBase Introduction</h2>\n<p>FHIRBase is a PostgreSQL extension for storing and retrieving\n<a href=\"http://www.hl7.org/implement/standards/fhir/resources.html\">FHIR resources</a>. You\ncan interact with FHIRBase using any PostgreSQL client. We advise you\nto start with <a href=\"http://www.pgadmin.org/\">pgAdmin</a>, because it has\neasy-to-use graphical interface.  However, \n<a href=\"https://wiki.postgresql.org/wiki/Community_Guide_to_PostgreSQL_GUI_Tools\">other options</a>\nare available.</p>\n<p><a href=\"https://en.wikipedia.org/wiki/SQL\">SQL</a> is the language in which you\n&quot;talk&quot; to FHIRBase. If you don&#39;t have at least basic knowledge of SQL,\nwe strongly advise to read some books or tutorials on the Web in the\nfirst place.</p>\n<h2 id=\"functions-as-primary-api\">Functions as primary API</h2>\n<p>In SQL world it&#39;s conventional to insert data with <code>INSERT</code> statement,\ndelete it with <code>DELETE</code>, update with <code>UPDATE</code> and so on. FHIRBase uses\nless common approach - it forces you to use\n<a href=\"http://en.wikipedia.org/wiki/Stored_procedure\">stored procedures</a> for\ndata manipulation. Reason for this is that FHIRBase needs to perform\nadditional actions on data changes in order to keep FHIR-specific\nfunctionality (such as\n<a href=\"http://www.hl7.org/implement/standards/fhir/search.html\">search</a> and\n<a href=\"http://www.hl7.org/implement/standards/fhir/http.html#vread\">versioning</a>)\nworking. In PostgreSQL world Stored Procedures are called \n<a href=\"http://www.postgresql.org/docs/9.4/static/xfunc-sql.html\">functions</a>. So,\nhereinafter, we&#39;ll refer them as functions.</p>\n<p>There are some exceptions from this rule in data retrieval cases. For\nexample you can <code>SELECT ... FROM resource</code> to search for specific\nresource or set of resources. But when you create, delete or modify\nsomething, you have to use corresponding function.</p>\n<h2 id=\"types\">Types</h2>\n<p>SQL has strict type checking, so function arguments and return values are\ntyped. When describing function, we will put type of every argument after two\ncolon(<code>::</code>) characters. For example, if argument <code>cfg</code> has <code>jsonb</code> type, \nwe&#39;ll write:</p>\n<ul>\n<li>cfg::jsonb - Confguration data</li>\n</ul>\n<p>You can take a look at\n<a href=\"http://www.postgresql.org/docs/9.4/static/datatype.html#DATATYPE-TABLE\">overview of standard PostgreSQL types</a>.</p>\n<h2 id=\"json-and-xml\">JSON and XML</h2>\n<p>FHIR standard\n<a href=\"http://www.hl7.org/implement/standards/fhir/formats.html\">allows</a> to\nuse two formats for data exchange: XML and JSON. They are\ninterchangeable, what means any XML representation of FHIR resource\ncan be unambiguously transformed into equivalent JSON\nrepresentation.</p>\n<p>Considering interchangeability of XML and JSON FHIRBase team decided\nto discard XML format support and use JSON as only format. There are\nseveral advantages of such decision:</p>\n<ul>\n<li>PostgreSQL has native support for JSON data type which means fast\nqueries and efficient storage;</li>\n<li>JSON is native and preferred format for Web Services/APIs nowadays;</li>\n<li>If you need an XML representation of a resource, you can always get\nit from JSON in your application&#39;s code.</li>\n</ul>\n<h2 id=\"json-parameter\">JSON parameter</h2>\n<p>When function argument has type <code>jsonb</code>, that means you have to pass some\nJSON as a value. To do this, you need to represent JSON as\nsingle-line PostgreSQL string. You can do this in many ways, for\nexample, using a\n<a href=\"http://jsonviewer.stack.hu/\">online JSON formatter</a>. Copy-paste your\nJSON into this tool, click &quot;Remove white space&quot; button and copy-paste\nresult back to editor.</p>\n<p>Another thing we need to do before using JSON in SQL query is quote\nescaping. Strings in PostgreSQL are enclosed in single quotes. Example:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;this is a string&#39;;\n</code></pre>\n<p>If you have single quote in your string, you have to <strong>double</strong> it:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;I&#39;&#39;m a string with single quote!&#39;;\n</code></pre>\n<p>So if your JSON contains single quotes, Find and Replace them with two\nsingle quotes in any text editor.</p>\n<p>Finally, get your JSON, surround it with single quotes, and append\n<code>::jsonb</code> after closing quote. That&#39;s how you pass JSON to PostgreSQL.</p>\n<pre><code class=\"lang-sql\">SELECT &#39;{&quot;foo&quot;: &quot;i&#39;&#39;m a string from JSON&quot;}&#39;::jsonb;\n</code></pre>\n<p>Sometimes you can omit <code>::jsonb</code> suffix and PostreSQL will parse it\nautomaticly, if your JSON representation is valid:</p>\n<pre><code class=\"lang-sql\">SELECT &#39;{&quot;foo&quot;: &quot;i&#39;&#39;m a string from JSON&quot;}&#39;;\n</code></pre>\n<pre><code class=\"lang-sql\">-- compare two JSONs, one of which built with ::jsonb\n-- should return true\nSELECT &#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;::jsonb @&gt; &#39;{&quot;foo&quot;: &quot;bar&quot;}&#39;;\n</code></pre>\n<h2 id=\"fhirbase-overview\">FHIRBase Overview</h2>\n<p><strong>FHIRbase</strong> is built on top of PostgreSQL and requires its version higher than 9.4\n(i.e. <a href=\"http://www.postgresql.org/docs/9.4/static/datatype-json.html\">jsonb</a> support).</p>\n<p>FHIR describes ~100 <a href=\"http://hl7-fhir.github.io/resourcelist.html\">resources</a>\nas base StructureDefinitions which by themselves are resources in FHIR terms.</p>\n<p>FHIRbase stores each resource in two tables - one for current version\nand second for previous versions of the resource. Following a convention, tables are named\nin a lower case after resource types: <code>Patient</code> =&gt; <code>patient</code>,\n<code>StructureDefinition</code> =&gt; <code>structuredefinition</code>.</p>\n<p>For example <strong>Patient</strong> resources are stored\nin <code>patient</code> and <code>patient_history</code> tables:</p>\n<pre><code class=\"lang-sql\">-- show Patient table schema\nselect column_name, data_type\nfrom information_schema.columns where\ntable_name=&#39;patient&#39;;\n</code></pre>\n<pre><code class=\"lang-sql\">-- show Patient history table schema\nselect column_name, data_type\nfrom information_schema.columns where\ntable_name=&#39;patient_history&#39;;\n</code></pre>\n<p>All resource tables have similar structure and are inherited from <code>resource</code> table,\nto allow cross-table queries (for more information see <a href=\"http://www.postgresql.org/docs/9.4/static/tutorial-inheritance.html\">PostgreSQL inheritance</a>).</p>\n<p>Minimal installation of FHIRbase consists of only a\nfew tables for &quot;meta&quot; resources:</p>\n<ul>\n<li>StructureDefinition</li>\n<li>OperationDefinition</li>\n<li>SearchParameter</li>\n<li>ValueSet</li>\n<li>ConceptMap</li>\n</ul>\n<p>These tables are populated with resources provided by FHIR distribution.</p>\n<p>Most of API for FHIRbase is represented as functions in <code>fhir</code> schema,\nother schemas are used as code library modules.</p>\n<p>First helpful function is <code>fhir.generate_tables(resources::text[])</code> which generates tables\nfor specific resources passed as array.\nFor example to generate tables for patient, organization and encounter:</p>\n<pre><code class=\"lang-sql\">select fhir.generate_tables(&#39;{Patient, Organization, Encounter}&#39;);\n</code></pre>\n<p>If you call <code>generate_tables()</code> without any parameters,\nthen tables for all resources described in <code>StructureDefinition</code>\nwill be generated:</p>\n<pre><code class=\"lang-sql\">select fhir.generate_tables();\n</code></pre>\n<p>When concrete resource type tables are generated,\ncolumn <code>installed</code> for this resource is set to true in the profile table.</p>\n<pre><code class=\"lang-sql\">-- show column &#39;installed&#39; for Patient table\nSELECT logical_id, installed from structuredefinition\nWHERE logical_id = &#39;Patient&#39;\n</code></pre>\n<h2 id=\"public-api-functions\">Public API functions</h2>\n<p>Functions representing public API of FHIRbase are all located in the <code>fhir</code> schema.\nThe first group of functions implements CRUD operations on resources:</p>\n<ul>\n<li><code>fhir.create(resource::jsonb)</code></li>\n<li><code>fhir.read(resource_type, logical_id)</code></li>\n<li><code>fhir.update(resource::jsonb)</code></li>\n<li><code>fhir.vread(resource_type, version_id)</code></li>\n<li><code>fhir.delete(resource_type, logical_id)</code></li>\n<li><code>fhir.history(resource_type, logical_id)</code></li>\n<li><code>fhir.is_exists(resource_type, logical_id)</code></li>\n<li><code>fhir.is_deleted(resource_type, logical_id)</code></li>\n</ul>\n<p>Let&#39;s create first Patient with <code>fhir.create</code>;</p>\n<pre><code class=\"lang-sql\">SELECT fhir.create(&#39;{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;: [{&quot;given&quot;: [&quot;John&quot;]}]}&#39;)\n</code></pre>\n<p>When resource is created, <code>logical_id</code> and <code>version_id</code> are generated as uuids.</p>\n<p>Let&#39;s check, if Patient was created:</p>\n<pre><code class=\"lang-sql\">SELECT resource_type, logical_id, version_id, content\n FROM patient\nORDER BY updated DESC\nLIMIT 2\n</code></pre>\n<p>Now you can select last created patient&#39;s <code>logical_id</code> and copy it for\nall forthcoming requests:</p>\n<pre><code class=\"lang-sql\">(SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1)\n</code></pre>\n<p>Or you can use it in request directly. Let&#39;s select last patient with <code>fhir.read</code>:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.read(&#39;Patient&#39;,\n  (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1)\n);\n</code></pre>\n<p>And rename it with <code>fhir.update</code>:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.update(\n   jsonbext.merge(\n     fhir.read(&#39;Patient&#39;,\n       (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1)\n     ),\n     &#39;{&quot;name&quot;:[{&quot;given&quot;:&quot;Bruno&quot;}]}&#39;\n   )\n);\n-- returns updated version\n--\n-- Did you noticed that patient named Bruno now?\n-- Forget to mention, that you can edit any text inside of this code block.\n-- Try to rename {&quot;given&quot;:&quot;Bruno&quot;} to any name you want and run code multiple times\n</code></pre>\n<p>Repeat last update several times, but change given name every time. \nCheck how <code>patient_history</code> table grows.\nExecute next query after every update and pay attention to <code>versions_count</code> \nnumber:</p>\n<pre><code class=\"lang-sql\">SELECT\n (SELECT count(*) FROM patient LIMIT 1) as patients_count,\n (SELECT count(*) FROM patient_history LIMIT 1) as versions_count\n</code></pre>\n<p>On each update resource content is updated in the <code>patient</code> table, \nand old version of the resource is copied into the <code>patient_history</code> table.</p>\n<p><code>fhir.history</code> will show all previous versions for any resource:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.history(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n</code></pre>\n<p>But returned <code>Bundle</code> resource may be too excess. So you can select any version\nof <code>Patient</code> resource with <code>fhir.vread</code>. Let&#39;s select one step before current\nversion:</p>\n<pre><code class=\"lang-sql\">-- read previous version of resource\nSELECT fhir.vread(&#39;Patient&#39;, \n  (SELECT version_id FROM patient_history ORDER BY updated DESC LIMIT 1)\n);\n</code></pre>\n<p>Now let&#39;s delete Patient. That deletion will take place in patient&#39;s history.\nBut let&#39;s use <code>is_exists</code> and <code>is_deleted</code> before any delete action.</p>\n<pre><code class=\"lang-sql\">SELECT fhir.is_exists(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n-- should return true\n</code></pre>\n<pre><code class=\"lang-sql\">SELECT fhir.is_deleted(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n-- should return false\n</code></pre>\n<p>Time to delete the Patient, but pay attention to the fact, that we&#39;ll\nneed last patient&#39;s <code>logical_id</code> for the final <strong>is_exists</strong> and <strong>is_deleted</strong>\nchecks. <code>fhir.delete</code> will return that <code>logical_id</code> and you need to copy and paste it\nfurther.</p>\n<p>Now go to the deletion:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.delete(&#39;Patient&#39;, (SELECT logical_id FROM patient ORDER BY updated DESC LIMIT 1));\n-- should return last version\n-- don&#39;t forget to copy &quot;versionId&quot; value.\n</code></pre>\n<pre><code class=\"lang-sql\">SELECT fhir.is_exists(&#39;Patient&#39;, &#39;replace-this-to-copied-logical-id&#39;);\n-- should return false\n</code></pre>\n<pre><code class=\"lang-sql\">SELECT fhir.is_deleted(&#39;Patient&#39;, &#39;replace-this-to-copied-logical-id&#39;);\n-- should return true\n</code></pre>\n<h2 id=\"transaction\">Transaction</h2>\n<p>For sure you&#39;ve already thought about creating multiple patients with one\nquery. Or even about multiple different CRUD operations at the same time, like\n<code>fhir.create</code>, <code>fhir.update</code>, <code>fhir.delete</code> and so on. Good news - FHIRbase has\nsolution for this, and it&#39;s called <code>fhir.transaction</code>.</p>\n<p>Let&#39;s try it and create 10 patients with one transaction. But transaction JSON\nwould become very long and hard to read without indent formatting. PostgreSQL\nwill not let to pass multiline string easy way.  So we&#39;ll use PostgreSQL \n<a href=\"http://www.postgresql.org/docs/8.2/static/sql-syntax-lexical.html#SQL-SYNTAX-DOLLAR-QUOTING\">Dollar-Quoted String Constants</a> \nand wrap long multiline JSON inside of paired <code>$$</code> tags. Short representation\nof this idea: <code>fhir.transaction($$ HUGE_JSON $$)</code>.</p>\n<p>Ok, run transaction now:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.transaction($$ \n{\n&quot;resourceType&quot;:&quot;Bundle&quot;,\n&quot;type&quot;:&quot;transaction&quot;,\n&quot;entry&quot;: [\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Mark&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Boris&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Ted&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Mike&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Nick&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Chance&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Mary&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Cobe&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Paul&quot;]}]}\n  },\n  {\n    &quot;transaction&quot;:{&quot;method&quot;:&quot;POST&quot;, &quot;url&quot;:&quot;/Patient&quot;},\n    &quot;resource&quot;:{&quot;resourceType&quot;:&quot;Patient&quot;, &quot;name&quot;:[{&quot;given&quot;: [&quot;Daniel&quot;]}]}\n  }]\n} \n$$)\n</code></pre>\n<p>Let&#39;s check, if patients was created:</p>\n<pre><code class=\"lang-sql\">SELECT resource_type, logical_id, version_id, content\nFROM patient\nORDER BY updated DESC\nLIMIT 10\n</code></pre>\n<h2 id=\"search\">Search</h2>\n<p>Next part of API is a search API.\nFolowing functions will help you to search resources in FHIRbase:</p>\n<ul>\n<li><code>fhir.search(resourceType, searchString)</code> - returns a bundle</li>\n<li><code>fhir._search(resourceType, searchString)</code> - returns a relation</li>\n<li><code>fhir.explain_search(resourceType, searchString)</code> - shows an execution plan for search</li>\n<li><code>fhir.search_sql(resourceType, searchString)</code> - shows the original sql query underlying the search</li>\n</ul>\n<p>You can repeat patient creation with <code>fhir.transaction</code> multiple times, to\npopulate FHIRbase data a little.</p>\n<p>Now let&#39;s make a search:</p>\n<pre><code class=\"lang-sql\">select fhir.search(&#39;Patient&#39;, &#39;given=mark&#39;)\n-- returns bundle\n</code></pre>\n<p><code>Bundle</code> JSON can be not very convinient form for result and you may want to see\nevery patient in a single row, that&#39;s why <code>fhir._search</code> is needed.</p>\n<p>Let&#39;s search and get one patient per row:</p>\n<pre><code class=\"lang-sql\">select * from fhir._search(&#39;Patient&#39;, &#39;name=mark&amp;count=10&#39;);\n-- returns search as relation\n-- pay attention to logical_id fields, they must be different\n</code></pre>\n<p>Behind the scenes FHIRbase builds very smart and complex search SQL query. In \nsome point you may need to debug it, or understand what indexes to set and\nwhere. <code>fhir.search_sql</code> will decode query for you. Let&#39;s try:</p>\n<pre><code class=\"lang-sql\">select fhir.search_sql(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n\n-- SELECT * FROM patient\n-- WHERE (index_fns.index_as_string(patient.content, &#39;{given}&#39;) ilike &#39;%david%&#39;)\n-- LIMIT 10\n-- OFFSET 0\n</code></pre>\n<p>Now copy <code>search_sql</code> from result, run it separately and compare to previous\n<code>fhir._search</code> results:</p>\n<pre><code class=\"lang-sql\">SELECT patient.version_id, patient.logical_id, patient.resource_type,\npatient.updated, patient.published, patient.category, patient.content FROM\npatient WHERE (index_fns.index_as_string(patient.content, &#39;{name,given}&#39;) ilike\n&#39;%mark%&#39;) LIMIT 100 OFFSET 0\n-- Look, it completely identical to \n-- select * from fhir._search(&#39;Patient&#39;, &#39;name=mark&amp;count=10&#39;);\n</code></pre>\n<p>And execution plan can be seen with <code>fhir.explain_search</code>. Try it:</p>\n<pre><code class=\"lang-sql\">-- explain query execution plan\nselect fhir.explain_search(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n</code></pre>\n<h2 id=\"indexing\">Indexing</h2>\n<p>Search works without indexing but search query would be slow\non any reasonable amount of data.\nSo FHIRbase has a group of indexing functions:</p>\n<ul>\n<li><code>index_search_param(resourceType, searchParam)</code></li>\n<li><code>drop_index_search_param(resourceType, searchParam)</code></li>\n<li><code>index_resource(resourceType)</code></li>\n<li><code>drop_resource_indexes(resourceType)</code></li>\n<li><code>index_all_resources()</code></li>\n<li><code>drop_all_resource_indexes()</code></li>\n</ul>\n<p>Indexes are not for free - they eat space and slow inserts and updates.\nThat is why indexes are optional and completely under you control in FHIRbase.</p>\n<p>Before indexing experiments, please keep in mind, that searching time boost can be\nobservable only on thousands of entries. If you have enough patience, you can\ngo back to <strong>Transaction</strong> block and try to generate those thousands of\npatients. After that you&#39;ll see the difference sharp and clear.  </p>\n<p>If you don&#39;t have that much patience - you&#39;ll get indexing functions\nunderstanding and practice anyway. </p>\n<p>So, let&#39;s go. First, drop all existing indexes \nfor <code>Patient</code> resource with <code>drop_resource_indexes</code>:</p>\n<pre><code class=\"lang-sql\">SELECT fhir.drop_resource_indexes(&#39;Patient&#39;);\n</code></pre>\n<p>Check, if <code>Patient</code> names index exists. Next request should return empty\nresult:</p>\n<pre><code class=\"lang-sql\">-- Patient names index size\nselect * from (select obj-&gt;&gt;&#39;relname&#39; as relname, obj-&gt;&gt;&#39;size&#39; as size\nfrom jsonb_array_elements(fhir.admin_disk_usage_top(100)) as obj) x\nwhere relname = &#39;public.patient_name_name_string_idx&#39;\n</code></pre>\n<p>Check, how many patients you have at the moment:</p>\n<pre><code>SELECT COUNT(*) from patient;\n</code></pre><p>Now, follow up to indexing. Most important function for that is \n<code>fhir.index_search_param</code> which accepts resourceType as a first parameter, and \nname of search parameter to index.</p>\n<p>Let&#39;s check request timing for search without index you have already ran before. \nYou can see execution time in the header of result popup, near <strong>result</strong> word. \nMake search request multiple times and remember average execution time value:</p>\n<pre><code class=\"lang-sql\">-- search without index\nSELECT fhir.search(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n</code></pre>\n<p>Next step - add index for <code>Patient</code> names with <code>fhir.index_search_param</code>:</p>\n<pre><code class=\"lang-sql\">-- index search param\nSELECT fhir.index_search_param(&#39;Patient&#39;,&#39;name&#39;);\n</code></pre>\n<p>Check, if index was created. Request should return the size of just created\n<code>Patient</code> names index:</p>\n<pre><code class=\"lang-sql\">-- Patient names index size\nselect * from (select obj-&gt;&gt;&#39;relname&#39; as relname, obj-&gt;&gt;&#39;size&#39; as size\nfrom jsonb_array_elements(fhir.admin_disk_usage_top(100)) as obj) x\nwhere relname = &#39;public.patient_name_name_string_idx&#39;\n</code></pre>\n<p>Repeat patient search multiple times again and compare average execution timing \nvalue now. You&#39;ll see huge performance impact on large number of patients:</p>\n<pre><code class=\"lang-sql\">-- search with index\nSELECT fhir.search(&#39;Patient&#39;, &#39;given=mark&amp;count=10&#39;);\n</code></pre>\n<p>For more understanding you can research request execution plan. This time you\ncan see <strong>Bitmap Index Scan</strong> string in results.</p>\n<pre><code class=\"lang-sql\">-- explain search\nselect fhir.explain_search(&#39;Patient&#39;, &#39;name=mark&amp;count=10&#39;);\n</code></pre>\n<p>Try to run <code>fhir.drop_resource_indexes</code> and \n<code>fhir.index_search_param(&#39;Patient&#39;,&#39;name&#39;)</code> multiple times and check the result\nof <code>fhir.explain_search</code> every time.</p>\n";
 
 /***/ },
 /* 29 */,

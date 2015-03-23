@@ -7002,21 +7002,32 @@ nav a {
   color: #444 !important;
   font-size: 16px;
 }
-.sub-nav {
+.tutorial-container {
+  padding: 40px 0px;
+}
+.tutorial-container p,
+.tutorial-container ul li {
+  font-size: 16px;
+}
+.tutorial-container .tutorial-content {
+  border-right: 1px solid #eee;
+  padding-right: 40px;
+}
+.tutorial-container .sub-nav {
   position: relative;
 }
-ul.subnav-list {
+.tutorial-container .sub-nav ul.subnav-list {
   position: fixed;
   padding-top: 20px;
 }
-ul.subnav-list li {
+.tutorial-container .sub-nav ul.subnav-list li {
   padding: 0px 20px;
 }
-ul.subnav-list li a:focus {
+.tutorial-container .sub-nav ul.subnav-list li a:focus {
   color: #337ab7;
   text-decoration: none;
 }
-ul.subnav-list li.active a {
+.tutorial-container .sub-nav ul.subnav-list li.active a {
   font-weight: bold;
 }
 .header {
@@ -7206,8 +7217,4 @@ ul.subnav-list li.active a {
   border-radius: 2px;
   min-width: 150px;
   color: white;
-}
-.tutorial-content p,
-.tutorial-content ul li {
-  font-size: 16px;
 }
