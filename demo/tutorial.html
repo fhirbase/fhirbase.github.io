@@ -39,12 +39,15 @@
 </nav>
 <!-- Static navbar -->
 <div class="view">
-  <div class="container" ng-view></div>
+  <div class="container">
+    <div class="tutorial-content" markdown-tutor>
+    </div>
+  </div>
 </div>
 
 <div class="result" ng-class="{open: showResult}">
   <h3 class="result-header"  ng-click="showResult =! showResult">
-    result
+    result<span ng-if="queryTiming">: {{queryTiming}} ms</span>
     <span ng-class="{'glyphicon-chevron-up': !showResult, 'glyphicon-chevron-down': showResult}" class="glyphicon icon-collapse"></span>
   </h3>
   <div class="result-content">

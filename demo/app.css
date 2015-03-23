@@ -1,3 +1,41 @@
+.CodeMirror-hints {
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+  list-style: none;
+
+  margin: 0;
+  padding: 2px;
+
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border-radius: 3px;
+  border: 1px solid silver;
+
+  background: white;
+  font-size: 90%;
+  font-family: monospace;
+
+  max-height: 20em;
+  overflow-y: auto;
+}
+
+.CodeMirror-hint {
+  margin: 0;
+  padding: 0 4px;
+  border-radius: 2px;
+  max-width: 19em;
+  overflow: hidden;
+  white-space: pre;
+  color: black;
+  cursor: pointer;
+}
+
+li.CodeMirror-hint-active {
+  background: #08f;
+  color: white;
+}
 /* BASICS */
 
 .CodeMirror {
@@ -394,45 +432,7 @@ THE SOFTWARE.
 .cm-s-xq-light span.cm-error {color: #f00;}
 
 .cm-s-xq-light .CodeMirror-activeline-background {background: #e8f2ff !important;}
-.cm-s-xq-light .CodeMirror-matchingbracket {outline:1px solid grey;color:black !important;background:yellow;}.CodeMirror-hints {
-  position: absolute;
-  z-index: 10;
-  overflow: hidden;
-  list-style: none;
-
-  margin: 0;
-  padding: 2px;
-
-  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  border-radius: 3px;
-  border: 1px solid silver;
-
-  background: white;
-  font-size: 90%;
-  font-family: monospace;
-
-  max-height: 20em;
-  overflow-y: auto;
-}
-
-.CodeMirror-hint {
-  margin: 0;
-  padding: 0 4px;
-  border-radius: 2px;
-  max-width: 19em;
-  overflow: hidden;
-  white-space: pre;
-  color: black;
-  cursor: pointer;
-}
-
-li.CodeMirror-hint-active {
-  background: #08f;
-  color: white;
-}
-/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+.cm-s-xq-light .CodeMirror-matchingbracket {outline:1px solid grey;color:black !important;background:yellow;}/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -7002,6 +7002,16 @@ nav a {
   color: #444 !important;
   font-size: 16px;
 }
+.sub-nav {
+  position: relative;
+}
+ul.subnav-list {
+  position: fixed;
+  padding-top: 20px;
+}
+ul.subnav-list li {
+  padding: 0px 20px;
+}
 .header {
   padding: 0 45px;
   margin: 0 auto;
@@ -7190,22 +7200,7 @@ nav a {
   min-width: 150px;
   color: white;
 }
-.ng-enter,
-.ng-leave {
-  -webkit-transition: 455ms cubic-bezier(0.19, 1, 0.22, 1) all;
-  -moz-transition: 455ms cubic-bezier(0.19, 1, 0.22, 1) all;
-  -ms-transition: 455ms cubic-bezier(0.19, 1, 0.22, 1) all;
-  -o-transition: 455ms cubic-bezier(0.19, 1, 0.22, 1) all;
-  transition: 1000ms cubic-bezier(0.19, 1, 0.22, 1) all;
-}
-.ng-enter.ng-leave-active,
-.ng-leave.ng-leave-active {
-  display: none;
-}
-.ng-enter {
-  opacity: 0.1;
-  position: relative;
-}
-.ng-enter.ng-enter-active {
-  opacity: 1;
+.tutorial-content p,
+.tutorial-content ul li {
+  font-size: 16px;
 }
