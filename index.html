@@ -3,102 +3,155 @@ layout: default
 title: FHIRbase
 ---
 
+<style>
+.next .icon {
+  position: relative;
+  font-size: 58px;
+  width: 70px;
+  top: 30px;
+  margin: 0 auto;
+  border-radius: 100%;
+  padding: 6px;
+  background: #666;
+  color: white;
+  box-shadow: 2px 4px 6px gray;
+}
+.moto {
+  border-bottom: 1px solid #dfdfdf;
+  text-align: center;
+  padding: 130px 0px 170px;
+  background-color: #f8f8f8;
+}
+.next {
+  margin-bottom: 50px;
+}
+
+.row-content{
+  background-color: white;
+  font-size: 18px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  margin: 0px 0px;
+  border-bottom: 1px solid #dfdfdf;
+}
+main .row-content:nth-child(odd){
+   background-color: transparent;
+}
+main .row-content:nth-child(even){
+   background-color: #f8f8f8;
+}
+.row-content p {
+  line-height: 30px;
+}
+
+</style>
+
 <main>
-  <div class="row moto" id="moto">
-    <h1>Relational Storage for Health IT Solutions</h1>
-    <p>Open source storage based on the <a href="http://hl7.org/implement/standards/fhir/" target="_blank">FHIR Standard</a> and ready for production use</p>
-    <br>
-    <a href="demo/index.html" class="btn btn-default btn-lg">TRY NOW</a>
-    <a href="installation.html" class="btn btn-default btn-lg">INSTALL</a>
-  </div>
+<div class="row moto" id="moto">
+  <h1>Relational Storage for Health IT Solutions</h1>
+  <p>Open source storage based on the <a href="http://hl7.org/implement/standards/fhir/" target="_blank">FHIR Standard</a> ready for production use</p>
+  <br>
+  <a href="demo/tutorial.html" class="btn btn-default btn-lg">LIVE TUTOR</a>
+  <a href="demo/index.html" class="btn btn-default btn-lg">TRY NOW</a>
+  <a href="installation.html" class="btn btn-default btn-lg">INSTALL</a>
+</div>
 
-  <div class="next text-center">
-    <a href="#positioning"><span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-  </div>
+<div class="next text-center">
+  <span class="icon">L</span>
+</div>
 
-  <!-- Positioning -->
-  <div class="row row-content positioning" id="positioning">
-    <div class="container">
-      <div class="col-md-6">
-        <h2>Vision of FHIRbase </h2>
-        <p>FHIRbase is an excellent start and basis for creating standardized next generation solutions for Health IT such as EHRs, Patient Portals, etc. <br>With FHIRbase you can focus on solving your business tasks using familiar technologies while leveraging the FHIR standard.</p>
-      </div>
-      <div class="col-md-6">
-        <div class="image">
-          <img src="img/fhirbase_start.png" class="img-response">
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Features -->
-  <div class="row row-content" id="heart">
-    <div class="container">
-      <div class="col-md-6">
-        <div class="image">
-          <img src="img/fhirbase_heart.png" class="img-response">
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h2>The Heart of FHIRbase is PostgreSQL</h2>
-        <p>PostgreSQL is a battle proven open source database which supports structured documents (jsonb) while preserving ACID guaranties and richness of SQL query language.</p>
-      </div>
-    </div>
-  </div>
-  <div class="row row-content" id="soul">
-    <div class="container">
-      <div class="col-md-6">
-        <h2>The Soul of FHIRbase is FHIR standard</h2>
-        <p>We decided to implement most of FHIR specification inside a database for scalability reason. This approach also gives you a possibility to use FHIRbase from your preferred lang/platform (.NET, java, ruby, nodejs etc).</p>
-      </div>
-      <div class="col-md-6">
-        <div class="image">
-          <img src="img/fhirbase_soul.png" class="img-response">
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row row-content" id="face">
-    <div class="container">
-      <div class="col-md-6">
-        <div class="image">
-          <img src="img/fhirbase_face.png" class="img-response">
-        </div>
-      </div>
-      <div class="col-md-6">
-        <h2>The Face of FHIRbase is a simple API</h2>
-        <p>Most of API for FHIRbase is represented as functions in fhir schema, other schemas are used as code library modules.</p>
-      </div>
-    </div>
-  </div>
-  <!-- Features END -->
-
-  <div class="row row-content">
-  	<div class="container calltoaction">
-	    <h1>Relational Storage for Health IT Solutions</h1>
-    <p>Open source storage based on the <a href="http://hl7.org/implement/standards/fhir/" target="_blank">FHIR Standard</a> and ready for production use</p>
-    <br>
-    <a href="demo/index.html" class="btn btn-default btn-lg">TRY NOW</a>
-    <a href="installation.html" class="btn btn-default btn-lg">INSTALL</a>
-	  </div>
-  </div>
-
-  <!-- Community & Offer -->
-  <div id="community" class="row row-content offer center">
-    <div class="container">
-      <div class="image">
-        <img src="img/fhirbase_community.png" class="img-response">
-      </div>
-      <h2>Community</h2>
+<!-- Positioning -->
+<div class="row row-content positioning" id="positioning">
+  <div class="container">
+    <div class="col-md-6">
+      <h2>Vision of FHIRbase </h2>
+      <p>
+      FHIRbase is a quick start and good basis for creating
+      next generation solutions for Health IT: EHRs, Patient
+      Portals and Public health, mobile apps backend.
       <br>
-      <div class="">
-        <p>The primary forum for discussing FHIRbase is the <a href="https://groups.google.com/forum/#!forum/fhirbase" target="_blank">Google Group</a> - please join us!</p>
-        <br>
-        <a href="https://groups.google.com/forum/#!forum/fhirbase" target="_blank" class="btn btn-community btn-lg">JOIN</a>
-        <hr>
-        <p>Enterprise support for FHIRbase is provided by <a href="http://health-samurai.io" target="_blank">Health Samurai Team</a></p>
+      With FHIRbase you can focus on solving your business
+      tasks using familiar technologies while leveraging the
+      FHIR standard.
+      </p>
+    </div>
+    <div class="col-md-6">
+      <div class="image">
+        <img src="img/fhirbase_start.png" class="img-response">
       </div>
     </div>
   </div>
+</div>
+<!-- Features -->
+<div class="row row-content" id="heart">
+  <div class="container">
+    <div class="col-md-6">
+      <div class="image">
+        <img src="img/fhirbase_heart.png" class="img-response">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2>The Heart of FHIRbase is PostgreSQL</h2>
+      <p>PostgreSQL is a battle proven open source database which supports structured documents (jsonb) while preserving ACID guaranties and richness of SQL query language.</p>
+    </div>
+  </div>
+</div>
+<div class="row row-content" id="soul">
+  <div class="container">
+    <div class="col-md-6">
+      <h2>The Soul of FHIRbase is FHIR standard</h2>
+      <p>We decided to implement most of FHIR specification inside a database for scalability reason. This approach also gives you a possibility to use FHIRbase from your preferred lang/platform (.NET, java, ruby, nodejs etc).</p>
+    </div>
+    <div class="col-md-6">
+      <div class="image">
+        <img src="img/fhirbase_soul.png" class="img-response">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row row-content" id="face">
+  <div class="container">
+    <div class="col-md-6">
+      <div class="image">
+        <img src="img/fhirbase_face.png" class="img-response">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2>The Face of FHIRbase is a simple API</h2>
+      <p>Most of API for FHIRbase is represented as functions in fhir schema, other schemas are used as code library modules.</p>
+    </div>
+  </div>
+</div>
+<!-- Features END -->
+
+<div class="row row-content">
+  <div class="container calltoaction">
+    <h1>Relational Storage for Health IT Solutions</h1>
+    <p>Open source storage based on the <a href="http://hl7.org/implement/standards/fhir/" target="_blank">FHIR Standard</a> ready for production use</p>
+    <br>
+    <a href="demo/tutorial.html" class="btn btn-default btn-lg">LIVE TUTOR</a>
+    <a href="demo/index.html" class="btn btn-default btn-lg">TRY NOW</a>
+    <a href="installation.html" class="btn btn-default btn-lg">INSTALL</a>
+  </div>
+</div>
+
+<!-- Community & Offer -->
+<div id="community" class="row row-content offer center">
+  <div class="container">
+    <div class="image">
+      <img src="img/fhirbase_community.png" class="img-response">
+    </div>
+    <h2>Community</h2>
+    <br>
+    <div class="">
+      <p>The primary forum for discussing FHIRbase is the <a href="https://groups.google.com/forum/#!forum/fhirbase" target="_blank">Google Group</a> - please join us!</p>
+      <br>
+      <a href="https://groups.google.com/forum/#!forum/fhirbase" target="_blank" class="btn btn-community btn-lg">JOIN</a>
+      <hr>
+      <p>Commercial support for FHIRbase is provided by <a href="http://health-samurai.io" target="_blank">Health Samurai Team</a></p>
+    </div>
+  </div>
+</div>
 </main>
 
 <!--

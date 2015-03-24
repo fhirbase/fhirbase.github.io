@@ -5,7 +5,7 @@ html {
 
 body{
 	height: 100%;
-	color: #444;
+	color: #333;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
 	/* margin-bottom: 290px; */
@@ -30,7 +30,7 @@ body{
 }
 
 .navbar{
-	background-color: #fafafa !important;
+	background-color: #f8f8f8 !important;
 	border: none !important;
 	box-shadow: none;
 	padding: 15px 0px;
@@ -125,21 +125,6 @@ footer a:hover{
 
 /* Index Styles */
 
-.row-content{
-	background-color: white;
-	border-bottom: 1px solid #eee;
-	font-size: 18px;
-	padding-top: 80px;
-	padding-bottom: 80px;
-	margin: 0px 0px;
-}
-
-.moto{
-	border-bottom: 1px solid #eee;
-	text-align: center;
-	padding: 200px 0px;
-	background-color: #fafafa;
-}
 
 .next{
 	margin-top: -70px;
@@ -180,14 +165,6 @@ footer a:hover{
 	margin-right: auto;
 }
 
-main .row-content:nth-child(odd){
-	background-color: transparent;
-}
-
-main .row-content:nth-child(even){
-	background-color: #fafafa;
-}
-
 /* Getting Started Page */
 
 .sub-nav{
@@ -203,8 +180,16 @@ ul.subnav-list li{
        padding: 0px 20px;
 }
 
-#nav li.current a{
-        font-weight: bold;
+.navbar-default .navbar-nav>li>a {
+  color: #777 !important;
+}
+.navbar-default .navbar-nav>li.active>a {
+  color: #333 !important;
+}
+
+
+#nav li.active a{
+  color: black;
 }
 
 .gstarted{

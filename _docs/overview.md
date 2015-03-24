@@ -10,23 +10,42 @@ order: 2
 FHIR is a specification of semantic resources and API for working with healthcare data.
 Please address the [official specification](http://hl7-fhir.github.io/) for more details.
 
-To implement FHIR server we have to persist & query data in an application internal
-format or in FHIR format. This article describes how to store FHIR resources
-in a relational database (PostgreSQL), and open source FHIR
-storage implementation - [FHIRbase](https://github.com/fhirbase/fhirbase).
+FHIRbase is open source, smart storage implementation for FHIR resources, built on top of PostgreSQL
+and leveraging PostgreSQL advanced features
+ (like [jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html) support,
+GIN & GIST indexes, table inheritance etc).
+
+Public API represented as set of functions in *fhir* schema.
+This functions are designed as close as possible to [FHIR REST operations](http://hl7-fhir.github.io/http.html)
+to hide standard implementation details & complexity from FHIRbase clients.
+
+For example for FHIR [create operation](http://hl7-fhir.github.io/http.html#create) FHIRbase exposes
+`fhir.create(resource)` function with same semantic.
+
+To become familiar with Public API please read [interactive tutorial](/demo/tutorial.html) and
+for installation instructions address [Installation Guide](installation.md).
 
 
-## Overview
+This article describes FHIRBase internals.
 
-*FHIRbase* is built on top of PostgreSQL and requires its version higher than 9.4
-(i.e. [jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html) support).
+### FHIR Meta-data (Conformance resources)
 
-FHIR describes ~100 [resources](http://hl7-fhir.github.io/resourcelist.html)
-as base StructureDefinitions which by themselves are resources in FHIR terms.
+FHIR describes ~100 [resource types](http://hl7-fhir.github.io/resourcelist.html)
+to store and exchange healthcare & administrative information.
+Structure of every resource type is described by [StructureDefinition resource](http://hl7-fhir.github.io/structuredefinition.html).
+Search API for each resource described using [SearchParameter] resources. Coded attributes
+of resource could be bound to a set of codes drawn from one or more code systems, described as [ValueSet resources](http://hl7-fhir.github.io/valueset.html).
+There are more conformance resources (OperationDefinition, ConceptMap, DataElements).
 
-To setup FHIRbase use [Installation Guide](installation.md).
+FHIR standard is distributed with content of this meta-data (conformance) resources.
 
-FHIRbase stores each resource in two tables - one for current version
+FHIRBase comes with preloaded conformance resources
+
+
+### How resources are stored?
+
+
+Internally FHIRbase stores each resource in two tables - one for current version
 and second for previous versions of the resource. Following a convention, tables are named
 in a lower case after resource types: Patient => patient, StructureDefinition => structuredefinition.
 
