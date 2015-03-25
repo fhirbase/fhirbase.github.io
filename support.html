@@ -45,6 +45,7 @@ title: Support
   /*box-shadow: 2px 0px 17px #ccc;*/
 }
 #hslogo {
+  text-decoration: none;
   position: fixed;
   right: 50px;
   top: 100px;
@@ -56,6 +57,10 @@ title: Support
   padding: 5px;
   box-shadow: 2px 3px 5px #aaa;
   color: white;
+}
+#hslogo:hover {
+  background: white;
+  color: #888;
 }
 .provide-line {
   text-align: center;
@@ -80,10 +85,15 @@ title: Support
 .per {
   color: #666;
 }
+@media (max-width: 1280px){
+  #hslogo {
+    display: none;
+  }
+}
 </style>
 
 <div class="bgblock"></div>
-<div id="hslogo" class="icon">S</div>
+<a href="http://health-samurai.io/" id="hslogo" class="icon">S</a>
 <h3 class="provide-line">
   <a href="http://health-samurai.io/">HeathSamurai</a> team provides commercial support for FHIRBase:
   <a href="mailto:hello@health-samurai.io" target="_top">hello@health-samurai.io</a>
