@@ -192,6 +192,10 @@ ul.subnav-list li{
   color: black;
 }
 
+#nav li.current a{
+  font-weight: bold;
+}
+
 .gstarted{
 	padding: 40px 0px;
 }
