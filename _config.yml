@@ -1,6 +1,6 @@
 name: FHIRbase
-markdown: pygments
-highlighter: rogue
+markdown: kramdown
+highlighter: pygments
 
 collections:
   instructions:
