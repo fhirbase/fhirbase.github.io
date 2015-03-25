@@ -130,4 +130,5 @@ PLATFORMS
 DEPENDENCIES
   execjs
   github-pages
+  kramdown
   therubyracer

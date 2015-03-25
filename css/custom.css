@@ -211,5 +211,14 @@ ul.subnav-list li{
 	font-size: 16px;
 }
 
+.docs-content table {
+  width: 100%;
+  table-layout: fixed;
+  box-sizing: border-box;
+}
 
-
+.docs-content table tbody td {
+  white-space: normal;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

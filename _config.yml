@@ -1,6 +1,6 @@
 name: FHIRbase
-markdown: redcarpet
-highlighter: pygments
+markdown: kramdown
+highlighter: rogue
 
 collections:
   instructions:
@@ -9,3 +9,6 @@ collections:
     output: true
 
 exclude: [/vendor/]
+
+redcarpet:
+  extensions: ['tables']
