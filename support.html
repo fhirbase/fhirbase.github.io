@@ -8,10 +8,11 @@ title: Support
   border: 1px solid #ddd;
   background: white;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  margin-bottom: 30px;
 }
 .offer-content {
   height: 400px;
-  padding: 20px 30px;
+  padding: 20px 20px;
   border-bottom: 1px solid #ddd;
   text-align: left;
 }
@@ -20,13 +21,16 @@ title: Support
   font-size: 18px;
   padding-top: 20px;
   margin-bottom: 15px;
+  height: 50px;
 }
 .offer .price {
-  height: 60px;
+  padding: 30px;
   background: #eee;
+  text-align: center;
+  text-shadow: -1px -1px 1px white;
 }
 .offers {
-  margin-top: 150px;
+  margin-top: 50px;
   margin-bottom: 500px;
 }
 .bgblock {
@@ -53,19 +57,46 @@ title: Support
   box-shadow: 2px 3px 5px #aaa;
   color: white;
 }
+.provide-line {
+  text-align: center;
+  padding-top: 36px;
+  color: #777;
+  text-shadow: -1px -1px 1px white;
+}
+.provide-line a {
+  color: #777;
+  text-decoration: underline;
+}
+.currency {
+  font-weight: bold;
+  color: #666;
+  vertical-align: top;
+}
+.number {
+  font-weight: bold;
+  font-size: 30px;
+  color: #444;
+}
+.per {
+  color: #666;
+}
 </style>
 
 <div class="bgblock"></div>
 <div id="hslogo" class="icon">S</div>
+<h3 class="provide-line">
+  <a href="http://health-samurai.io/">HeathSamurai</a> team provides commercial support for FHIRBase:
+  <a href="mailto:hello@health-samurai.io" target="_top">hello@health-samurai.io</a>
+</h3>
 <div class="container offers">
   <div class="row">
-    <div class="col-xs-4">
+    <div class="col-md-3">
       <div class="offer">
-        <h3>FHIRBase for production</h3>
+        <h3>FHIRBase production</h3>
         <div class="offer-content">
           <p>
           We install and support complete and robust
-          Fhirbase infrastructure for production*.
+          Fhirbase infrastructure for production.
           </p>
           <br/>
           <ul>
@@ -78,10 +109,12 @@ title: Support
           </ul>
         </div>
         <div class="price">
+          <span class="currency">$</span>
+          <span class="number">30,000</span>
         </div>
       </div>
     </div>
-    <div class="col-xs-4">
+    <div class="col-md-3">
       <div class="offer">
         <h3>Dedicated Developer</h3>
         <div class="offer-content">
@@ -99,16 +132,19 @@ title: Support
           </ul>
         </div>
         <div class="price">
+          <span class="currency">$</span>
+          <span class="number">10,000</span>
+          <span class="per">/mo</span>
         </div>
       </div>
     </div>
-    <div class="col-xs-4">
+    <div class="col-md-3">
       <div class="offer">
         <h3>Customization & Integration</h3>
         <div class="offer-content">
           <p>
           We customize Fhirbase for
-          your needs/requirements
+          your needs and requirements
           and develop Fhirbase
           integrations with your
           platform or technical stack.
@@ -121,6 +157,32 @@ title: Support
           </ul>
         </div>
         <div class="price">
+          <span class="currency">$</span>
+          <span class="number">10,000</span>
+          <span class="per">/mo</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="offer">
+        <h3>FHIRBase consulting</h3>
+        <div class="offer-content">
+          <p>
+          We consult your engineers
+          about fhirbase and fhirbase
+          integrations.
+          </p>
+          <br/>
+          <ul>
+            <li>dedicated person to contact </li>
+            <li>education about fhirbase </li>
+            <li>discussions</li>
+          </ul>
+        </div>
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="number">5,000</span>
+          <span class="per">/mo</span>
         </div>
       </div>
     </div>
