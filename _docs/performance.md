@@ -7,13 +7,29 @@ order: 3
 
 # FHIRBase Performance
 
-Blah-blah about performance reports.
+Generally, FHIRBase performance mainly depends on PostgreSQL
+configuration (TODO: explain configuration options). User should
+expect that FHIRBase is a bit slower in CRUD operations than
+general-purpose PostgreSQL setup because it stores additional
+meta-data for each resource and also uses Stored Procedures instead of
+vanilla SQL statements.
 
-## MacBook Air 1,7 GHz Intel Core i7, 8 GB 1600 MHz DDR3, SSD
+Resources stored in FHIRBase will consume a bit more disk space than
+it's raw JSON representation - about 1.3 of it's original size. For
+example, if you store 1 million of resources (1KB each), such table
+will consume 1.3GB, not 1GB as you may expect. Additional indexes for
+fast searches will consume additional space depending on type of
+index.
+
+Searching, one of most important operations, is optimized very well,
+thanks to PostgreSQL GiN and GiST indices. It performs well on rather
+complex searches with sorting and chained params.
+
+Following table shows detailed timing which we get on MacBook Air 1,7
+GHz Intel Core i7, 8 GB 1600 MHz DDR3, SSD.
 
 | Operation                                                                                                           | Elapsed time (ms) |
 |---------------------------------------------------------------------------------------------------------------------+------------------:|
-| disk usage right after generation of seed data                                                                      |            21.885 |
 | fhir.create called just one time                                                                                    |            25.243 |
 | fhir.create called 1000 times in batch                                                                              |          1209.033 |
 | fhir.read called just one time                                                                                      |             6.694 |
@@ -34,10 +50,6 @@ Blah-blah about performance reports.
 | building Encounter.participant index                                                                                |             8.256 |
 | building Encounter.practitioner index                                                                               |             7.585 |
 | building Patient.organization index                                                                                 |        105702.273 |
-| running VACUUM ANALYZE on patient table                                                                             |         41941.426 |
-| running VACUUM ANALYZE on encounter table                                                                           |         10796.692 |
-| running VACUUM ANALYZE on organization table                                                                        |            89.839 |
-| running VACUUM ANALYZE on practitioner table                                                                        |            17.554 |
 | searching for patient with unique name                                                                              |            51.238 |
 | searching for all Johns in database                                                                                 |           220.397 |
 | searching Patient with name=John&gender=female&_count=100 (should have no matches at all)                           |           172.586 |
@@ -49,3 +61,26 @@ Blah-blah about performance reports.
 | searching Encounter with patient:Patient.name=John&_count=100&patient:Patient.organization:Organization.name=Mollis |           373.777 |
 |---------------------------------------------------------------------------------------------------------------------|-------------------|
 {: .table .table-condensed .table-benchmark .table-striped }
+
+## Generating test data and running benchmarks on your machine
+
+FHIRBase `runme` utility can be used to run benchmarks on your
+machine. At first, generate test data:
+
+~~~bash
+$ cd fhirbase
+$ DB=<your db> PATIENTS_COUNT=1000000 ./runme seed
+~~~
+
+This command will generate 1 million of Patients, 1.3 million of
+Encounters, 200 Practitioners and 400 Organizations, and will
+cross-link them with ResourceReferences. Usually it takes from 5 to
+20 minutes to generate such amount of data.
+
+Now you can run benchmark suite:
+
+~~~bash
+$ DB=<your db> ./runme perf
+~~~
+
+This operation can take some time, be patient.
