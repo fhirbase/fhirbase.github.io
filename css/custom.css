@@ -222,3 +222,8 @@ ul.subnav-list li{
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.docs-content table.table-benchmark tr td:last-child,
+.docs-content table.table-benchmark tr th:last-child {
+  width: 120px;
+}

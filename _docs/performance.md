@@ -48,4 +48,4 @@ Blah-blah about performance reports.
 | searching Encounter with patient:Patient.name=John&_count=100&status=finished&practitioner:Practitioner.name=Alex   |         34834.579 |
 | searching Encounter with patient:Patient.name=John&_count=100&patient:Patient.organization:Organization.name=Mollis |           373.777 |
 |---------------------------------------------------------------------------------------------------------------------|-------------------|
-{: .table }
+{: .table .table-condensed .table-benchmark .table-striped }

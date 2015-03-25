@@ -15,19 +15,19 @@ Requirements
 
 Installation steps:
 
-```bash
+~~~bash
 sudo apt-get install postgresql-9.4 postgresql-contrib-9.4 curl
 # create local user for ident auth
 sudo su postgres -c 'createuser -s <you-local-user>'
 # create empty database
 psql -d postgres -c 'create database test'
-```
+~~~
 
 Download latest version of fhirbase.sql
 
 <a href="#" class="btn btn-default btn-lg" id="download">Download</a>
 
-```bash
+~~~bash
 # install last version of fhirbase
 psql -d test < fhirbase.sql
 # generate tables
@@ -35,7 +35,7 @@ psql -d test -c 'SELECT fhir.generate_tables()'
 
 psql test
 #> \dt
-```
+~~~
 
 
 
