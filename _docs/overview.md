@@ -5,352 +5,93 @@ id: overview
 order: 2
 ---
 
-## FHIRbase: FHIR persistence in PostgreSQL
+# FHIRbase
 
-FHIR is a specification of semantic resources and API for working with healthcare data.
-Please address the [official specification](http://hl7-fhir.github.io/) for more details.
+![fhirbase](https://avatars3.githubusercontent.com/u/6482975?v=3&s=400)
 
-FHIRbase is open source, smart storage implementation for FHIR resources, built on top of PostgreSQL
-and leveraging PostgreSQL advanced features
- (like [jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html) support,
-GIN & GIST indexes, table inheritance etc).
+FHIRbase is an open source relational storage for
+[FHIR](http://hl7.org/implement/standards/fhir/) targeting real production.
 
-Public API represented as set of functions in *fhir* schema.
-This functions are designed as close as possible to [FHIR REST operations](http://hl7-fhir.github.io/http.html)
-to hide standard implementation details & complexity from FHIRbase clients.
+[![Build Status](https://travis-ci.org/fhirbase/fhirbase.png?branch=master)](https://travis-ci.org/fhirbase/fhirbase)
 
-For example for FHIR [create operation](http://hl7-fhir.github.io/http.html#create) FHIRbase exposes
-`fhir.create(resource)` function with same semantic.
+## Motivation
 
-To become familiar with Public API please read [interactive tutorial](/demo/tutorial.html) and
-for installation instructions address [Installation Guide](installation.md).
+While crafting Health IT systems we understand an importance of a
+properly chosen domain model. FHIR is an open source new generation
+lightweight standard for health data interoperability, which (we hope)
+could be used as a foundation for Health IT systems. FHIR is based
+on a concept of __resource__.
 
+> FHIR® is a next generation standards framework created by HL7.  FHIR
+> combines the best features of HL7 Version 2, Version 3 and CDA®
+> product lines while leveraging the latest web standards and applying
+> a tight focus on implementability.
 
-This article describes FHIRBase internals.
+Also we learned that data is a heart of any information system, and
+should be reliably managed. PostgreSQL is a battle proved open source
+database which supports structured documents (jsonb) while
+preserving ACID guaranties and richness of SQL query language.
 
-### FHIR Meta-data (Conformance resources)
+> PostgreSQL is a powerful, open source object-relational database
+> system.  It has more than 15 years of active development and a
+> proven architecture that has earned it a strong reputation for
+> reliability, data integrity, and correctness.
 
-FHIR describes ~100 [resource types](http://hl7-fhir.github.io/resourcelist.html)
-to store and exchange healthcare & administrative information.
-Structure of every resource type is described by [StructureDefinition resource](http://hl7-fhir.github.io/structuredefinition.html).
-Search API for each resource described using [SearchParameter] resources. Coded attributes
-of resource could be bound to a set of codes drawn from one or more code systems, described as [ValueSet resources](http://hl7-fhir.github.io/valueset.html).
-There are more conformance resources (OperationDefinition, ConceptMap, DataElements).
+Here is the list of PostgreSQL features that we use:
 
-FHIR standard is distributed with content of this meta-data (conformance) resources.
+* [jsonb](http://www.postgresql.org/docs/9.4/static/functions-json.html)
+* [gin & gist](http://www.postgresql.org/docs/9.1/static/textsearch-indexes.html)
+* [inheritance](http://www.postgresql.org/docs/9.4/static/tutorial-inheritance.html)
 
-FHIRBase comes with preloaded conformance resources
+We actively collaborate with PostgreSQL lead developers to craft
+production ready storage for FHIR.
 
+> Why are we doing this inside a database?
 
-### How resources are stored?
+We decided to implement most of FHIR specification inside a database for
+scalability reason (all data operations are done efficiently in a database).
 
+This approach also gives you a possibility to use FHIRbase from your
+preferred lang/platform (.NET, java, ruby, nodejs etc).
+We have implemented FHIR compliant server in clojure with small amount of
+code - [FHIRPlace](https://github.com/fhirbase/fhirplace/).
 
-Internally FHIRbase stores each resource in two tables - one for current version
-and second for previous versions of the resource. Following a convention, tables are named
-in a lower case after resource types: Patient => patient, StructureDefinition => structuredefinition.
+And there is an option to break FHIR specification abstraction (if required) and
+go into the database by generic SQL interface and complete your business task.
 
-For example *Patient* resources are stored
-in *patient* and *patient_history* tables:
 
-~~~psql
-fhirbase=# \d patient
-                       Table "public.patient"
-    Column     |           Type           |        Modifiers
----------------+--------------------------+-------------------------
- version_id    | text                     |
- logical_id    | text                     | not null
- resource_type | text                     | default 'Patient'::text
- updated       | timestamp with time zone | not null default now()
- published     | timestamp with time zone | not null default now()
- category      | jsonb                    |
- content       | jsonb                    | not null
-Inherits: resource
+## Features
 
-fhirbase=# \d patient_history
-
-                   Table "public.patient_history"
-    Column     |           Type           |        Modifiers
----------------+--------------------------+-------------------------
- version_id    | text                     | not null
- logical_id    | text                     |
- resource_type | text                     | default 'Patient'::text
- updated       | timestamp with time zone | not null default now()
- published     | timestamp with time zone | not null default now()
- category      | jsonb                    |
- content       | jsonb                    | not null
-Inherits: resource_history
-~~~
+FHIRbase implements 80% of FHIR specification inside the database as
+procedures:
 
-All resource tables have similar structure and are inherited from *resource* table,
-to allow cross-table queries (for more information see [PostgreSQL inheritance](http://www.postgresql.org/docs/9.4/static/tutorial-inheritance.html)).
-
-Minimal installation of FHIRbase consists of only a
-few tables for "meta" resources:
-
-* StructureDefinition
-* OperationDefinition
-* SearchParameter
-* ValueSet
-* ConceptMap
-
-These tables are populated with resources provided by FHIR distribution.
-
-Most of API for FHIRbase is represented as functions in *fhir* schema,
-other schemas are used as code library modules.
-
-First helpful function is `fhir.generate_tables(resources text[])` which generates tables
-for specific resources passed as array.
-For example to generate tables for patient, organization and encounter:
-
-~~~sql
-psql fhirbase
+* meta-data resource storage (StructureDefinition, ValueSet, SearchParameter, etc)
+* CRUD on resources with history
+* search operations with indexing
+* transactions
 
-fhirbase=# select fhir.generate_tables('{Patient, Organization, Encounter}');
-
---  generate_tables
------------------
---  3
--- (1 row)
-~~~
-
-If you call generate_tables() without any parameters,
-then tables for all resources described in StructureDefinition
-will be generated:
-
-~~~sql
-
-fhirbase=# select fhir.generate_tables();
--- generate_tables
------------------
--- 93
---(1 row)
-~~~
-
-When concrete resource type tables are generated,
-column *installed* for this resource is set to true in the profile table.
-
-~~~sql
-SELECT logical_id, installed from structuredefinition
-WHERE logical_id = 'Patient'
-
---  logical_id | installed
-----------------------------
---  Patient    | true
-~~~
-
-Functions representing public API of FHIRbase are all located in the FHIR schema.
-The first group of functions implements CRUD operations on resources:
-
-* create(resource json)
-* read(resource_type, logical_id)
-* update(resource json)
-* vread(resource_type, version_id)
-* delete(resource_type, logical_id)
-* history(resource_type, logical_id)
-* is_exists(resource_type, logical_id)
-* is_deleted(resource_type, logical_id)
-
-
-~~~sql
-
-SELECT fhir.create('{"resourceType":"Patient", "name": [{"given": ["John"]}]}')
--- {
---  "id": "c6f20b3a...",
---  "meta": {
---    "versionId": "c6f20b3a...",
---    "lastUpdated": "2015-03-05T15:53:47.213016+00:00"
---  },
---  "name": [{"given": ["John"]}],
---  "resourceType": "Patient"
--- }
---(1 row)
-
--- create - insert new row into patient table
-SELECT resource_type, logical_id, version_id,* from patient;
-
--- resource_type |  logical_id  |  version_id | content
----------------+---------------------------------------------------
--- Patient       | c6f20b3ab... | c6f20b....  | {"resourceType".....}
---(1 row)
-
-
-
-SELECT fhir.read('Patient', 'c6f20b3a...');
--- {
---  "id": "c6f20b3a...",
---  "meta": {
---    "versionId": "c6f20b3a...",
---    "lastUpdated": "2015-03-05T15:53:47.213016+00:00"
---  },
---  "name": [{"given": ["John"]}],
---  "resourceType": "Patient"
--- }
---(1 row)
-
-SELECT fhir.update(
-   jsonbext.merge(
-     fhir.read('Patient', 'c6f20b3a...'),
-     '{"name":[{"given":"Bruno"}]}'
-   )
-);
--- returns update version
-
-SELECT count() FROM patient; => 1
-SELECT count() FROM patient_history; => 1
-
--- read previous version of resource
-SELECT fhir.vread('Patient', /*old_version_id*/ 'c6f20b3a...');
-
-
-SELECT fhir.history('Patient', 'c6f20b3a...');
-
--- {
---     "type": "history",
---     "entry": [{
---         "resource": {
---             "id": "c6f20b3a...",
---             "meta": {
---                 "versionId": "a11dba...",
---                 "lastUpdated": "2015-03-05T16:00:12.484542+00:00"
---             },
---             "name": [{
---                 "given": "Bruno"
---             }],
---             "resourceType": "Patient"
---         }
---     }, {
---         "resource": {
---             "id": "c6f20b3a...",
---             "meta": {
---                 "versionId": "c6f20b3a...",
---                 "lastUpdated": "2015-03-05T15:53:47.213016+00:00"
---             },
---             "name": [{
---                 "given": ["John"]
---             }],
---             "resourceType": "Patient"
---         }
---     }],
---     "resourceType": "Bundle"
--- }
-
-SELECT fhir.is_exists('Patient', 'c6f20b3a...'); => true
-SELECT fhir.is_deleted('Patient', 'c6f20b3a...'); => false
-
-SELECT fhir.delete('Patient', 'c6f20b3a...');
--- return last version
-
-SELECT fhir.is_exists('Patient', 'c6f20b3a...'); => false
-SELECT fhir.is_deleted('Patient', 'c6f20b3a...'); => true
-~~~
-When resource is created, *logical_id* and *version_id* are generated as uuids.
-On each update resource content is updated in the *patient* table, and old version of the resource is copied
-into the *patient_history* table.
-
-## Transaction
-
-
-## Search & Indexing
-
-Next part of API is a search API.
-Folowing functions will help you to search resources in FHIRbase:
-
-* fhir.search(resourceType, searchString) returns a bundle
-* fhir._search(resourceType, searchString) returns a relation
-* fhir.explain_search(resourceType, searchString) shows an execution plan for search
-* fhir.search_sql(resourceType, searchString) shows the original sql query underlying the search
-
-~~~sql
-
-select fhir.search('Patient', 'given=john')
--- returns bundle
--- {"type": "search", "entry": [...]}
-
--- return search as relatio
-select * from fhir._search('Patient', 'name=david&count=10');
-
--- version_id | logical_id     | resource_type
-------------+----------------------------------
---            | "a8bec52c-..." | Patient
---            | "fad90884-..." | Patient
---            | "895fdb15-..." | Patient
-
-
--- expect generated by search sql
-select fhir.search_sql('Patient', 'given=david&count=10');
-
--- SELECT * FROM patient
--- WHERE (index_fns.index_as_string(patient.content, '{given}') ilike '%david%')
--- LIMIT 100
--- OFFSET 0
-
--- explain query execution plan
-select fhir.explain_search('Patient', 'given=david&count=10');
-
--- Limit  (cost=0.00..19719.37 rows=100 width=461) (actual time=6.012..7198.325 rows=100 loops=1)
---   ->  Seq Scan on patient  (cost=0.00..81441.00 rows=413 width=461) (actual time=6.010..7198.290 rows=100 loops=1)
---         Filter: (index_fns.index_as_string(content, '{name,given}'::text[]) ~~* '%david%'::text)
---         Rows Removed by Filter: 139409
--- Planning time: 0.311 ms
--- Execution time: 7198.355 ms
-~~~
-
-Search works without indexing but search query would be slow
-on any reasonable amount of data.
-So FHIRbase has a group of indexing functions:
-
-* index_search_param(resourceType, searchParam)
-* drop_index_search_param(resourceType, searchParam)
-* index_resource(resourceType)
-* drop_resource_indexes(resourceType)
-* index_all_resources()
-* drop_all_resource_indexes()
-
-Indexes are not for free - they eat space and slow inserts and updates.
-That is why indexes are optional and completely under you control in FHIRbase.
-
-Most important function is `fhir.index_search_param` which
-accepts resourceType as a first parameter, and name of search parameter to index.
-
-~~~sql
-
-select count(*) from patient; --=> 258000
-
--- search without index
-select fhir.search('Patient', 'given=david&count=10');
--- Time: 7332.451 ms
-
--- index search param
-SELECT fhir.index_search_param('Patient','name');
---- Time: 15669.056 ms
-
--- index cost
-select fhir.admin_disk_usage_top(10);
--- [
---  {"size": "107 MB", "relname": "public.patient"},
---  {"size": "19 MB", "relname": "public.patient_name_name_string_idx"},
---  ...
--- ]
-
--- search with index
-select fhir.search('Patient', 'name=david&count=10');
--- Time: 26.910 ms
-
--- explain search
-
-select fhir.explain_search('Patient', 'name=david&count=10');
-
-------------------------------------------------------------------------------------------------------------------------------------------------
--- Limit  (cost=43.45..412.96 rows=100 width=461) (actual time=0.906..6.871 rows=100 loops=1)
---   ->  Bitmap Heap Scan on patient  (cost=43.45..1569.53 rows=413 width=461) (actual time=0.905..6.859 rows=100 loops=1)
---         Recheck Cond: (index_fns.index_as_string(content, '{name}'::text[]) ~~* '%david%'::text)
---         Heap Blocks: exact=100
---         ->  Bitmap Index Scan on patient_name_name_string_idx  (cost=0.00..43.35 rows=413 width=0) (actual time=0.205..0.205 rows=390 loops=1)
---               Index Cond: (index_fns.index_as_string(content, '{name}'::text[]) ~~* '%david%'::text)
--- Planning time: 0.449 ms
--- Execution time: 6.946 ms
-~~~
-
-### Performance Tests
-
-### Road Map
+
+## Roadmap
+
+* resource validation
+* referential integrity
+* terminology
+* guides for java, .NET, python, ruby, js
+
+## Contribution
+
+* Star us on GitHub
+* If you encountered a bug, please [make an Issue](https://github.com/fhirbase/fhirplace/issues/new)
+* Contribute to FHIRbase − see [dev/README.md](https://github.com/fhirbase/fhirbase/blob/master/dev/README.md)
+
+## Thxs
+
+Powered by [Health Samurai](http://health-samurai.io/)
+
+Sponsored by: ![choice-hs.com](http://choice-hs.com/Images/Shared/Choice-HSLogo.png)
+
+## License
+
+Copyright © 2014 health samurai.
+
+FHIRbase is released under the terms of the MIT License.
