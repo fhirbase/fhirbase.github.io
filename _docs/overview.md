@@ -5,15 +5,6 @@ id: overview
 order: 2
 ---
 
-# FHIRbase
-
-![fhirbase](https://avatars3.githubusercontent.com/u/6482975?v=3&s=400)
-
-FHIRbase is an open source relational storage for
-[FHIR](http://hl7.org/implement/standards/fhir/) targeting real production.
-
-[![Build Status](https://travis-ci.org/fhirbase/fhirbase.png?branch=master)](https://travis-ci.org/fhirbase/fhirbase)
-
 ## Motivation
 
 While crafting Health IT systems we understand an importance of a
@@ -73,22 +64,12 @@ procedures:
 
 ## Roadmap
 
-* resource validation
+* validation
 * referential integrity
-* terminology
-* guides for java, .NET, python, ruby, js
+* terminology service
+* SDKs and guides for java, .NET, python, ruby, js
 
-## Contribution
 
-* Star us on GitHub
-* If you encountered a bug, please [make an Issue](https://github.com/fhirbase/fhirplace/issues/new)
-* Contribute to FHIRbase − see [dev/README.md](https://github.com/fhirbase/fhirbase/blob/master/dev/README.md)
-
-## Thxs
-
-Powered by [Health Samurai](http://health-samurai.io/)
-
-Sponsored by: ![choice-hs.com](http://choice-hs.com/Images/Shared/Choice-HSLogo.png)
 
 ## License
 
