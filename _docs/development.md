@@ -9,7 +9,7 @@ order: 4
 
 Quick installation on ubuntu:
 
-```bash
+~~~bash
 sudo apt-get install -qqy postgresql-9.4 postgresql-contrib-9.4 curl python
 sudo su postgres -c 'createuser -s <you-local-user>'
 export PGUSER=<you-local-user>
@@ -18,7 +18,7 @@ export DB=test
 git clone https://github.com/fhirbase/fhirbase
 cd fhirbase
 ./runme integrate
-```
+~~~
 
 ### Project structure
 
@@ -40,9 +40,9 @@ we use simple SQL preprocessor written in python (in `ql/` directory).
 ### runme
 
 All tasks for fhirbase could be done using `runme` script in form
-```bash
+~~~bash
 env DB=test ./runme <command> <args>
-```
+~~~
 
 Here is the list of subcomands:
 
@@ -67,7 +67,7 @@ They implemented as magic comments in source files and using loader (./runme).
 For example you have created module a.sql with function `util`. Then you want to
 create module b.sql, which depends on module `a`:
 
-```sql
+~~~sql
 -- file src/b.sql
 -- #import ./a.sql
 
@@ -75,13 +75,13 @@ create module b.sql, which depends on module `a`:
   b.util()
 ...
 
-```
+~~~
 
 Then you can load module b into databse:
 
-```bash
+~~~bash
 ./runme load src/a.sql
-```
+~~~
 
 Loader read `#import` instructions and resolve dependencies recursively,
 then load all modules in right order and write module status into special table `modules`.
@@ -96,15 +96,15 @@ To reduce sql boilerplate you can use some macro expansions in source files.
 you can write sql functions in python style,
 ie body of function should be idented:
 
-```sql
+~~~sql
 -- FILE: src/coll.sql
 func _butlast(_ar_ anyarray) returns anyarray
   SELECT _ar_[array_lower(_ar_,1) : array_upper(_ar_,1) - 1]
-```
+~~~
 
 Preprocessor will produce:
 
-```sql
+~~~sql
 -- FILE: src/coll.sql
 drop schema if exists coll cascade;
 create schema coll;
@@ -114,7 +114,7 @@ LANGUAGE sql AS $$
   SELECT _ar_[array_lower(_ar_,1) : array_upper(_ar_,1) - 1] -- coll:3
 $$ IMMUTABLE;
 
-```
+~~~
 
 You can always inspect result of preprocessor by running `./runme compile src/file.sql`.
 
@@ -136,18 +136,18 @@ timestamps. When you run `/.runme migrate` all pending migrations will be applie
 
 There are some preprocessor sugar for tests:
 
-```sql
+~~~sql
 -- one-line test
 select 1 => 1
 
 ---will be compiled into:
 
 SELECT tests.expect('', 'test/<file>.sql:<line-number>',(select 1),(1));
-```
+~~~
 
 Here is also multiline form (body should be idented):
 
-```sql
+~~~sql
 expect "Comment"
   select 1
 => 1
@@ -155,11 +155,11 @@ expect "Comment"
 -- compiled
 
 SELECT tests.expect('Comment', 'test/<file>.sql:<line-number>',(select 1),(1));
-```
+~~~
 
 To test for exeptions there is special syntax:
 
-```sql
+~~~sql
 expect_raise 'does not exist'
   SELECT crud.delete('{}'::jsonb, 'Patient', 'nonexisting')
 
@@ -169,6 +169,6 @@ SELECT tests.expect_raise('does not exist', 'test/fhir_crud_spec.sql:151',
 ($SQL$
   SELECT crud.delete('{}'::jsonb, 'Patient', 'nonexisting') -- fhir_crud_spec:151
 $SQL$));
-```
+~~~
 
 Source code of expect functions is in src/tests.sql.

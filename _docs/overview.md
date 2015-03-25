@@ -52,7 +52,7 @@ in a lower case after resource types: Patient => patient, StructureDefinition =>
 For example *Patient* resources are stored
 in *patient* and *patient_history* tables:
 
-```psql
+~~~psql
 fhirbase=# \d patient
                        Table "public.patient"
     Column     |           Type           |        Modifiers
@@ -79,7 +79,7 @@ fhirbase=# \d patient_history
  category      | jsonb                    |
  content       | jsonb                    | not null
 Inherits: resource_history
-```
+~~~
 
 All resource tables have similar structure and are inherited from *resource* table,
 to allow cross-table queries (for more information see [PostgreSQL inheritance](http://www.postgresql.org/docs/9.4/static/tutorial-inheritance.html)).
@@ -102,7 +102,7 @@ First helpful function is `fhir.generate_tables(resources text[])` which generat
 for specific resources passed as array.
 For example to generate tables for patient, organization and encounter:
 
-```sql
+~~~sql
 psql fhirbase
 
 fhirbase=# select fhir.generate_tables('{Patient, Organization, Encounter}');
@@ -111,32 +111,32 @@ fhirbase=# select fhir.generate_tables('{Patient, Organization, Encounter}');
 -----------------
 --  3
 -- (1 row)
-```
+~~~
 
 If you call generate_tables() without any parameters,
 then tables for all resources described in StructureDefinition
 will be generated:
 
-```sql
+~~~sql
 
 fhirbase=# select fhir.generate_tables();
 -- generate_tables
 -----------------
 -- 93
 --(1 row)
-```
+~~~
 
 When concrete resource type tables are generated,
 column *installed* for this resource is set to true in the profile table.
 
-```sql
+~~~sql
 SELECT logical_id, installed from structuredefinition
 WHERE logical_id = 'Patient'
 
 --  logical_id | installed
 ----------------------------
 --  Patient    | true
-```
+~~~
 
 Functions representing public API of FHIRbase are all located in the FHIR schema.
 The first group of functions implements CRUD operations on resources:
@@ -151,7 +151,7 @@ The first group of functions implements CRUD operations on resources:
 * is_deleted(resource_type, logical_id)
 
 
-```sql
+~~~sql
 
 SELECT fhir.create('{"resourceType":"Patient", "name": [{"given": ["John"]}]}')
 -- {
@@ -242,7 +242,7 @@ SELECT fhir.delete('Patient', 'c6f20b3a...');
 
 SELECT fhir.is_exists('Patient', 'c6f20b3a...'); => false
 SELECT fhir.is_deleted('Patient', 'c6f20b3a...'); => true
-```
+~~~
 When resource is created, *logical_id* and *version_id* are generated as uuids.
 On each update resource content is updated in the *patient* table, and old version of the resource is copied
 into the *patient_history* table.
@@ -260,7 +260,7 @@ Folowing functions will help you to search resources in FHIRbase:
 * fhir.explain_search(resourceType, searchString) shows an execution plan for search
 * fhir.search_sql(resourceType, searchString) shows the original sql query underlying the search
 
-```sql
+~~~sql
 
 select fhir.search('Patient', 'given=john')
 -- returns bundle
@@ -293,7 +293,7 @@ select fhir.explain_search('Patient', 'given=david&count=10');
 --         Rows Removed by Filter: 139409
 -- Planning time: 0.311 ms
 -- Execution time: 7198.355 ms
-```
+~~~
 
 Search works without indexing but search query would be slow
 on any reasonable amount of data.
@@ -312,7 +312,7 @@ That is why indexes are optional and completely under you control in FHIRbase.
 Most important function is `fhir.index_search_param` which
 accepts resourceType as a first parameter, and name of search parameter to index.
 
-```sql
+~~~sql
 
 select count(*) from patient; --=> 258000
 
@@ -349,7 +349,7 @@ select fhir.explain_search('Patient', 'name=david&count=10');
 --               Index Cond: (index_fns.index_as_string(content, '{name}'::text[]) ~~* '%david%'::text)
 -- Planning time: 0.449 ms
 -- Execution time: 6.946 ms
-```
+~~~
 
 ### Performance Tests
 
