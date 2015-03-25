@@ -9,7 +9,7 @@ order: 3
 
 2.  For this installation we are going to use docker-containers - images, which are stored in the Docker Hub repository or can be built manually. Depending on your goals you can get different docker images:
 
-    * Stable versioned tagged build       [fhirbase-build](https://registry.hub.docker.com/u/fhirbase/fhirbase-build). Select
+    * Stable versioned tagged build [fhirbase-build](https://registry.hub.docker.com/u/fhirbase/fhirbase-build). Select
       the desired tag from tags, for example 0.0.9-alpha4, and run the
       following command:
 
@@ -44,6 +44,7 @@ order: 3
     The process of image loading can take some time. When it is
     finished FHIRbase will be accessible on localhost with the
     following parameters:
+
     - port: 5433
     - user: fhirbase
     - password: fhirbase
