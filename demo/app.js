@@ -100,7 +100,11 @@
 	  });
 	});
 
-	app.run(function($rootScope, $window, $location, $http) {});
+	app.run(function($rootScope, $window, $location, $http) {
+	  if ($window.location.protocol === 'https') {
+	    return $window.location.protocol = 'http';
+	  }
+	});
 
 	SELECT_PROCS = "SELECT\n'fhir.' || routine_name || '(' ||\n  coalesce(( select string_agg(x.parameter_name || ' ' || x.data_type, ', ') from\n    information_schema.parameters  x\n    where routines.specific_name=x.specific_name\n  ), '')\n  || ')' as title\n  from information_schema.routines\n  where routine_schema = 'fhir'\n  order by routine_name";
 
