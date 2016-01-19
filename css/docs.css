@@ -18,3 +18,57 @@
 	color: white;
 	border: 1px solid #455a64; 
 }
+
+.gstarted.api h2{
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
+.gstarted.api pre{
+	background-color: rgba(69, 90, 100, 0.16);
+	color: #333;
+	border: none;
+  margin-bottom: 20px;
+}
+
+.gstarted.api pre > h4{
+    font-weight: 700;
+}
+
+.gstarted.api .function{
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.42857143;
+    word-break: break-all;
+    word-wrap: break-word;
+    border-radius: 4px;
+    /* background-color: rgba(69, 90, 100, 0.06); */
+    background-color: #f8f8f8;
+    color: #333;
+    border: none;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.gstarted.api .function > header {
+    font-size: 18px; 
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.gstarted.api .function > .description {
+    font-size: 13px; 
+    margin-bottom: 12px;
+}
+
+.gstarted.api .function > .example:before {
+    content: "Example: ";
+    display: block;
+    font-size: 13px; 
+    font-weight: 700;
+}
+
+.gstarted.api .function > .example {
+    font-size: 13px; 
+}

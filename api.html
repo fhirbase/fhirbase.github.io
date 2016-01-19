@@ -1,0 +1,132 @@
+---
+layout: default
+title: FHIRbase
+---
+
+{% assign docs = site.docs | sort: 'order' %}
+<div class="container gstarted api">
+	<div class="col-md-9 docs-content">
+    <h1>FHIRbase API</h1>
+    <p>
+      FHIRbase API is just a set of simple PostgreSQL stored procedures.
+      You can use those functions in select statement.
+    </p>
+    <p>
+      To make fhirbase-plv8 work you have to just after opening
+      connection to postgresql you have to issue command:
+    </p>
+    <code>SET plv8.start_proc = 'plv8_init';</code>
+
+    <h2 id="storage">Work with storage</h2>
+    <section class="function">
+      <header>fhir_create_storage('fhir_resource::json')</header>
+      <p class="description">
+        Create storage for new resource 
+      </p>
+      <p class="example">
+        SELECT fhir_create_storage('{"resourceType": "Patient"}');
+      </p>
+    </section>
+
+    <section class="function">
+      <header>fhir_drop_storage('fhir_resource::json')</header>
+      <p class="description">
+        Delete resource storage
+      </p>
+      <p class="example">
+        SELECT fhir_drop_storage('{"resourceType": "Patient"}');
+      </p>
+    </section>
+
+    <section class="function">
+      <header>fhir_truncate_storage('fhir_resource::json')</header>
+      <p class="description">
+        Delete all resources of specified type
+      </p>
+      <p class="example">
+        SELECT fhir_truncate_storage('{"resourceType": "Patient"}');
+      </p>
+    </section>
+
+    <h2 id="create">Create</h2>
+    <section class="function">
+      <header>fhir_create_resource('fhir_resource::json')</header>
+      <p class="description">
+        Create new FHIR resource
+      </p>
+      <p class="example">
+        SELECT fhir_create_resource('{"resource": {"resourceType": "Patient", "name": [{"given": ["Smith"]}]}}');
+      </p>
+    </section>
+
+    <h2 id="read">Read</h2>
+    <section class="function">
+      <header>fhir_read_resource('fhir_resource::json')</header>
+      <p class="description">
+        Read resource by id
+      </p>
+      <p class="example">
+        SELECT fhir_read_resource('{"resourceType": "Patient", "id": "smith"}');
+      </p>
+    </section>
+
+    <h3>Update</h3>
+    <section class="function">
+      <header>fhir_update_resource('fhir_resource::json')</header>
+      <p class="description">
+        Update specific resource
+      </p>
+      <p class="example">
+        SELECT fhir_update_resource('{"resource": {"resourceType": "Patient", "id": "smith", "name": [{"given": ["John"], "family": ["Smith"]}]}}');
+      </p>
+      <br>
+      <br>
+      <p class="description">
+        Conditional update
+      </p>
+      <p class="example">
+        SELECT fhir_update_resource('{"ifNoneExist": "identifier=007", "resource": {"resourceType": "Patient", "id": "smith", "name": [{"given": ["Smith"]}]}}');
+      </p>
+      <br>
+      <br>
+      <p class="description">
+        Update with contention guard
+      </p>
+      <p class="example">
+        SELECT fhir_update_resource('{"ifMatch": "..versionid..", "resource": {"resourceType": "Patient", "id": "smith", "name": [{"given": ["Smith"]}]}}');
+      </p>
+    </section>
+
+    <h3>Delete</h3>
+    <pre><h4>fhir_delete_resource('fhir_resource::json')</h4><code>Mark resource as deleted (i.e. keep history)</code></pre>
+    <pre><h4>fhir_terminate_resource('fhir_resource::json')</h4><code>Completely delete resource and its history</code></pre>
+
+    <h3>History</h3>
+    <pre><h4>fhir_vread_resource('fhir_resource::json')</h4><code>Read specific version of resource</code></pre>
+    <pre><h4>fhir_resource_history('fhir_resource::json')</h4><code>Show resource history</code></pre>
+    <pre><h4>fhir_resource_type_history('fhir_resource::json')</h4><code>???</code></pre>
+
+    <h3>Search</h3>
+    <pre><h4>fhir_search('fhir_resource::json')</h4><code>Search with queryString</code></pre>
+    <pre><h4>fhir_search_sql('fhir_resource::json')</h4><code>See generated search SQL</code></pre>
+    <pre><h4>fhir_explain_search('fhir_resource::json')</h4><code>See execution plan</code></pre>
+
+    <h3>Index</h3>
+    <pre><h4>fhir_index_parameter('::json')</h4><code>Index by parameter name</code></pre>
+    <pre><h4>fhir_unindex_parameter('::json')</h4><code>Unindex by parameter name</code></pre>
+
+    <h3>Expand ValueSet</h3>
+    <pre><h4>fhir_valueset_expand('::json')</h4><code>Expand ValueSet</code></pre>
+
+    <h3>Conformance</h3>
+    <pre><h4>fhir_conformance('::json')</h4><code>return simple Conformance resource, based on created stores</code></pre>
+
+	</div>
+	<div class="col-md-3 sub-nav">
+		<ul class="subnav-list list-unstyled" id="nav">
+      {% for instruction in docs %}
+		     <li {% if instruction.order == 1 %}class="current"{% endif %}><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
+		  {% endfor %}
+		</ul>
+	</div>
+</div>
