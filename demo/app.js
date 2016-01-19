@@ -101,8 +101,8 @@
 	});
 
 	app.run(function($rootScope, $window, $location, $http) {
-	  if (window.location.protocol === 'https') {
-	    return window.location.protocol = 'http';
+	  if (window.location.protocol === 'https:') {
+	    return window.location.protocol = 'http:';
 	  }
 	});
 
