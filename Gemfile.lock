@@ -149,6 +149,3 @@ DEPENDENCIES
   github-pages
   kramdown
   therubyracer
-
-BUNDLED WITH
-   1.11.2

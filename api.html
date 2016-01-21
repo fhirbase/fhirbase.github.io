@@ -268,9 +268,16 @@ title: FHIRbase
   </div>
   <div class="col-md-3 sub-nav">
     <ul class="subnav-list list-unstyled" id="nav">
-      {% for instruction in docs %}
-      <li {% if instruction.order == 1 %}class="current"{% endif %}><a href="#{{instruction.id}}">{{instruction.title}}</a></li>
-      {% endfor %}
+      <li><a href="#storage">Work with storage</a></li>
+      <li><a href="#create">Create</a></li>
+      <li><a href="#read">Read</a></li>
+      <li><a href="#update">Update</a></li>
+      <li><a href="#delete">Delete</a></li>
+      <li><a href="#history">History</a></li>
+      <li><a href="#search">Search</a></li>
+      <li><a href="#index">Index</a></li>
+      <li><a href="#expand">Expand ValueSet</a></li>
+      <li><a href="#conformance">Conformance</a></li>
     </ul>
   </div>
 </div>
