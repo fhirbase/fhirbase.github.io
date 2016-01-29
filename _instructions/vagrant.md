@@ -7,23 +7,33 @@ order: 2
 
 The simplest and cross-platform installation can be done using Vagrant.
 
-1. Install [vagrant][] according to its documentation or check you already have it.
+Install Vagrant
+---------------
 
-[vagrant]: https://www.vagrantup.com/downloads.html
+Install [vagrant][] according to its documentation or check you
+already have it
 
 ~~~bash
 vagrant --version
 # Vagrant 1.8.1
 ~~~
 
-2. Clone Fhirbase project and go to the project folder.
+[vagrant]: https://www.vagrantup.com/downloads.html
+
+Clone Fhirbase
+--------------
+
+Clone [Fhirbase][] project and go to the project folder
 
 ~~~bash
 git clone https://github.com/fhirbase/fhirbase-plv8.git fhirbase
 cd fhirbase
 ~~~
 
-3.  Launch vagrant.
+[fhirbase]: https://github.com/fhirbase/fhirbase-plv8
+
+Launch vagrant
+--------------
 
 This action could take a time to load fhirbase container
 
@@ -31,7 +41,10 @@ This action could take a time to load fhirbase container
 vagrant up
 ~~~
 
-4. Test your Fhirbase installation.
+Test installation
+-----------------
+
+Test your Fhirbase installation
 
 ~~~bash
 echo "SET plv8.start_proc = 'plv8_init'; SELECT fhirbase_version();" \
