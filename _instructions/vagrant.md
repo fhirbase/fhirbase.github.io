@@ -7,47 +7,35 @@ order: 2
 
 The simplest and cross-platform installation can be done using Vagrant.
 
-1.  Install [vagrant](http://www.vagrantup.com/downloads) according to
-    its documentation or check you already have it.
+1. Install [vagrant][] according to its documentation or check you already have it.
 
-    ~~~bash
-    vagrant -v
-    # Vagrant 1.7.2
-    ~~~
+[vagrant]: https://www.vagrantup.com/downloads.html
 
-2.  Clone FHIRbase project and go to the project folder.
+~~~bash
+vagrant --version
+# Vagrant 1.8.1
+~~~
 
-    ~~~bash
-    git clone https://github.com/fhirbase/fhirbase.git
-    cd fhirbase
-    ~~~
+2. Clone Fhirbase project and go to the project folder.
+
+~~~bash
+git clone https://github.com/fhirbase/fhirbase-plv8.git fhirbase
+cd fhirbase
+~~~
 
 3.  Launch vagrant.
 
-    ~~~bash
-    sudo vagrant up
-    # this action could take a time to load fhirbase container
-    ~~~
+This action could take a time to load fhirbase container
 
-4.  Check your ssh-config settings and remember your ip.
+~~~bash
+vagrant up
+~~~
 
-    ~~~bash
-    vagrant ssh-config
-    # HostName 172.17.0.15 <<- vm <ip>
-    #  User vagrant
-    #  Port 22
-    ~~~
+4. Test your Fhirbase installation.
 
-5.  Use your <ip> in the next command to connect to the database.
+~~~bash
+echo "SET plv8.start_proc = 'plv8_init'; SELECT fhirbase_version();" \
+    | psql postgres://fhir:fhirbase@127.0.0.1:2345/fhir
+~~~
 
-    ~~~bash
-    psql -h <ip> -p 5432 -U fhirbase
-    # password: fhirbase
-    ~~~
-
-6.  If you like GU interfaces use pgadmin with connection
-
-    * host: <ip>
-    * database: fhirbase
-    * user: fhirbase
-    * password: fhirbase
+You should see output with version number of the installed Fhirbase.
