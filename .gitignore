@@ -1,5 +1,5 @@
-_site
-vendor/bundle/
 *sw?
 .DS_Store
 /_config.mlapshin.yml
+_site
+vendor/bundle/
