@@ -39,7 +39,77 @@
   </div><!-- /.container-fluid -->
 </nav>
 <!-- Static navbar -->
-<div class="view" ng-view>
+<div ng-controller="IndexController">
+  <div class="container-fluid toolbar">
+    <button class="btn btn-success" style="vertical-align: top;"ng-click="query()">Query &lt;ctrl-enter&gt;</button>
+    <div class="input-group" style="display: inline-block; width: 25em;">
+      <input type="text" class="form-control" style="width:15em;" placeholder="Title" ng-model="sql_title">
+      <div class="input-group-btn">
+        <button class="btn btn-default" ng-click="saveRequestAs()">Save As</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <a ng-class="{active: (rightPane=='snippets')}" ng-click="trigerState('snippets')">Snippets</a>
+      <a ng-class="{active: (rightPane=='procs')}" ng-click="trigerState('procs')">Procedures</a>
+      <a ng-class="{active: (rightPane=='tables')}" ng-click="trigerState('tables')">Tables</a>
+    </div>
+  </div>
+  <div style="font-size:10px; color: gray; padding: 7px 10px 2px;"> Hint: use <code>&lt;ctrl-space&gt;</code> for auto-complete</div>
+  <textarea ui-codemirror="codemirrorOptions"
+            class="form-control"
+            ng-keypress="enterSql($event)"
+            ng-model="sql">
+  </textarea>
+  <div class="right-bar" ng-class="{open:(rightPane=='snippets')}">
+    <span class="refresh-btn glyphicon glyphicon-refresh pull-right"
+          ng-click="reloadSidebar()"></span>
+    <table class="table">
+      <ul class="snippets-list list-unstyled">
+        <li class="item" ng-repeat="item in snippets" ng-click="selectSnippet(item)">
+          {{item.title}}
+        </li>
+      </ul>
+    </table>
+  </div>
+  <div class="right-bar" ng-class="{open:(rightPane=='tables')}">
+    <ul class="list-unstyled">
+      <li class="item" ng-repeat="item in tables" ng-click="selectTable(item)">
+        {{item.title}}
+      </li>
+    </ul>
+  </div>
+  <div class="right-bar" ng-class="{open:(rightPane=='procs')}">
+    <ul class="list-unstyled">
+      <li class="item" ng-repeat="item in procs" ng-click="selectProc(item)">
+        {{item.title}}
+      </li>
+    </ul>
+  </div>
+  <div class="result" ng-class="{open: showResult}">
+    <h3 class="result-header"  ng-click="showResult =! showResult">
+      result&nbsp;<span ng-class="{'glyphicon-chevron-up': !showResult, 'glyphicon-chevron-down': showResult}" class="glyphicon icon-collapse"></span>
+    </h3>
+    <div class="result-content">
+      <div ng-if="error" class="alert alert-danger error">
+        <pre>{{errorMessage}}</pre>
+      </div>
+      <h3 ng-if="queryResultIsEmpty">Empty result</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th ng-repeat="(k,v) in result[0]">
+              {{k}}
+            </th>
+          </tr>
+        </thead>
+        <tr ng-repeat="row in result">
+          <td ng-repeat="(k,v) in row">
+            {{v}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>
 
 <script src="app.js"></script>
