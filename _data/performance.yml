@@ -10,6 +10,7 @@ operations:
 
   - description: "fhir.read called 1000 times in batch"
     time: "356.768"
+
   - description: "Updating single patient with fhir.update()"
     time: "218.599"
 
