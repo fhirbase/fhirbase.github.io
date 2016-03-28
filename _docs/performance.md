@@ -28,9 +28,10 @@ complex searches with sorting and chained params.
 Following table shows detailed timing which we get on MacBook Air 1,7
 GHz Intel Core i7, 8 GB 1600 MHz DDR3, SSD.
 
-| Operation                                                                                                           | Elapsed time (ms) |
-|---------------------------------------------------------------------------------------------------------------------+------------------:|
-| fhir.create called just one time                                                                                    |            25.243 |
+{% assign perf = site.data.performance %}
+| Operation                                                                                                           | Elapsed time (ms)      |
+|---------------------------------------------------------------------------------------------------------------------+-----------------------:|
+| fhir.create called just one time                                                                                    | {{ perf.create-once }} |
 | fhir.create called 1000 times in batch                                                                              |          1209.033 |
 | fhir.read called just one time                                                                                      |             6.694 |
 | fhir.read called 1000 times in batch                                                                                |           356.768 |
