@@ -1,6 +1,6 @@
 name: FHIRbase
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 
 collections:
   instructions:
