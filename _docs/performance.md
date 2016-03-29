@@ -35,7 +35,7 @@ GHz Intel Core i7, 8 GB 1600 MHz DDR3, SSD.
 {: .table .table-condensed .table-benchmark .table-striped }
 
 | Operation                                                                                                           | Elapsed time (ms)      |
-|---------------------------------------------------------------------------------------------------------------------+-----------------------:|{% for operation in site.data.performance2.operations %}
+|---------------------------------------------------------------------------------------------------------------------+-----------------------:|{% for operation in site.data.performance3.operations %}
 | {{ operation.description }} | {{ operation.time }} |{% endfor %}
 |---------------------------------------------------------------------------------------------------------------------|-------------------|
 {: .table .table-condensed .table-benchmark .table-striped }
