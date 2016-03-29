@@ -1,1 +1,2 @@
-SET plv8.start_proc = 'plv8_init'; select fhir_benchmark('{}'::json);
+ {"operations":[{"description":"fhir.fhir_create_resource called just one time","time":"0.666 ms"}]}
+
