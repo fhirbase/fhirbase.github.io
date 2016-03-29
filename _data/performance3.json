@@ -1,0 +1,1 @@
+SET plv8.start_proc = 'plv8_init'; select fhir_benchmark('{}'::json);
