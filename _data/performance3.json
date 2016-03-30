@@ -1,2 +1,2 @@
- {"operations":[{"description":"fhir_create_resource called just one time","time":"25 ms"},{"description":"fhir_create_resource called 1000 times in batch","time":"197 ms"}]}
+ {"operations":[{"description":"fhir_create_resource called just one time","time":29},{"description":"fhir_create_resource called 1000 times in batch","time":197},{"description":"fhir_read_resource called just one time","time":13},{"description":"fhir_read_resource called 1000 times in batch","time":2076}]}
 
