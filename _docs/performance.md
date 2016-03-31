@@ -25,16 +25,11 @@ Searching, one of most important operations, is optimized very well,
 thanks to PostgreSQL GiN and GiST indices. It performs well on rather
 complex searches with sorting and chained params.
 
-Following table shows detailed timing which we get on m3.medium Amazon EC2 Instance Type.
+Following table shows detailed timing which we get on m3.medium Amazon
+EC2 Instance Type <https://aws.amazon.com/ec2/instance-types/#M3>.
 
 | Operation                                                                                                           | Elapsed time (ms)      |
 |---------------------------------------------------------------------------------------------------------------------+-----------------------:|{% for operation in site.data.performance.operations %}
-| {{ operation.description }} | {{ operation.time }} |{% endfor %}
-|---------------------------------------------------------------------------------------------------------------------|-------------------|
-{: .table .table-condensed .table-benchmark .table-striped }
-
-| Operation                                                                                                           | Elapsed time (ms)      |
-|---------------------------------------------------------------------------------------------------------------------+-----------------------:|{% for operation in site.data.performance3.operations %}
 | {{ operation.description }} | {{ operation.time }} |{% endfor %}
 |---------------------------------------------------------------------------------------------------------------------|-------------------|
 {: .table .table-condensed .table-benchmark .table-striped }
