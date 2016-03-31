@@ -25,8 +25,7 @@ Searching, one of most important operations, is optimized very well,
 thanks to PostgreSQL GiN and GiST indices. It performs well on rather
 complex searches with sorting and chained params.
 
-Following table shows detailed timing which we get on MacBook Air 1,7
-GHz Intel Core i7, 8 GB 1600 MHz DDR3, SSD.
+Following table shows detailed timing which we get on m3.medium Amazon EC2 Instance Type.
 
 | Operation                                                                                                           | Elapsed time (ms)      |
 |---------------------------------------------------------------------------------------------------------------------+-----------------------:|{% for operation in site.data.performance.operations %}
