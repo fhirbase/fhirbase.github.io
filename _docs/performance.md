@@ -36,12 +36,17 @@ EC2 Instance Type <https://aws.amazon.com/ec2/instance-types/#M3>.
 
 ## Generating test data and running benchmarks on your machine
 
-FHIRBase `runme` utility can be used to run benchmarks on your
-machine. At first, generate test data:
+Fhirbase `perf` utility can be used on your machine
+to generate test data:
 
 ~~~bash
-$ cd fhirbase
-$ DB=<your db> PATIENTS_COUNT=1000000 ./runme seed
+path/to/fhirbase/perf/perf --verbose=3 \
+                           --number-of-patients=1000000 \
+                           --pgdatabase=your_db_name \
+                           --pghost=locahost \
+                           --pgpassword=your_password \
+                           --pgport=5432 \
+                           --pguser=your_user_name
 ~~~
 
 This command will generate 1 million of Patients, 1.3 million of
@@ -52,7 +57,8 @@ cross-link them with ResourceReferences. Usually it takes from 5 to
 Now you can run benchmark suite:
 
 ~~~bash
-$ DB=<your db> ./runme perf
+echo "SET plv8.start_proc = 'plv8_init'; SELECT SELECT fhir_benchmark('{}'::json);" \
+     | psql postgres://your_user_name:your_password@localhost:5432/your_db_name
 ~~~
 
 This operation can take some time, be patient.
