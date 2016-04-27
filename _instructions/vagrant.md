@@ -25,7 +25,7 @@ Clone [Fhirbase][] project and go to the project folder
 
 ~~~bash
 git clone https://github.com/fhirbase/fhirbase-plv8.git fhirbase
-cd fhirbase
+cd fhirbase/vagrant
 ~~~
 
 [fhirbase]: https://github.com/fhirbase/fhirbase-plv8
