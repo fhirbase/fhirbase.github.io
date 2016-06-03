@@ -1,0 +1,1306 @@
+---
+layout: default
+title: FHIRbase
+---
+
+{% assign docs = site.docs | sort: 'order' %}
+<h1 id="fhirbase_api_info">Fhirbase API</h1>
+
+<h2 id="fhirbase_api_conformance">Conformance</h2>
+
+<p><code>fhir_conformance('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code></p>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_create_storage">Create storage</h2>
+
+<p><code>fhir_create_storage('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<p>Create patient table</p>
+
+<p><code>sql
+SELECT fhir_create_storage('{"resourceType": "Patient"}'::json);
+</code></p>
+
+<p>Response:</p>
+
+<p><code>
+{
+  "message": "Table patient was created",
+  "status": "ok"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_create_all_storages">Create all storages</h2>
+
+<p><code>fhir_create_all_storages()</code></p>
+
+<h3>Arguments</h3>
+
+<p>Function has no arguments</p>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>string</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_drop_storage">Drop storage</h2>
+
+<p><code>fhir_drop_storage('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_drop_all_storages">Drop all storages</h2>
+
+<p><code>fhir_drop_all_storages('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Function has no arguments</p>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_describe_storage">Describe storage</h2>
+
+<p><code>fhir_describe_storage('{}'::json)</code></p>
+
+<p>n### Arguments</p>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_truncate_storage">Truncate storage</h2>
+
+<p><code>fhir_truncate_storage('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_create_resource">Create resource</h2>
+
+<p><code>fhir_create_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>allowId</em> <code>boolean</code></li>
+<li><em>resource</em> <code>JSON</code> with properties:
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul></li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Resource</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Create patient</h4>
+
+<p><code>sql
+SELECT fhir_create_resource('
+  {
+    "resource": {
+      "name": [
+        {
+          "given": [
+            "Smith"
+          ]
+        }
+      ],
+      "resourceType": "Patient"
+    }
+  }
+');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "meta": {
+    "extension": [
+      {
+        "valueString": "POST",
+        "url": "fhir-request-method"
+      },
+      {
+        "valueUri": "Patient",
+        "url": "fhir-request-uri"
+      }
+    ],
+    "lastUpdated": "2016-05-05T16:57:26.202Z",
+    "versionId": "0a75f4b1-1e15-4628-b1ad-ae8a8730af00"
+  },
+  "id": "c6258cdc-1c80-4dda-80d4-6027c2a23ffd",
+  "name": [
+    {
+      "given": [
+        "Smith"
+      ]
+    }
+  ],
+  "resourceType": "Patient"
+}
+</code></p>
+
+<h4>Create patient with specific id</h4>
+
+<p><code>sql
+SELECT fhir_create_resource('
+  {
+    "resource": {
+      "id": "smith",
+      "resourceType": "Patient"
+    },
+    "allowId": true
+  }
+');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "meta": {
+    "extension": [
+      {
+        "valueString": "POST",
+        "url": "fhir-request-method"
+      },
+      {
+        "valueUri": "Patient",
+        "url": "fhir-request-uri"
+      }
+    ],
+    "lastUpdated": "2016-05-06T13:38:11.910Z",
+    "versionId": "c112dd87-1f5b-4c2a-a3c0-783e371cc721"
+  },
+  "id": "smith2",
+  "resourceType": "Patient"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_read_resource">Read resource</h2>
+
+<p><code>fhir_read_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Resource</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Show patient by id</h4>
+
+<p><code>sql
+SELECT fhir_read_resource('{"resourceType": "Patient", "id": "smith"}');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "resourceType": "Patient",
+  "meta": {
+    "lastUpdated": "2016-05-06T13:18:20.996Z",
+    "versionId": "c8da6a21-018f-4646-afbf-dc2e36baaef1",
+    "extension": [
+      {
+        "valueString": "POST",
+        "url": "fhir-request-method"
+      },
+      {
+        "valueUri": "Patient",
+        "url": "fhir-request-uri"
+      }
+    ]
+  },
+  "id": "smith"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_vread_resource">Vread resource</h2>
+
+<p><code>fhir_vread_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>versionId</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Resource</em> <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_update_resource">Update resource</h2>
+
+<p><code>fhir_update_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Resource</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Update patient by id</h4>
+
+<p><code>sql
+SELECT fhir_update_resource('
+  {
+    "resource": {
+      "name": [
+        {
+          "family": [
+            "Smith"
+          ],
+          "given": [
+            "John"
+          ]
+        }
+      ],
+      "id": "smith",
+      "resourceType": "Patient"
+    }
+  }
+');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "meta": {
+    "extension": [
+      {
+        "valueString": "PUT",
+        "url": "fhir-request-method"
+      },
+      {
+        "valueUri": "Patient",
+        "url": "fhir-request-uri"
+      }
+    ],
+    "lastUpdated": "2016-05-06T13:46:09.571Z",
+    "versionId": "946b91ac-b285-4751-9f6f-c6462d0e7465"
+  },
+  "name": [
+    {
+      "family": [
+        "Smith"
+      ],
+      "given": [
+        "John"
+      ]
+    }
+  ],
+  "id": "smith",
+  "resourceType": "Patient"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_patch_resource">Patch resource</h2>
+
+<p><code>fhir_patch_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>patch</em> <code>array</code> (mandatory) contains objects with properties:
+<ul>
+<li><em>op</em> <code>string</code> (mandatory)</li>
+<li><em>path</em> <code>string</code> (mandatory)</li>
+<li><em>value</em> <code>string</code> (mandatory)</li>
+</ul></li>
+<li><em>resource</em> <code>JSON</code>  (mandatory) with properties:
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul></li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Resource</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Patch patient by id</h4>
+
+<p><code>sql
+SELECT fhir_patch_resource('
+  {
+    "patch": [
+      {
+        "value": "Jane",
+        "path": "\/name\/0\/given\/0",
+        "op": "replace"
+      }
+    ],
+    "resource": {
+      "id": "johndoe",
+      "resourceType": "Patient"
+    }
+  }
+');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "resourceType": "Patient",
+  "name": [
+    {
+      "family": [
+        "Doe"
+      ],
+      "given": [
+        "Jane"
+      ],
+      "text": "John Doe"
+    }
+  ],
+  "meta": {
+    "lastUpdated": "2016-05-11T16:12:50.377Z",
+    "versionId": "3541fd2e-4ca9-4790-9382-41f98c8b9ad7",
+    "extension": [
+      {
+        "valueString": "PUT",
+        "url": "fhir-request-method"
+      },
+      {
+        "valueUri": "Patient",
+        "url": "fhir-request-uri"
+      }
+    ]
+  },
+  "id": "johndoe"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_delete_resource">Delete resource</h2>
+
+<p><code>fhir_delete_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Resource</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Mark patient as deleted (i.e. keep history)</h4>
+
+<p><code>sql
+SELECT fhir_delete_resource('{"resourceType": "Patient", "id": "smith"}');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "resourceType": "Patient",
+  "meta": {
+    "lastUpdated": "2016-05-06T14:10:50.841Z",
+    "versionId": "a307ff6c-d35d-4cc4-9784-a91865dfa933",
+    "extension": [
+      {
+        "valueString": "DELETE",
+        "url": "fhir-request-method"
+      },
+      {
+        "valueUri": "Patient",
+        "url": "fhir-request-uri"
+      }
+    ]
+  },
+  "id": "smith"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_terminate_resource">Terminate resource</h2>
+
+<p><code>fhir_terminate_resource('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Completely delete patient and its history</h4>
+
+<p><code>sql
+SELECT fhir_terminate_resource('{"resourceType": "Patient", "id": "smith"}');
+</code></p>
+
+<p>Response:</p>
+
+<p>```json</p>
+
+<p>[
+  "{\"id\": \"smith\", \"meta\": {\"extension\": [{\"url\": \"fhir-request-method\", \"valueString\": \"POST\"}, {\"url\": \"fhir-request-uri\", \"valueUri\": \"Patient\"}], \"versionId\": \"3074d414-2318-42e4-aebe-f521d0ef1aff\", \"lastUpdated\": \"2016-05-06T14:10:43.186Z\"}, \"resourceType\": \"Patient\"}",
+  "{\"id\": \"smith\", \"meta\": {\"extension\": [{\"url\": \"fhir-request-method\", \"valueString\": \"DELETE\"}, {\"url\": \"fhir-request-uri\", \"valueUri\": \"Patient\"}], \"versionId\": \"a307ff6c-d35d-4cc4-9784-a91865dfa933\", \"lastUpdated\": \"2016-05-06T14:10:50.841Z\"}, \"resourceType\": \"Patient\"}"
+]
+```</p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_resource_history">Resource history</h2>
+
+<p><code>fhir_resource_history('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Bundle</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Show patient's history</h4>
+
+<p><code>sql
+SELECT fhir_resource_history('{"resourceType": "Patient", "id": "smith"}');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "meta": {
+          "lastUpdated": "2016-05-06T13:18:20.996Z",
+          "versionId": "c8da6a21-018f-4646-afbf-dc2e36baaef1",
+          "extension": [
+            {
+              "valueString": "POST",
+              "url": "fhir-request-method"
+            },
+            {
+              "valueUri": "Patient",
+              "url": "fhir-request-uri"
+            }
+          ]
+        },
+        "id": "smith"
+      },
+      "request": {
+        "url": "Patient",
+        "method": "POST"
+      }
+    }
+  ],
+  "type": "history",
+  "meta": {
+    "lastUpdated": "2016-05-06T13:46:48.278Z"
+  },
+  "total": 1,
+  "resourceType": "Bundle"
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_resource_type_history">Resource type history</h2>
+
+<p><code>fhir_resource_type_history('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Bundle</em> <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_search">Search</h2>
+
+<p><code>fhir_search('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>queryString</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Bundle</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Patient search</h4>
+
+<p><code>sql
+SELECT fhir_search('{"resourceType": "Patient", "queryString": "name=smith"}');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "entry": [
+    {
+      "resource": {
+        "deceasedBoolean": "N",
+        "resourceType": "Patient",
+        "identifier": [
+          {
+            "system": "urn:oid:2.16.840.1.113883.4.3.42",
+            "value": "010107112",
+            "type": {
+              "text": "External ID"
+            }
+          },
+          {
+            "system": "urn:oid:2.16.840.1.113883.4.3.45",
+            "value": "160923",
+            "type": {
+              "text": "Internal ID"
+            }
+          },
+          {
+            "system": "urn:oid:2.16.840.1.113883.4.3.46",
+            "value": "160923",
+            "type": {
+              "text": "Alternate ID"
+            }
+          },
+          {
+            "value": "5435435435",
+            "type": {
+              "text": "Account number"
+            }
+          },
+          {
+            "system": "http:\/\/hl7.org\/fhir\/sid\/us-ssn",
+            "value": "123-22-1111",
+            "type": {
+              "text": "Social Security Number"
+            }
+          }
+        ],
+        "birthDate": "1996-02-16T04:17+03",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "090.293.5104 x4116",
+            "use": "home"
+          }
+        ],
+        "contact": [
+          {
+            "address": {
+              "use": "Mailing Address"
+            },
+            "gender": "unknown",
+            "name": {
+              "middle": [
+                "Ms."
+              ],
+              "family": [
+                "Balistreri"
+              ],
+              "given": [
+                "Bartholome"
+              ],
+              "text": "JEAN SANDY JACK",
+              "use": "official"
+            }
+          }
+        ],
+        "address": [
+          {
+            "postalCode": "08928",
+            "country": "USA",
+            "state": "MI",
+            "line": [
+              "45713 Glennie Loaf",
+              "Schumm Village"
+            ],
+            "city": "Rodriguezville"
+          }
+        ],
+        "gender": "female",
+        "name": [
+          {
+            "middle": [
+              "Mrs."
+            ],
+            "family": [
+              "Smitham"
+            ],
+            "given": [
+              "Rudy"
+            ],
+            "text": "JEAN SANDY JACK"
+          }
+        ],
+        "id": "97af0e81-29fc-4a97-935d-a7909da2c17d"
+      }
+    }
+  ],
+  "link": [
+    {
+      "url": "Patient\/search?name=smith&amp;_page=0",
+      "relation": "self"
+    }
+  ],
+  "total": 1,
+  "type": "searchset",
+  "resourceType": "Bundle"
+}
+</code></p>
+
+<h2 id="fhirbase_api_search_sql">Get search SQL</h2>
+
+<p><code>fhir_search_sql('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>queryString</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>See generated SQL</h4>
+
+<p><code>sql
+SELECT fhir_search_sql('
+  {
+    "queryString": "name=smith",
+    "resourceType": "Patient"
+  }
+');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+[
+  "SELECT * FROM \"patient\" tbl1
+     WHERE fhir_extract_as_string(
+             ( \"tbl1\".\"resource\" )::json,
+             ( '[\"Patient\",\"name\"]' )::json,
+             'HumanName'
+           ) ilike $1
+     LIMIT $2",
+  "%^^smith%",
+  10
+]
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_expand_valueset">Expand valueset</h2>
+
+<p><code>fhir_expand_valueset('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+<li><em>filter</em> <code>string</code></li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>ValueSet</em> <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_valueset_after">Analyze storage</h2>
+
+<p><code>fhir_analyze_storage('{}'::json)</code></p>
+
+<p>Analyze on resource tables to update PostgreSQL statistic</p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Resource</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_index_parameter">Index parameter</h2>
+
+<p><code>fhir_index_parameter('{}'::json)</code></p>
+
+<p>Create index for parameter</p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>name</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_index_order">Index order</h2>
+
+<p><code>fhir_index_order('{}'::json)</code></p>
+
+<p>Creates index for parameter sort</p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>name</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_unindex_parameter">Unindex parameter</h2>
+
+<p><code>fhir_unindex_parameter('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>name</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_unindex_order">Unindex order</h2>
+
+<p><code>fhir_unindex_order('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>name</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_explain_search">Explain search</h2>
+
+<p><code>fhir_explain_search('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>queryString</em> <code>string</code> (mandatory)</li>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>integer</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_transaction">Transaction</h2>
+
+<p><code>fhir_transaction('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em>Bundle</em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+<li><em>entry</em> <code>array</code> (mandatory) contains objects with properties:
+<ul>
+<li><em>resource</em> <code>JSON</code> (mandatory) with properties:
+<ul>
+<li><em>resourceType</em> <code>string</code> (mandatory)</li>
+</ul></li>
+<li><em>request</em> <code>JSON</code> (mandatory) with properties:
+<ul>
+<li><em>method</em> <code>string</code> (mandatory)</li>
+<li><em>url</em> <code>string</code> (mandatory)</li>
+</ul></li>
+</ul></li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns <em>Bundle</em> <code>JSON</code></p>
+
+<h3>Example</h3>
+
+<h4>Create practitioner and associated patient</h4>
+
+<h4>Patient search</h4>
+
+<p><code>sql
+SELECT fhir_transaction('
+  {
+    "resourceType": "Bundle",
+    "id": "bundle-transaction-id",
+    "type": "transaction",
+    "entry": [
+      {
+        "resource": {
+          "resourceType": "Practitioner"
+        },
+        "request": {
+          "method": "PUT",
+          "url": "/Practitioner/created-practitioner-id"
+        }
+      },
+      {
+        "resource": {
+          "resourceType": "Patient",
+          "careProvider": [
+            {
+              "reference": "/Practitioner/created-practitioner-id"
+            }
+          ]
+        },
+        "request": {
+          "method": "PUT",
+          "url": "/Patient/created-patient-id"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "/Patient?_id=created-patient-id&amp;_include=careprovider"
+        }
+      }
+    ]
+  }
+');
+</code></p>
+
+<p>Response:</p>
+
+<p><code>json
+{
+  "resourceType": "Bundle",
+  "type": "transaction-response",
+  "entry": [
+    {
+      "resourceType": "Practitioner",
+      "id": "created-practitioner-id",
+      "meta": {
+        "versionId": "b6de0892-0aa5-48f3-a645-b833fc4bf0c3",
+        "lastUpdated": "2016-05-12T12:29:22.412Z",
+        "extension": [
+          {
+            "url": "fhir-request-method",
+            "valueString": "PUT"
+          },
+          {
+            "url": "fhir-request-uri",
+            "valueUri": "Practitioner"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Patient",
+      "careProvider": [
+        {
+          "reference": "/Practitioner/created-practitioner-id"
+        }
+      ],
+      "id": "created-patient-id",
+      "meta": {
+        "versionId": "ffc1c306-c2bd-472e-916f-d75ba2ce133d",
+        "lastUpdated": "2016-05-12T12:29:22.414Z",
+        "extension": [
+          {
+            "url": "fhir-request-method",
+            "valueString": "POST"
+          },
+          {
+            "url": "fhir-request-uri",
+            "valueUri": "Patient"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Bundle",
+      "type": "searchset",
+      "total": 1,
+      "link": [
+        {
+          "relation": "self",
+          "url": "/Patient?_id=created-patient-id&amp;_include=careprovider&amp;_page=0"
+        }
+      ],
+      "entry": [
+        {
+          "resource": {
+            "id": "created-patient-id",
+            "meta": {
+              "extension": [
+                {
+                  "url": "fhir-request-method",
+                  "valueString": "POST"
+                },
+                {
+                  "url": "fhir-request-uri",
+                  "valueUri": "Patient"
+                }
+              ],
+              "versionId": "ffc1c306-c2bd-472e-916f-d75ba2ce133d",
+              "lastUpdated": "2016-05-12T12:29:22.414Z"
+            },
+            "careProvider": [
+              {
+                "reference": "/Practitioner/created-practitioner-id"
+              }
+            ],
+            "resourceType": "Patient"
+          }
+        },
+        {
+          "resource": {
+            "id": "created-practitioner-id",
+            "meta": {
+              "extension": [
+                {
+                  "url": "fhir-request-method",
+                  "valueString": "PUT"
+                },
+                {
+                  "url": "fhir-request-uri",
+                  "valueUri": "Practitioner"
+                }
+              ],
+              "versionId": "b6de0892-0aa5-48f3-a645-b833fc4bf0c3",
+              "lastUpdated": "2016-05-12T12:29:22.412Z"
+            },
+            "resourceType": "Practitioner"
+          }
+        }
+      ]
+    }
+  ]
+}
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_valueset_after_changed">Valueset after changed</h2>
+
+<p><code>fhir_valueset_after_changed('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em><a href="https://www.hl7.org/fhir/valueset.html">ValueSet</a></em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_valueset_after_deleted">Valueset after deleted</h2>
+
+<p><code>fhir_valueset_after_deleted('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes <em><a href="https://www.hl7.org/fhir/valueset.html">ValueSet</a></em> <code>JSON</code> with properties:</p>
+
+<ul>
+<li><em>id</em> <code>string</code> (mandatory)</li>
+</ul>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>JSON</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_disk_usage_top">Disk usage</h2>
+
+<p><code>fhirbase_disk_usage_top('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code></p>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>array</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_benchmark">Benchmark</h2>
+
+<p><code>fhir_benchmark('{}'::json)</code></p>
+
+<h3>Arguments</h3>
+
+<p>Takes an argument <code>JSON</code></p>
+
+<h3>Returns</h3>
+
+<p>Returns an <code>array</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_fhir_version">Fhir version</h2>
+
+<p><code>fhir_version()</code></p>
+
+<h3>Arguments</h3>
+
+<p>Function has no arguments</p>
+
+<h3>Returns</h3>
+
+<p>Returns <em>version</em> <code>string</code></p>
+
+<h3>Example</h3>
+
+<p><code>sql
+SELECT fhir_version();
+</code></p>
+
+<p>Response:</p>
+
+<p><code>
+1.3.0
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_fhirbase_version">Fhirbase version</h2>
+
+<p><code>fhirbase_version()</code></p>
+
+<h3>Arguments</h3>
+
+<p>Function has no arguments</p>
+
+<h3>Returns</h3>
+
+<p>Returns <em>version</em> <code>string</code></p>
+
+<h3>Example</h3>
+
+<p><code>sql
+SELECT fhirbase_version();
+</code></p>
+
+<p>Response:</p>
+
+<p><code>
+1.3.0.13
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
+
+<h2 id="fhirbase_api_fhirbase_release_date">Fhirbase release date</h2>
+
+<p><code>fhirbase_release_date()</code></p>
+
+<h3>Arguments</h3>
+
+<p>Function has no arguments</p>
+
+<h3>Returns</h3>
+
+<p>Returns <em>datetime</em> <code>string</code></p>
+
+<h3>Example</h3>
+
+<p><code>sql
+SELECT fhirbase_release_date();
+</code></p>
+
+<p>Response:</p>
+
+<p><code>
+1970-12-31T23:59:59Z
+</code></p>
+
+<p><a href="#toc">Back To Top</a></p>
