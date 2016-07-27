@@ -30,13 +30,14 @@ title: Support
   text-shadow: -1px -1px 1px white;
 }
 .offers {
-  margin-top: 50px;
-  margin-bottom: 500px;
+  padding: 100px 0;
+  text-align: center;
+  /*margin-bottom: 100px;*/
 }
 .bgblock {
   position: absolute;
   top: 60px;
-  height: 300px;
+  height: 280px;
   left: 0;
   right: 0;
   z-index: -1;
@@ -64,7 +65,8 @@ title: Support
 }
 .provide-line {
   text-align: center;
-  padding-top: 36px;
+  padding: 48px 0;
+  line-height: 36px;
   color: #777;
   text-shadow: -1px -1px 1px white;
 }
@@ -72,6 +74,11 @@ title: Support
   color: #777;
   text-decoration: underline;
 }
+
+.line-text {
+  margin-bottom:100px;
+}
+
 .currency {
   font-weight: bold;
   color: #666;
@@ -85,6 +92,55 @@ title: Support
 .per {
   color: #666;
 }
+
+.aidbox-main-text {
+  font-size: 21px;
+}
+
+.aidbox-description {
+  padding-top:20px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.aidbox-features {
+  text-align: left;
+}
+
+.aidbox-features-title{
+  padding: 25px 0px 15px;
+}
+
+.features-list {
+   margin-left: 20px;
+   padding: 0;
+}
+
+.features-list li {
+  padding-bottom: 25px;
+}
+
+.try-for-free {
+  display: block;
+  margin-top: 40px;
+}
+
+.try-for-free-btn {
+  background-color: #2B4961;
+  color: white;
+  padding: 20px 40px;
+  text-transform: uppercase;
+  border-radius: 40px;
+  font-weight: 500;
+  letter-spacing: 0.7px;
+}
+
+.try-for-free-btn:hover {
+  background-color: #3E6D95;
+  color: white;
+  text-decoration: none;
+}
+
 @media (max-width: 1280px){
   #hslogo {
     display: none;
@@ -93,15 +149,61 @@ title: Support
 </style>
 
 <div class="bgblock"></div>
-<a href="http://health-samurai.io/" id="hslogo" class="icon">S</a>
-<h3 class="provide-line">
-  <a href="http://health-samurai.io/">HeathSamurai</a> team provides commercial support for FHIRbase:
-  <a href="mailto:hello@health-samurai.io" target="_top">hello@health-samurai.io</a>
-</h3>
+<!-- <a href="http://health-samurai.io/" id="hslogo" class="icon">S</a> -->
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <h3 class="provide-line">
+      <a href="http://health-samurai.io/" class="line-text">Heath Samurai</a> provides commercial support for FHIRbase:
+      <br>
+      <a href="mailto:hello@health-samurai.io" target="_top">hello@health-samurai.io</a>
+      <p class="">+1 (818) 731-12-79</p>
+    </h3>
+  </div>
+</div>
+
 <div class="container offers">
   <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <span class="aidbox-main-text">
+        <a href="http://health-samurai.io/">Heath Samurai</a> also provides commercial version of FHIRbase under the brand name <b>Aidbox</b>.
+      </span>
+      <p class="aidbox-description">Aidbox is a platform for modern web and mobile healthcare applications built on top of a centralized FHIR server. Anyone can register at <a href="http://health-samurai.io/">aidbox.io</a> and make their own testing/evaluation of aidbox platform absolutely free. 
+Aidbox can be deployed into any infrastructure of customer's choice (linux servers in the cloud or private data center).</p>
+      <span class=try-for-free>
+        <a class="try-for-free-btn" href="">Try for free in cloud</a>
+      </span>
+      
+
+    <div class="aidbox-features">
+      <h4 class=aidbox-features-title><b>Aidbox Features</b></h4>
+      <ul class="features-list">
+        <li><b>Based on the FHIR</b> (Fast Healthcare Interoperability Resources) standard for external & internal data information model, aidbox implements generic FHIR server specification (tested in project Argonaut and featured in one of HSPC HIMSS 2016 demonstrations)</li>
+        <li>Aidbox provides <b>relational storage for FHIR resources</b> with use of open source fhirbase project (that gives scalability and power of rich SQL language)</li>
+        <li><b>Data aggregation</b> by widespread legacy HL7 v2 messaging, CDA/CCD documents, FHIR REST API and custom processable data channels</li>
+        <li>Aidbox ensures <b>security</b>. OAuth 2.0 provider, Policy-­based Access Control, complete audit of all events in system</li>
+        <li><b>SDK</b> for all features, based on reference FHIR clients for popular platforms (Java, .NET, JavaScript, Objective­C, Ruby, Python and iOS)</li>
+        <li>Implements <b>FHIR terminology server</b> specification and provide LOINC, Snomed, RxNorm, ICD­10, CPT, FHIR terminologies out of the box</li>
+        <li><b>Compatible with SMART on FHIR</b> interface and could host SPA web applications (JavaScript, HTML5, CSS3)</li>
+        <li>Aidbox provides <b>analytics tools</b> based on PostgreSQL, Elasticsearch and Druid OLAP</li>
+        <li><b>Automated cloud infrastructure</b>. It could be hosted in public and private clouds, with automatic failover, backups and update</li>
+        <li>Aidbox provides foundation for workflow support with use of queues, customizable providers and consumers</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<!--<div class="container offers">
+  <div class="row">
+    
+  </div>
+  
+  <div class="row">
+
     <div class="col-md-3">
-      <div class="offer">
+      -<div class="offer">
         <h3>FHIRbase production</h3>
         <div class="offer-content">
           <p>
@@ -124,8 +226,9 @@ title: Support
         </div>
       </div>
     </div>
+
     <div class="col-md-3">
-      <div class="offer">
+       <div class="offer">
         <h3>Dedicated Developer</h3>
         <div class="offer-content">
           <p>
@@ -143,11 +246,12 @@ title: Support
         </div>
         <div class="price">
           <span class="currency">$</span>
-          <span class="number">10,000</span>
+           <span class="number">10,000</span>
           <span class="per">/mo</span>
         </div>
       </div>
     </div>
+
     <div class="col-md-3">
       <div class="offer">
         <h3>Customization & Integration</h3>
@@ -167,13 +271,16 @@ title: Support
             <li>scalability</li>
           </ul>
         </div>
+        
         <div class="price">
           <span class="currency">$</span>
           <span class="number">10,000</span>
           <span class="per">/mo</span>
         </div>
+        
       </div>
     </div>
+
     <div class="col-md-3">
       <div class="offer">
         <h3>FHIRbase consulting</h3>
@@ -189,13 +296,13 @@ title: Support
             <li>education about FHIRbase </li>
             <li>discussions</li>
           </ul>
-        </div>
+        </div> 
         <div class="price">
           <span class="currency">$</span>
           <span class="number">5,000</span>
           <span class="per">/mo</span>
-        </div>
+        </div> 
       </div>
     </div>
   </div>
-</div>
+</div>-->
