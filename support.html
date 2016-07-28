@@ -30,7 +30,7 @@ title: Support
   text-shadow: -1px -1px 1px white;
 }
 .offers {
-  padding: 100px 0;
+  padding: 80px 0;
   text-align: center;
   /*margin-bottom: 100px;*/
 }
@@ -97,10 +97,8 @@ title: Support
   font-size: 21px;
 }
 
-.aidbox-description {
-  padding-top:20px;
-  font-size: 16px;
-  text-align: left;
+.aidbox-main-text a{
+  text-decoration: underline; 
 }
 
 .aidbox-features {
@@ -122,7 +120,7 @@ title: Support
 
 .try-for-free {
   display: block;
-  margin-top: 40px;
+  margin: 60px 0 40px 0;
 }
 
 .try-for-free-btn {
@@ -133,6 +131,7 @@ title: Support
   border-radius: 40px;
   font-weight: 500;
   letter-spacing: 0.7px;
+  text-decoration: none;
 }
 
 .try-for-free-btn:hover {
@@ -140,6 +139,15 @@ title: Support
   color: white;
   text-decoration: none;
 }
+
+.try-for-free-btn:visited {
+  color: white;
+}
+
+.try-for-free-btn:link {
+  text-decoration: none;
+}
+
 
 @media (max-width: 1280px){
   #hslogo {
@@ -153,7 +161,7 @@ title: Support
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <h3 class="provide-line">
-      <a href="http://health-samurai.io/" class="line-text">Heath Samurai</a> provides commercial support for FHIRbase:
+      <a href="http://health-samurai.io/" class="line-text">Heath Samurai</a> provides commercial support for FHIRbase. Please contact us at
       <br>
       <a href="mailto:hello@health-samurai.io" target="_top">hello@health-samurai.io</a>
       <p class="">+1 (818) 731-12-79</p>
@@ -165,15 +173,13 @@ title: Support
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <span class="aidbox-main-text">
-        <a href="http://health-samurai.io/">Heath Samurai</a> also provides commercial version of FHIRbase under the brand name <b>Aidbox</b>.
+        Besides FHIRBase <a href="http://health-samurai.io/">Heath Samurai</a> offers <a href="https://aidbox.io/index.html"><b>Aidbox</b></a> - a platform for modern web and mobile healthcare applications built on top of a centralized FHIR server.
       </span>
-      <p class="aidbox-description">Aidbox is a platform for modern web and mobile healthcare applications built on top of a centralized FHIR server. Anyone can register at <a href="http://health-samurai.io/">aidbox.io</a> and make their own testing/evaluation of aidbox platform absolutely free. 
-Aidbox can be deployed into any infrastructure of customer's choice (linux servers in the cloud or private data center).</p>
+
       <span class=try-for-free>
-        <a class="try-for-free-btn" href="">Try for free in cloud</a>
+        <a class="try-for-free-btn" href="https://aidbox.io/ui#/signup" target="_blank">Try for free in cloud</a>
       </span>
       
-
     <div class="aidbox-features">
       <h4 class=aidbox-features-title><b>Aidbox Features</b></h4>
       <ul class="features-list">
@@ -193,116 +199,3 @@ Aidbox can be deployed into any infrastructure of customer's choice (linux serve
 </div>
 
 </div>
-
-
-<!--<div class="container offers">
-  <div class="row">
-    
-  </div>
-  
-  <div class="row">
-
-    <div class="col-md-3">
-      -<div class="offer">
-        <h3>FHIRbase production</h3>
-        <div class="offer-content">
-          <p>
-          We install and support complete and robust
-          FHIRbase infrastructure for production.
-          </p>
-          <br/>
-          <ul>
-            <li>installation automation</li>
-            <li>failover & backup</li>
-            <li>point in time recovery</li>
-            <li>monitoring and audit tools </li>
-            <li>education of your engineers</li>
-            <li>technical support</li>
-          </ul>
-        </div>
-        <div class="price">
-          <span class="currency">$</span>
-          <span class="number">30,000</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-       <div class="offer">
-        <h3>Dedicated Developer</h3>
-        <div class="offer-content">
-          <p>
-          Dedicated developer
-          works as a priority on
-          features specifically
-          needed for your projects,
-          in a  scope of FHIRbase roadmap.
-          </p>
-          <br/>
-          <ul>
-            <li>development </li>
-            <li>technical consultations</li>
-          </ul>
-        </div>
-        <div class="price">
-          <span class="currency">$</span>
-           <span class="number">10,000</span>
-          <span class="per">/mo</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="offer">
-        <h3>Customization & Integration</h3>
-        <div class="offer-content">
-          <p>
-          We customize FHIRbase
-          for your needs and 
-          requirements and develop 
-          FHIRbase integrations with 
-          your platform and technical
-          stack.
-          </p>
-          <br/>
-          <ul>
-            <li>extra features</li>
-            <li>integrations</li>
-            <li>scalability</li>
-          </ul>
-        </div>
-        
-        <div class="price">
-          <span class="currency">$</span>
-          <span class="number">10,000</span>
-          <span class="per">/mo</span>
-        </div>
-        
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="offer">
-        <h3>FHIRbase consulting</h3>
-        <div class="offer-content">
-          <p>
-          We consult your engineers
-          about FHIRbase and FHIRbase
-          integrations.
-          </p>
-          <br/>
-          <ul>
-            <li>dedicated person to contact </li>
-            <li>education about FHIRbase </li>
-            <li>discussions</li>
-          </ul>
-        </div> 
-        <div class="price">
-          <span class="currency">$</span>
-          <span class="number">5,000</span>
-          <span class="per">/mo</span>
-        </div> 
-      </div>
-    </div>
-  </div>
-</div>-->
