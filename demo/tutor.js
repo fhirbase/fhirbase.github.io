@@ -134,7 +134,7 @@
 
 	app.run(function($rootScope, $window, $document, $location, $timeout, $http) {
 	  var baseUrl, codemirrorExtraKeys, query, tables;
-	  baseUrl = ("http://54.153.51.234:9001/") || (window.location.protocol + "//" + window.location.host);
+	  baseUrl = ("http://fhirbase-demo.aidbox.io/") || (window.location.protocol + "//" + window.location.host);
 	  codemirrorExtraKeys = window.CodeMirror.normalizeKeyMap({
 	    "Ctrl-Space": "autocomplete"
 	  });

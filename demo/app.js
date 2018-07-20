@@ -124,7 +124,7 @@
 	      tables: tables
 	    }
 	  };
-	  baseUrl = ("http://54.153.51.234:9001/") || (window.location.protocol + "//" + window.location.host);
+	  baseUrl = ("http://fhirbase-demo.aidbox.io/") || (window.location.protocol + "//" + window.location.host);
 	  $scope.sql = 'SELECT 1';
 	  $scope.trigerState = function(st) {
 	    if ($scope.rightPane === st) {
