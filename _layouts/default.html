@@ -39,15 +39,15 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="https://fhirbase.gitbook.io/project/tutorials-1/getting-started">Intro</a></li>
-          <li><a href="https://fhirbase.gitbook.io/project/overview">Docs</a></li>
-          <li><a href="demo/index.html">Demo</a></li>
-          <li><a href="https://github.com/fhirbase">Github</a></li>
-          <li><a href="https://chat.fhir.org/#narrow/stream/16-fhirbase">Community</a></li>
-          <li><a href="https://medium.com/fhirbase-dojo">News</a></li>
-          <li {% if page.url == '/fhirpath.html' %}class="active"{% endif %}><a href="fhirpath.html">Extensions</a></li>
-          <li {% if page.url == '/support.html' %}class="active"{% endif %}><a href="support.html">Commercial Support</a></li>
+          <ul class="nav navbar-nav navbar-right">
+              <li><a data-ga-label="main-menu" data-ga="fb-docs-getting-started" href="https://fhirbase.gitbook.io/project/tutorials-1/getting-started">Intro</a></li>
+              <li><a data-ga-label="main-menu" data-ga="fb-docs-overview" href="https://fhirbase.gitbook.io/project/overview">Docs</a></li>
+              <li><a data-ga-label="main-menu" data-ga="fb-demo" href="demo/index.html">Demo</a></li>
+              <li><a data-ga-label="main-menu" data-ga="fb-github" href="https://github.com/fhirbase">Github</a></li>
+              <li><a data-ga-label="main-menu" data-ga="fb-zulip" href="https://chat.fhir.org/#narrow/stream/16-fhirbase">Community</a></li>
+              <li><a  data-ga-label="main-menu"data-ga="fb-medium" href="https://medium.com/fhirbase-dojo">News</a></li>
+              <li {% if page.url == '/fhirpath.html' %}class="active"{% endif %}><a data-ga-label="main-menu" data-ga="fb-extensions" href="fhirpath.html">Extensions</a></li>
+              <li {% if page.url == '/support.html' %}class="active"{% endif %}><a  data-ga-label="main-menu" data-ga="fb-support" href="support.html">Commercial Support</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -66,11 +66,18 @@
       <div class="col-md-6 text-right">
         <h3>Links</h3>
         <ul class="list-unstyled">
-          <li><a href="demo/index.html">FHIRbase Demo</a></li>
-          <li><a href="https://groups.google.com/forum/#!forum/fhirbase" target="_blank">FHIRbase Community</a></li>
-          <li><a href="https://github.com/fhirbase" target="_blank">FHIRbase on GitHub</a></li>
-          <li><a href="https://registry.hub.docker.com/repos/fhirbase/" target="_blank">FHIRbase on Dockerhub</a></li>
-          <li><a href="https://twitter.com/fhirbase" target="_blank">FHIRbase twitter</a></li>
+          <li>
+              <a data-ga="fb-demo" data-ga-label="footer" href="demo/index.html">Demo</a>
+          </li>
+          <li>
+              <a data-ga="fb-zulip" data-ga-label="footer" href="https://chat.fhir.org/#narrow/stream/16-fhirbase">Community</a>
+          </li>
+          <li>
+              <a data-ga="fb-github" data-ga-label="footer" href="https://github.com/fhirbase">Github</a>
+          </li>
+          <li>
+              <a data-ga="fb-twitter" data-ga-label="footer" href="https://twitter.com/fhirbase" target="_blank">Twitter</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -82,7 +89,7 @@
   </footer>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.nav.js"></script>
@@ -109,6 +116,19 @@
    function gtag(){dataLayer.push(arguments);}
    gtag('js', new Date());
    gtag('config', 'UA-125233238-1');
+
+   $("a[data-ga!=''][data-ga]").click((x)=>{
+       try {
+           gtag('event', 'click', {
+               'event_category' : $(x.target).data("ga"),
+               'event_label' : "FROM " + window.location.href + " TO " + x.target.href + " " + ($(x.target).data("ga-label") || "")
+           });
+       } catch (e) {
+           console.error(e);
+       }
+   });
+
+
   </script>
 
 
