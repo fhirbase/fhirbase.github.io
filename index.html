@@ -19,10 +19,12 @@ title: FHIRbase
 .moto {
   border-bottom: 1px solid #dfdfdf;
   text-align: center;
-  padding: 130px 0px 170px;
+  padding: 120px 0px 160px;
   background-color: #f8f8f8;
   background-image: url(img/fhirbase_bg.png);
-  background-position: center;
+  /*background-position: center;*/
+  /*background-position: bottom;*/
+  /*background-repeat: repeat-y;*/
 }
 .next {
   margin-bottom: 50px;
@@ -31,8 +33,7 @@ title: FHIRbase
 .row-content{
   background-color: white;
   font-size: 18px;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding: 100px 0;
   margin: 0px 0px;
   border-bottom: 1px solid #dfdfdf;
 }
@@ -46,21 +47,59 @@ main .row-content:nth-child(even){
   line-height: 30px;
 }
 
+.brand-name {
+  font-size: 22px;
+}
+
+.space-btw li {
+line-height: 20px;
+margin-bottom: 10px;
+}
+
+.update {
+    padding: 160px;
+    margin: 0;
+}
+
+.logo {
+  width: 300px;
+}
+
+
+.why-fix {
+  text-align: left;
+  background-color: white !important;
+  padding: 40px !important;
+}
+
+.why-fix ul li {
+  text-align: left;
+}
+
 </style>
 
 <main>
 <div class="row moto" id="moto">
     <style>
      #brand-name {
-        font-size: 44px;
+        font-size: 32px;
+     }
+     #moto-name {
+        font-size: 20px;
+        line-height: 35px;
+        padding-top: 20px;
+        padding-bottom: 50px;
      }
     </style>
-    <img src="img/name.png"/>
+    <img class="logo" src="img/name.svg"/>
     <br/>
     <br/>
-    <h1 id="brand-name">Open source database for FHIR</h1>
-    <p>
-        document-relational persistence layer for FHIR resources on top of PostgreSQL
+    <h1 id="brand-name" class="brand-name">Open source database for FHIR</h1>
+    <br>
+    <p id="moto-name">
+        document-relational persistence layer for
+    <br>
+        FHIR resources on top of PostgreSQL
     </p>
   <br/>
   <br/>
@@ -70,7 +109,7 @@ main .row-content:nth-child(even){
 </div>
 
 <div class="next text-center">
-  <span class="icon">L</span>
+  <!-- <span class="icon">L</span> -->
 </div>
 
 <div class="row row-content" style="margin-top: -40px">
@@ -91,24 +130,13 @@ main .row-content:nth-child(even){
              .clients a img {
                  height: 40px;
               }
-
             </style>
             <div class="clients">
-                <a data-ga="fb-clients" href="https://aidbox.io" title "aidbox">
-                    <img src="img/aidbox.svg"/>
-                </a>
-                <a data-ga="fb-clients" href="https://www.narushealth.com/" title "Narus Health">
-                    <img src="img/clients/narus.png"/>
-                </a>
-                <a data-ga="fb-clients" href="https://nanthealth.com/" title "aidbox">
-                    <img src="img/clients/nanhealth.jpg"/>
-                </a>
-                <a data-ga="fb-clients" href="https://netrika.ru/" title "aidbox">
-                    <img src="img/clients/netrika.png"/>
-                </a>
-                <a data-ga="fb-clients" href="http://spbmiac.ru/" title "aidbox">
-                    <img src="img/clients/miaz.png"/>
-                </a>
+                <a data-ga="fb-clients" href="https://aidbox.io" title "aidbox"><img src="img/aidbox.svg"/></a>
+                <a data-ga="fb-clients" href="https://www.narushealth.com/" title "Narus Health"><img src="img/clients/narus.png"/></a>
+                <a data-ga="fb-clients" href="https://nanthealth.com/" title "aidbox"><img src="img/clients/nanhealth.jpg"/></a>
+                <a data-ga="fb-clients" href="https://netrika.ru/" title "aidbox"><img src="img/clients/netrika.png"/></a>
+                <a data-ga="fb-clients" href="http://spbmiac.ru/" title "aidbox"><img src="img/clients/miaz.png"/></a>
             </div>
 
         </p>
@@ -126,7 +154,7 @@ main .row-content:nth-child(even){
 <div class="row row-content positioning" id="positioning">
   <div class="container">
     <div class="col-md-6">
-        <h2>Join the community</h2>
+      <h2>Join the community</h2>
       <p>
           Ask developers questions or leave feedback
           at the Zulip chat stream, and submit your FHIRbase stories to our <a data-ga-label="landing" data-ga="fb-medium" href="https://medium.com/fhirbase-dojo">FHIRbase Dojo blog!</a>
@@ -138,11 +166,11 @@ main .row-content:nth-child(even){
     </div>
     <div class="col-md-6">
       <div class="image">
-        <img src="img/fhirbase_community.png" style="height: 150px; width: auto;">
+        <img src="img/fhirbase_community.png" style="height: 100px; width: auto; margin-top: 70px">
       </div>
       <br/>
       <center>
-          <a data-ga-label="landing" data-ga="fb-zulip" href="https://chat.fhir.org/#narrow/stream/16-fhirbase" target="_blank" class="btn btn-community btn-lg">JOIN US</a>
+          <a data-ga-label="landing" data-ga="fb-zulip" href="https://chat.fhir.org/#narrow/stream/16-fhirbase" target="_blank" class="btn btn-default btn-lg™">JOIN US</a>
       </center>
     </div>
   </div>
@@ -157,44 +185,30 @@ main .row-content:nth-child(even){
     </center>
     <br/>
     <br/>
-    <div class="col-md-6">
-        <a data-ga="fb-for-apps" data-ga-label="landing" href="/for-apps.html" ><h2>FHIR-native system</h2></a>
+    <div class="col-md-offset-1 col-md-5 box why-fix">
+        <!-- <h2 data-ga="fb-for-apps" data-ga-label="landing" href="/for-apps.html" > -->
+        <h2>FHIR-native system</h2>
         <hr/>
         <p>If you are building a FHIR system from scratch, FHIRbase provides you with a solid persistence layer:</p>
-        <ul>
-            <li>
-                Battle-proven & flexible design
-            </li>
-            <li>
-                Transactional consistency (ACID)
-            </li>
-            <li>
-                Storage of FHIR resources in JSONB
-            </li>
-            <li>
-                The power and expressiveness of the SQL language
-            </li>
-            <li>
-                Advanced indexing for better search performance
-            </li>
+        <br/>
+        <ul class="space-btw">
+            <li>Battle-proven & flexible design</li>
+            <li>Transactional consistency (ACID)</li>
+            <li>Storage of FHIR resources in JSONB</li>
+            <li>The power and expressiveness of the SQL language</li>
+            <li>Advanced indexing for better search performance</li>
         </ul>
     </div>
-    <div class="col-md-6">
-        <a data-ga="fb-for-analytic" href="/for-analytic.html">
-            <h2>Analytics on FHIR</h2>
-        </a>
+    <div class="col-md-5 box why-fix">
+        <!-- <a data-ga="fb-for-analytic" href="/for-analytic.html"> -->
+        <h2>Analytics on FHIR</h2>
         <hr/>
         <p> If you have a bunch of FHIR data and want to understand it, you can use FHIRbase as analytical tool </p>
-        <ul>
-            <li>
-                Load your data
-            </li>
-            <li>
-                Run analytical queries with SQL
-            </li>
-            <li>
-                Use the PostgreSQL ecosystem
-            </li>
+        <br/>
+        <ul class="space-btw">
+            <li>Load your data</li>
+            <li>Run analytical queries with SQL</li>
+            <li>Use the PostgreSQL ecosystem</li>
         </ul>
     </div>
   </div>
@@ -210,15 +224,16 @@ main .row-content:nth-child(even){
     <style>
      .langs {text-align: center;}
      .langs a { display: inline-block; padding: 10px; color: #444;}
-     .langs a img { width: 80px; margin: 10px 5px; }
+     .langs a img { width: 80px; margin: 10px 25px; }
+     /*.lang-box { background-color:red; padding: 40px; margin: 10px;}*/
     </style>
     <div class="langs">
-        <a data-ga="fb-libs-js" href="https://fhirbase.gitbook.io/project/usage/nodejs"><img src="img/langs/JS.png"/><br/>NodeJS</a>
-        <a data-ga="fb-libs-py" href="https://fhirbase.gitbook.io/project/usage/python"><img src="img/langs/Python.png"/><br/>Python</a>
-        <a data-ga="fb-libs-go" href="https://fhirbase.gitbook.io/project/usage/golang"><img src="img/langs/Golang.png"/><br/>Go</a>
-        <a data-ga="fb-libs-java" href="https://fhirbase.gitbook.io/project/usage/java"><img src="img/langs/Java.png"/><br/>Java</a>
-        <a data-ga="fb-libs-net" href="https://fhirbase.gitbook.io/project/usage/.net"><img src="img/langs/C-Sharp-01.png"/><br/>.NET</a>
-        <a data-ga="fb-libs-clj" href="https://fhirbase.gitbook.io/project/usage/clojure"><img src="img/langs/Clojure.png"/><br/>Clojure</a>
+        <a data-ga="fb-libs-js" class="lang-box" href="https://fhirbase.gitbook.io/project/usage/nodejs"><img src="img/langs/JS.png"/><br/>NodeJS</a>
+        <a data-ga="fb-libs-py"  class="lang-box" href="https://fhirbase.gitbook.io/project/usage/python"><img src="img/langs/Python.png"/><br/>Python</a>
+        <a data-ga="fb-libs-go"  class="lang-box" href="https://fhirbase.gitbook.io/project/usage/golang"><img src="img/langs/Golang.png"/><br/>Go</a>
+        <a data-ga="fb-libs-java"  class="lang-box" href="https://fhirbase.gitbook.io/project/usage/java"><img src="img/langs/Java.png"/><br/>Java</a>
+        <a data-ga="fb-libs-net"  class="lang-box" href="https://fhirbase.gitbook.io/project/usage/.net"><img src="img/langs/C-Sharp-01.png"/><br/>.NET</a>
+        <a data-ga="fb-libs-clj"  class="lang-box" href="https://fhirbase.gitbook.io/project/usage/clojure"><img src="img/langs/Clojure.png"/><br/>Clojure</a>
     </div>
     <br/>
     <br/>
@@ -228,33 +243,39 @@ main .row-content:nth-child(even){
   </div>
 </div>
 
-<div class="row row-content" id="heart">
+<div class="row row-content update" id="heart">
   <div class="container">
-    <div class="col-md-6">
-        <h2>Upgrade to <img src="img/aidbox.svg"/></h2>
+    <style>
+     .box {
+      background-color: #F8F8F8;
+      padding: 80px 50px;
+      text-align: center;
+      /*margin: 10px;*/
+      }
+      .offer-txt {
+        padding: 6px 0;
+      }
+     /*.lang-box { background-color:red; padding: 40px; margin: 10px;}*/
+    </style>
+    <div class="col-md-offset-1 col-md-5 box">
+        <h3 class="box-centered">Upgrade to<img src="img/aidbox.svg"/></h3>
         <hr/>
-        <p>You can turn your FHIRbase into an advanced FHIR server using aidbox</p>
+        <p class="offer-txt">You can turn your FHIRbase into an advanced FHIR server using aidbox</p>
         <hr/>
         <center>
-            <a data-ga-label="landing" data-ga="fb-to-aidbox" href="/aidbox.html" class="btn btn-community btn-lg">UPGRADE</a>
+            <a data-ga-label="landing" data-ga="fb-to-aidbox" href="/aidbox.html" class="btn btn-default btn-lg">UPGRADE</a>
         </center>
     </div>
-    <div class="col-md-6">
-        <h2>Enhance with fhirpath.pg</h2>
+    <div class="col-md-offset-1 col-md-5 box">
+        <h3 class="box-centered">Enhance with <img src="img/fhirpath.svg"/></h3>
         <hr/>
-        <p>fhirpath.pg is a extremely fast implementation of <a href="http://hl7.org/fhirpath/">FHIRPath</a> as a PostgreSQL extension</p>
+        <p class="offer-txt">fhirpath.pg is a extremely fast implementation of <a href="http://hl7.org/fhirpath/">FHIRPath</a> as a PostgreSQL extension</p>
         <hr/>
         <center>
-            <a data-ga-label="landing" data-ga="fb-fhirpath" href="/fhirpath.html" class="btn btn-community btn-lg">GET FHIRPATH</a>
+            <a data-ga-label="landing" data-ga="fb-fhirpath" href="/fhirpath.html" class="btn btn-default btn-lg">GET FHIRPATH</a>
         </center>
     </div>
   </div>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
-  <br/>
 </div>
 </main>
 
