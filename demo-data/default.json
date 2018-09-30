@@ -11,8 +11,22 @@
       "query": "SELECT resource->'name', resource->'birthDate' \nFROM patient\nLIMIT 10"
     },
     {
+      "title": "Access with fhirpath",
+      "query": "SELECT fhirpath(resource, 'name.given') \nFROM patient\nLIMIT 10"
+    },
+    {
       "title": "Encounters",
-      "query": "SELECT * \nFROM encounter\nLIMIT 10"
+      "query": "SELECT count(*) \nFROM encounter"
+    },
+     {
+      "title": "Count popular names",
+      "query": "SELECT COUNT(*), resource#>>'{name,0,given,0}'\nFROM patient\nGROUP BY resource#>>'{name,0,given,0}'\nORDER BY COUNT(*) DESC;"
+    },
+    {
+      "title": "Search by name",
+      "query": "SELECT id, resource->'name' \n FROM patient\n WHERE \n  fhirpath(resource,$$name.where(use='official').family$$)->>0  ilike 'Chal%';"
     }
+    
+    
   ]
 }
