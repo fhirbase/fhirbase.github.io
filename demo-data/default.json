@@ -1,0 +1,18 @@
+{
+  "title": "Fhirbase basics",
+
+  "queries": [
+    {
+      "title": "Select patients",
+      "query": "SELECT * \nFROM patient\nLIMIT 10"
+    },
+    {
+      "title": "Access attributes",
+      "query": "SELECT resource->'name', resource->'birthDate' \nFROM patient\nLIMIT 10"
+    },
+    {
+      "title": "Encounters",
+      "query": "SELECT * \nFROM encounter\nLIMIT 10"
+    }
+  ]
+}
