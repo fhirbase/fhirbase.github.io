@@ -24,7 +24,11 @@
     },
     {
       "title": "Search by name",
-      "query": "SELECT id, resource->'name' \n FROM patient\n WHERE \n  fhirpath(resource,$$name.where(use='official').family$$)->>0  ilike 'Chal%';"
+      "query": "SELECT id, resource->'name' \n FROM patient\n WHERE \n  fhirpath(resource,$$name.where(use='official').family$$)->>0  ilike 'Hick%';"
+    },
+    {
+      "title": "Observations",
+      "query": "SELECT resource#>>'{code,text}', fhirpath(resource, 'value.Quantity.value') FROM observation\n LIMIT 100 ;"
     }
     
     
